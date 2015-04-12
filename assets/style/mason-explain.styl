@@ -1,0 +1,92 @@
+@require 'lib'
+
+mason-explain
+	// Changed on load.
+	visibility hidden
+	font-family 'PT Sans'
+
+	section
+		margin 0 1em
+		padding 1em
+		background #fff6
+		// Generally this will be as high as possible, meaning it closes like a 'D'.
+		border-radius-right 4em
+
+	h1
+		position relative
+
+		margin-top 0.5em
+		margin-bottom 0.25em
+		font-size 200%
+		font-weight bold
+		text-align center
+		color darkmagenta
+		font-family Overlock
+
+		span
+			background white
+
+	h1-line()
+		content ''
+		display block
+		height 1px
+		position absolute
+		top 50%
+		border-top solid 1px black
+	h1:before
+		h1-line()
+		width calc(50% -  3em)
+	h1:after
+		h1-line()
+		left calc(50% + 3em)
+		width calc(50% - 3em)
+
+
+	h2
+		margin-left 2em
+		margin-top 0.5em
+		margin-bottom 0.25em
+		font-size 150%
+		font-weight bold
+		color darkblue
+		font-family Overlock
+
+	code
+		font-family 'Oxygen Mono'
+		font-weight bold
+		color maroon
+
+	a
+		font-family 'Oxygen Mono'
+		color indigo
+		font-weight bold
+		text-decoration none
+
+	table
+		margin 1em
+		center-x()
+		background #fff8
+		border-radius-bottom 2em
+		box-shadow 0 2px 4px gray
+
+		thead
+			background white
+			border-bottom 1px solid gray
+			color midnightBlue
+			font-weight bold
+			font-family sans
+
+		td
+			padding 0 2em
+			text-align left
+
+	ul
+		margin 1em
+
+		li
+			list-style disc inside
+
+	.tooltip
+		font-weight bold
+		color indigo
+

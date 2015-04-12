@@ -1,0 +1,60 @@
+@require 'lib'
+
+html, body
+	background url(../image/bg.gif)
+
+header
+	background #fff8
+	box-shadow 0 3px 6px gray
+	margin-bottom 1em
+
+	h1
+		margin-top -0.25em
+		margin-bottom -0.15em
+		font-size 400%
+		text-align center
+
+		a
+			font-weight bold
+			text-decoration none
+			color indigo
+			font-family 'Patua One'
+
+	nav
+		overflow auto
+
+		a
+			display inline-block
+			text-align center
+			width 3em
+			margin 0 1em
+
+			font-family Overlock
+			font-weight bold
+			font-size 120%
+			color darkblue
+			text-decoration none
+		a:hover
+			border-radius 1em
+			background lightsalmon
+
+		#source
+			float right
+			font-size 200%
+			width 0
+			margin-bottom -1em
+
+			color black
+
+			i
+				position absolute
+				transform translate(0, -25%)
+		#source:hover
+			color violet
+
+
+mason-editor
+	// Prevents FOUC. Overwritten by mason-editor.js.
+	visibility hidden
+	margin 1em 10%
+	min-width 400px

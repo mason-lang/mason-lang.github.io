@@ -1,0 +1,12 @@
+{
+	"name": "mason-online",
+	"dependencies": {
+		"mason": "andy-hanson/mason",
+		"codemirror": "5.1.0",
+		"es6-shim": "0.27.1",
+		"font-awesome": "4.3.0",
+		"marked": "0.3.3",
+		"requirejs": "2.1.17",
+		"webcomponentsjs": "0.6.0"
+	}
+}

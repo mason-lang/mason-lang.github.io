@@ -1,0 +1,64 @@
+@require 'lib'
+
+radius = 2em
+
+mason-editor
+	display block
+	box-shadow 0 3px 6px gray
+	border-radius radius
+
+	#outContainer
+		display flex
+		flex-direction row
+		background azure
+	#status
+		flex-basis 2em
+		text-align center
+	#out
+		flex-basis auto
+		.warning
+			color crimson
+		.error
+			color firebrick
+		.loc
+			font-weight bold
+			color seagreen
+		.code
+			font-weight bold
+			color indigo
+
+	#statusIcon
+		margin 0.25em
+		font-size 1.5em
+	#statusIcon.fa-check
+		color chartreuse
+	#statusIcon.fa-exclamation
+		color tomato
+	#statusIcon.fa-refresh
+		color cornflowerBlue
+		cursor pointer
+
+	.spinning
+		anim spin 2s
+		anim-iteration-count infinite
+		anim-timing-function steps(8)
+	@keyframes spin
+		from
+			transform rotate(0)
+		to
+			transform rotate(360deg)
+
+	.CodeMirror
+		height 100%
+	#ms .CodeMirror
+		font-size 14px
+		border-radius-top radius
+	#js .CodeMirror
+		font-size 12px
+
+	#js
+		border-radius-bottom radius
+		overflow hidden
+		// mason-editor.js expands the height when hovered over.
+		max-height 0.5em
+		transition max-height 1s
