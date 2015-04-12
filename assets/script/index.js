@@ -4,10 +4,10 @@ const isFirefox = /firefox/i.test(navigator.userAgent)
 
 window.requirejs.config({
 	// Global requires are assumed to be for lib.
-	baseUrl: '../lib',
+	baseUrl: './lib',
 	paths: {
-		marked: '../lib/marked/marked.min',
-		mason: '../lib/mason/dist'
+		marked: 'marked/marked.min',
+		mason: 'mason/dist'
 	},
 	scriptType: isFirefox ? 'text/javascript;version=1.8' : 'text/javascript'
 })

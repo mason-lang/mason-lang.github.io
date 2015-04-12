@@ -93,14 +93,14 @@ In that case, you'll usually want to remember to `<~~` it.
 		mason.Generator! each~
 		mason.math.methods *
 
-	doubled-then-tripled = |_
+	doubled-then-tripled = |seq
 		Stream ~|
-			<~~ each~ _ ~|_
+			<~~ each~ seq ~|_
 				<~ * 2 _
-			<~~ each~ _ ~|_
+			<~~ each~ seq ~|_
 				<~ * 3 _
 
 	_ = [ 1 2 3 ]
 	. doubled-then-tripled_
 	# Of course, it's much easier to just do:
-	. ++ (map _ *[2]) (map _ *[3])
+	. ++ (map _ *[2]) (map _ *[3

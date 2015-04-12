@@ -1,11 +1,14 @@
+block params
+- fullTitle = title === undefined ? "Mason" : "Mason." + title
+
 doctype html
 html
 	head
-		title Mason
+		title #{fullTitle}
 		meta(charset='utf-8')
 
 		// Shim
-		link(rel='stylesheet' href='http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css')
+		link(rel='stylesheet' href='./style/reset.css')
 		script(src='./lib/es6-shim/es6-shim.min.js')
 		script(src='./lib/webcomponentsjs/webcomponents.js')
 
@@ -15,9 +18,8 @@ html
 
 		// I'd like to include this in mason-editor.jade, but RequireJS won't let me.
 		script(src='./lib/requirejs/require.js' data-main='./script/index.js')
-
 		link(rel='stylesheet'
-			href='http://fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans|Oxygen+Mono')
+			href='http://fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans:400,400italic|Oxygen+Mono')
 		link(rel='stylesheet' href='./style/layout.css')
 	body
 		header

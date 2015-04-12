@@ -126,19 +126,6 @@ Funs are called by listing their arguments separated by spaces.
 A Fun with no arguments can be called like `fun()`.
 
 
-You can also attach properties to a Fun by putting it at the end of an Obj block.
-`doc` and [test](./test) are essential.
-
-	identity =
-		doc. "Does nothing."
-		test. |
-			[ 1 ] -> 1
-		|a
-			a
-	identity.doc
-
-
-
 # Focus
 
 `_` is a special variable called the "focus".
