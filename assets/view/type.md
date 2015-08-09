@@ -1,5 +1,4 @@
 A `Type` is something that `contains?` a certain set of values.
-Anything implementing `Type` (more on `Kind`s later) and defining `contains?` is one.
 
 When declaring a local, including in function arguments, use `:` to assert a value's type. This calls `contains?` and asserts that the result is true.
 
@@ -14,150 +13,97 @@ When declaring a local, including in function arguments, use `:` to assert a val
 	# Uncomment this and it will fail:
 	# plus-one 1.5
 
+You can also use `var:Type` anywhere else as a value testing the type.
+If the variable name is missing, the test is on the focus.
 
-# Making Types
+	x = 1
+	. x:Number
+	. x:String
+	_ = "one"
+	. :Number
+	. :String
+
 
 ## Pred-Type
 
-You can just make any function a Type.
+You can make any predicate into a Type.
 
 	use
 		mason.compare =?
 		mason.Type.Pred-Type
 
-	Equal-To-Three = Pred-Type
+	Three = new Pred-Type
 		predicate. |_
-			=? _ 3
+			=? 3 _
 
-	three:Equal-To-Three = 3
-	plus-one = |_:Equal-To-Three
-		4
-	plus-one three
+	. 3:Three
+	. 4:Three
 
 
 ## Impl-Type
 
-An `Impl-Type` is a type with an associated prototype.
+An `Impl-Type` is a type with an associated prototype. Most types are Impl-Types.
 This allows `Method`s to be defined on it, which will be introduced later.
 
-Every Fun is considered an Impl-Type, meaning JavaScript's function "types" (Str, Num, etc.) can be used as Mason types.
+All functions are considered Impl-Types because JavaScript uses functions as constructors.
 
-
-## Obj-Type
-
-In most programming languages, types can be used as factories for values.
-Mason is no exception.
-
-An `Obj-Type` describes Objs which have certain properties.
-A value must be created with the Obj-Type as a constructor to qualify (meaning, these are nominal types).
-
-	use
-		mason.Str
-		mason.Type.Obj-Type
-
-	Name = Obj-Type
-		props.
-			first. Str
-			last. Str
-	# Create it by passing an Obj into the constructor.
-	Name
-		first. "Joe"
-		last. "Shmoe"
-
-These also support optional properties and default values.
-
-
-## Kind
-
-`Kind`s group multiple sub-types into one.
-
-	use
-		mason.math.Num
-		mason.Str
-		mason.Type.Kind _ kind!
-		mason.Type.Type contains?
-
-	Num-or-Str = Kind
-		implementors. [ Num Str ]
-
-	. contains? Num-or-Str 0
-	. contains? Num-or-Str "0"
-	. contains? Num-or-Str [ 0 ]
-
-	# You can also leave the implementors open-ended.
-	# This means that Kinds can act both as "unions" and as "interfaces".
-
-	Open-Kind = Kind
-		doc. "Anyone can implement this."
-	kind! Str Open-Kind
-	kind! Num Open-Kind
-
-Kinds support multiple inheritance and can be applied to any Impl-Type, including other Kinds.
-
-If some of the subtypes are not Impl-Types, you'll have to use `Union` instead, which you can't define Methods on.
-
-Type is a Kind.
-Kind is an Obj-Type (and Obj-Types are all Impl-Types, which are all Types).
-And Obj-Type is an Obj-Type!
+In Mason you should uses [classes]('./class') to create Impl-Types.
 
 
 # Method
 
-`Method`s are Funs that act differently on different Impl-Types.
-They delegate to another function based on the type of their first parameter.
+`Method`s are Functions that act differently on different Impl-Types.
+The implementation function chosen depends on the first parameter.
+Methods use an `impl-symbol` to store the implementation, meaning that they don't suffer from monkey-patching conflicts.
+
+`impl!` creates a method implementation in a type's prototype.
+`self-impl!` implements the method directly on some object.
 
 	use
-		mason.@.@ count
-		mason.Fun identity
-		mason.math.Num
-		mason.Str
 		mason.Type.Method _ impl! self-impl!
-		mason.Type.Kind
 
-	Num-or-Str = Kind
-		implementors. [ Num Str ]
-
-	magnitude = Method
+	magnitude = new Method
 		default. |
 			0
 
-	impl! magnitude Num identity
-	impl! magnitude Str count
+	# This modifies Number.prototype.
+	impl! magnitude Number .|
+		this
+	impl! magnitude String .|
+		.length
+
+	# This modifies String, not String.prototype.
+	self-impl! magnitude String .|
+		42
 
 	. magnitude 1
 	. magnitude "two"
-	# Since we provided a default, this will return '0'.
-	. magnitude [ ]
-
-Note that JavaScript's special `this` variable is not used and we use regular functions as implementations.
-
-Double dispatch is also supported via `impl! method Type-A Type-B implementation`, but is slow.
+	. magnitude String
 
 
-# Focus testing
+## Kind
 
-There's a neat syntax for testing the type of the focus.
+`Kind`s group multiple Impl-Types.
 
 	use
-		mason.@.@ count
-		mason.math.Num
-		mason.Str
+		mason.Type.Kind _ kind!
 
-	_ = 1
-	. :Num
-	. :Str
+	Num-or-Str = new Kind
+		implementors. [ Number String ]
 
-	# It goes great with `case`!
-	magnitude = |case
-		:Num
-			_
-		:Str
-			count_
-		else
-			0
-	. magnitude 1
-	. magnitude "two"
-	. magnitude [ ]
+	. 0:Num-or-Str
+	. "0":Num-or-Str
+	. [ 0 ]:Num-or-Str
+
+	# You can also leave the implementors open-ended.
+	Open-Kind = Kind
+		doc. "Anyone can implement this."
+	kind! String Open-Kind
+	kind! Number Open-Kind
+
+Kinds can even implement other Kinds.
+
+You can even implement methods on Kinds, which passes the implementation down to its implementors.
 
 
 # Naming
@@ -171,17 +117,8 @@ Looks like | Means | Example
 `$a` | `$` (promise) | `$read-file "Hello.txt"`
 `@a` | `@` (bag) | `@prime = [ 2 3 5 ]`
 `a->b` | `Map` (from a to b) | `name->address`
-`a~` | `Generator!` | `each~`
-`a?` | `Bool` | `even?`
+`a~` | `Generator` | `each~`
+`a?` | `Boolean` | `even?`
 
 An optional promise is `?$a`; a promise for an option is `$?a`.
-
-
-
-Other uses of symbols in names:
-
-Looks like | Means | Example
-:-: | :-: | :-:
-`a!` | Mutation or write-like I/O | `log! "Hello, world!"`
-`A!` | Mutable type | `empty Map!`
-`!` | Assertion | `! <? 1 2`
+`a!` indicates a function that performs some action rather than just returning a value.

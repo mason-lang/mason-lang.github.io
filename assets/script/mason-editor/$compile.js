@@ -20,7 +20,7 @@ export default msCode =>
 				// TODO: Button for checks: false
 				includeAmdefine: false,
 				includeSourceMap: false,
-				includeModuleDisplayName: false,
+				includeModuleName: false,
 				forceNonLazyModule: true
 			})
 

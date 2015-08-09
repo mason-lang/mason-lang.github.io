@@ -1,20 +1,20 @@
 {
 	"devDependencies": {
-		"gulp": "3.8.11",
-		"gulp-babel": "4.00",
-		"gulp-eslint": "0.7.0",
-		"gulp-jade": "1.0.0",
-		"gulp-plumber": "1.0.0",
-		"gulp-sourcemaps": "1.5.1",
-		"gulp-stylus": "2.0.1",
-		"gulp-watch": "4.2.1",
+		"gulp": "3.9.0",
+		"gulp-babel": "5.2.0",
+		"gulp-eslint": "1.0.0",
+		"gulp-jade": "1.1.0",
+		"gulp-plumber": "1.0.1",
+		"gulp-sourcemaps": "1.5.2",
+		"gulp-stylus": "2.0.6",
+		"gulp-watch": "4.3.4",
 		"http-server": "0.8.0",
-		"marked": "0.3.3",
-		"jade": "1.9.2"
+		"jade": "1.11.0"
 	},
 	"eslintConfig": {
 		"env": {
-			"browser": true
+			"browser": true,
+			"node": true
 		},
 		"ecmaFeatures": {
 			"arrowFunctions": true,
@@ -27,24 +27,22 @@
 			"modules": true,
 			"objectLiteralShorthandMethods": true,
 			"objectLiteralShortandProperties": true,
+			"restParams": true,
 			"spread": true,
 			"templateStrings": true
 		},
-		"globals": {
-			"_ms": true,
-			"require": true
-		},
 		"rules": {
 			"comma-style": [ 1, "last" ],
+			"camelcase": 0,
 			"curly": [ 1, "multi" ],
 			"default-case": 1,
 			"generator-star-spacing": [ 1, "after" ],
-			"indent": [ 1, "tab" ],
+			"indent": [ 1, "tab", { "SwitchCase": 1 } ],
 			"max-len": [ 1, 100, 4 ],
 			"new-cap": 0,
-			"no-console": 0,
 			"no-constant-condition": 0,
 			"no-inner-declarations": 0,
+			"no-extend-native": 0,
 			"no-fallthrough": 0,
 			"no-floating-decimal": 1,
 			"no-inline-comments": 1,
@@ -56,6 +54,7 @@
 			"no-shadow": 0,
 			"no-throw-literal": 1,
 			"no-underscore-dangle": 0,
+			"no-unused-vars": 1,
 			"no-use-before-define": 0,
 			"no-var": 1,
 			"no-void": 1,
@@ -67,9 +66,10 @@
 			"semi": 0,
 			"space-after-keywords": [ 1, "always" ],
 			"space-before-blocks": [ 1, "always" ],
-			"space-before-function-parentheses": [ 1, "never" ],
-			"spaced-line-comment": 1,
+			"space-before-function-paren": [ 1, "never" ],
+			"spaced-comment": 1,
 			"space-in-parens": [ 1, "never" ],
+			"valid-jsdoc": 1,
 			"yoda": 0
 		}
 	},

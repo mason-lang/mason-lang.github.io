@@ -12,6 +12,9 @@ window.requirejs.config({
 	scriptType: isFirefox ? 'text/javascript;version=1.8' : 'text/javascript'
 })
 
-// require([ 'mason/private/boot-order' ], () =>
-//	require([ 'mason/meta/run-all-tests' ], rat => _ms.getModule(rat).default()))
-require([ '../script/mason-explain' ])
+require([ 'mason/private/boot-order' ], bo => {
+	_ms.getModule(bo)
+	// Error.stackTraceLimit = 100
+	// require([ 'mason/meta/run-all-tests' ], rat => _ms.getModule(rat).default())
+	require([ '../script/mason-explain' ])
+}, err => { throw err })

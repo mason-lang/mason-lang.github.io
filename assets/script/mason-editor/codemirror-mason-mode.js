@@ -86,15 +86,6 @@ const PlainState = {
 }
 
 // TODO: Use mason.meta.compile.Lang
-const keywords = new Set([
-	'debug',
-	'debugger',
-	'this',
-	'use', 'use!', 'use~', 'use-debug',
-	'->',
-	'case', 'case!', 'else',
-	'in', 'out', 'res',
-	'_',
-	'loop!', 'end-loop!',
-	'=', '<~', '<~'
-])
+const keywords = new Set(
+	'_|->|and|assert!|break|break!|built|case|case!|catch|catch!|class|construct!|continue!|debug|debugger|else|except|except!|false|finally!|forbid!|@for|@for|for|for!|get|if|if!|in|is|new|not|null|or|out|pass|returning|set!|super|static|switch|switch!|this|this-module-directory|throw!|true|try|try!|undefined|unless|unless!|use|use!|use-debug|use~|<~|<~~'
+	.split('|'))

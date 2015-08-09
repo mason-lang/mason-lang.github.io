@@ -1,3 +1,3 @@
 
 export const $done = promise =>
-	promise.catch(console.log)
+	promise.catch(err => console.log(err.stack))

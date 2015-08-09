@@ -1,29 +1,25 @@
-Mason code should generally not have external documentation.
-Documentation is just another part of declarative data, which Mason is good at.
-
 Ending an Obj block with a function assigns those properties to the function.
 
 	use
-		mason.!
 		mason.@.@ fold
 		mason.@.Range range-incl
 		mason.$ $done
-		mason.math.methods * +
-		mason.math.Num Nat
+		mason.math.methods *
+		mason.math.Number Nat
 		mason.meta.tests.test $test-fun
 		mason.Try fails?
 
 	factorial =
 		doc. "Product of all numbers from 1 to n, inclusive."
 		test. |
-			! fails? |
+			assert! fails? |
 				factorial -1
 			[ 0 ] -> 1
 			[ 5 ] -> 120
-		|n:Nat
-			fold (range-incl 2 n) 1 *
+		|_:Nat
+			fold (range-incl 2 _) 1 *
 
-	$done ($test-fun factorial
+	$done ($test-fun factorial)
 
 	factorial.doc
 
@@ -34,35 +30,29 @@ Any property whose name *ends in `test`* is considered debug-only.
 One example is `$test`, whose code will be run inside of `$ing`.
 
 	use
-		mason.!
 		mason.$ $done $resolved
 		mason.compare =? <?
-		mason.Fun Act
-		mason.io.console log!
+		mason.Function Action
 		mason.io.time $after-time
-		mason.math.Num _ Nat
-		mason.math.methods - +
-		mason.meta.tests.test $test-fun
-	use-debug
-		mason.control Ref! mod! get
+		mason.math.Number decr incr Nat
+		mason.meta.tests.run-tests $test-fun
 
 	$interval =
-		$test. ~|
-			ref-n = Ref! 0
+		$test. ~!|
+			n ::= 0
 			n-times = 5
-			<~ $interval n-times 1000 |
-				# You'll need to open devtools to see this...
-				log! (get ref-n)
-				mod! ref-n +[1]
-			! =? n-times (get ref-n
-		|n-times:Nat time-ms:Num act:Act
+			<~ $interval n-times 1000 !|
+				# You'll need to open devtools to see this.
+				global.console.log n
+				n := incr n
+			assert! =? n-times n
+		|n-times:Nat time-ms:Number act:Action
 			case n-times
 				<? 0 _
 					$after-time time-ms |
 						act()
-						$interval (- n-times 1) time-ms act
+						$interval (decr n-times) time-ms act
 				else
 					$resolved()
 
-	$done ($test-fun $interval
-	()
+	$done ($test-fun $interval)

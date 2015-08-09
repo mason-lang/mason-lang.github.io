@@ -4,6 +4,8 @@ import { $done } from '../U/Promise'
 import $compile from './$compile'
 import $eval from './$eval'
 import { msCodeMirror, jsCodeMirror } from './make-codemirror'
+import masonToString from 'mason/to-string'
+const inspect = _ms.getModule(masonToString).inspect
 
 const template =
 	document.getElementById('link-mason-editor').import.querySelector('template')
@@ -61,7 +63,7 @@ const MasonEditorPrototype = Object.assign(Object.create(HTMLElement.prototype),
 
 	evaluate(js) {
 		$done($eval(require, js).then(val => {
-			this.out.textContent = _ms.show(val)
+			this.out.textContent = inspect(val)
 			this.setStatus('compiled')
 		}).catch(err => this.showError(err.stack)))
 	},
