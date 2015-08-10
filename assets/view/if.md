@@ -1,4 +1,3 @@
-
 # if / unless
 
 `if` and `unless` allow you to conditionally execute code.
@@ -20,12 +19,17 @@ These return `?` values. If you don't want to return a value, use `if!` and `unl
 	unless! false
 		. 2
 
+These are statements, not expressions. Since they don't have a value, they can appear as lines in blocks, but never inside other expressions. (No `x = if! ...`)
+
 When `if` appears in the middle of a line, you don't need parentheses -- the rest of the line automatically gets grouped with the `if`. Most keywords work this way.
 
 	use
 		mason.@.? un-?
+
+	# un-? has *1* argument: the `if` expression.
 	un-? if true
 		0
+
 
 
 # switch
@@ -33,8 +37,8 @@ When `if` appears in the middle of a line, you don't need parentheses -- the res
 `switch` efficiently branches based on a value.
 Unlike with JavaScript, you don't need `break`. Fallthrough is not supported.
 
-	f = |_
-		switch _
+	f = |number
+		switch number
 			0
 				"zero"
 			else
@@ -43,7 +47,35 @@ Unlike with JavaScript, you don't need `break`. Fallthrough is not supported.
 	. f 1
 
 If there is no `else`, an error will be thrown for an unhandled case.
-`switch!` acts the same but does not have a value.
+(If you want to do nothing, just write `pass` in the `else` block.)
+
+`switch!` is the statement version.
+
+
+
+# focus
+
+The focus, `_`, pronounced "it" when reading code, is a good short-lived variable when you don't need a name.
+
+Several expressions in Mason implicitly assign the focus.
+You can also assign to it explicitly like any other variable.
+
+`fun_` is syntax for `(fun _)`.
+
+	use
+		mason.math.methods * +
+
+	twice = |_
+		* _ 2
+	half = |_
+		* _ 0.5
+	two-and-a-half-of = |_
+		+ twice_ half_
+
+	_ = 2
+	two-and-a-half-of_
+
+
 
 # case
 
@@ -90,6 +122,8 @@ Or, when a Fun has only one argument and its body is a `case`, just use `|case`.
 
 `case!` is the statement version.
 
+
+
 # logic
 
 All these conditionals are easier with some boolean helpers.
@@ -100,3 +134,5 @@ All these conditionals are easier with some boolean helpers.
 	# nand and nor are simply:
 	. not and true false
 	. not or false false
+
+The syntax is similar to function calls, but without the need for parentheses because the keywords automatically group with the rest of the line, just like `if`, `unless`, `switch`, `case`, and others.

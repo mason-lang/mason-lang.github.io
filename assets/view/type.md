@@ -1,40 +1,43 @@
 A `Type` is something that `contains?` a certain set of values.
 
-When declaring a local, including in function arguments, use `:` to assert a value's type. This calls `contains?` and asserts that the result is true.
+When declaring a local, including in function arguments, use `:` to assert a value's type. This calls `contains?` and asserts that the result is `true`.
+
+For function return types, write the type right after the `|`.
 
 	use
-		mason.math.methods +
-		mason.math.Num Int
+		msl.Try try-result
 
-	one:Int = 1
-	plus-one = |:Int _:Int
-		+ _ one
-	plus-one 1
-	# Uncomment this and it will fail:
-	# plus-one 1.5
+	number-to-string = |:String _:Number
+		"{_}"
 
-You can also use `var:Type` anywhere else as a value testing the type.
-If the variable name is missing, the test is on the focus.
+	. number-to-string 1
+	. try-result !|
+		number-to-string [ ]
 
-	x = 1
-	. x:Number
-	. x:String
+You can also use `value:Type` (with no spaces) anywhere else to test a value's type.
+
+If the name is missing, the test is on the focus.
+
+	. 1:Number
+	. 1:String
 	_ = "one"
 	. :Number
 	. :String
 
+
+
+# types of types
 
 ## Pred-Type
 
 You can make any predicate into a Type.
 
 	use
-		mason.compare =?
-		mason.Type.Pred-Type
+		msl.compare =?
+		msl.Type.Pred-Type
 
 	Three = new Pred-Type
-		predicate. |_
-			=? 3 _
+		predicate. =?[3]
 
 	. 3:Three
 	. 4:Three
@@ -43,28 +46,56 @@ You can make any predicate into a Type.
 ## Impl-Type
 
 An `Impl-Type` is a type with an associated prototype. Most types are Impl-Types.
-This allows `Method`s to be defined on it, which will be introduced later.
 
 All functions are considered Impl-Types because JavaScript uses functions as constructors.
 
-In Mason you should uses [classes]('./class') to create Impl-Types.
+In Mason you should uses [class]('./class') to create Impl-Types.
 
 
-# Method
+## Kind
 
-`Method`s are Functions that act differently on different Impl-Types.
+`Kind`s group multiple Impl-Types.
+
+	use
+		msl.Type.Kind _ kind!
+
+	Num-or-Str = new Kind
+		implementors. [ Number String ]
+
+	. 0:Num-or-Str
+	. "0":Num-or-Str
+	. [ 0 ]:Num-or-Str
+
+	# You can also leave the implementors open-ended.
+	Open-Kind = new Kind
+		doc. "Anyone can implement this."
+	kind! String Open-Kind
+	kind! Number Open-Kind
+
+Kinds can even implement other Kinds.
+
+
+# method
+
+`Method`s are Functions that act differently on different types.
+
 The implementation function chosen depends on the first parameter.
-Methods use an `impl-symbol` to store the implementation, meaning that they don't suffer from monkey-patching conflicts.
+
+Methods use a `Symbol`, `method.impl-symbol`, to store the implementation, so they don't risk conflicts with other methods.
+
+(You can also manually supply a string for it, as was done for `to-string`.)
 
 `impl!` creates a method implementation in a type's prototype.
 `self-impl!` implements the method directly on some object.
 
 	use
-		mason.Type.Method _ impl! self-impl!
+		msl.Type.Method _ impl! self-impl!
 
 	magnitude = new Method
-		default. |
-			0
+		# This is called when the argument isn't implemented for.
+		default. .|
+			"{this}".length
+		allow-null?. true
 
 	# This modifies Number.prototype.
 	impl! magnitude Number .|
@@ -79,46 +110,27 @@ Methods use an `impl-symbol` to store the implementation, meaning that they don'
 	. magnitude 1
 	. magnitude "two"
 	. magnitude String
+	# This uses the default implementation.
+	. magnitude null
+
+You can implement a Method on a Kind, which will pass the implementation down to its implementors (recursively, if its implementors are also Kinds).
 
 
-## Kind
 
-`Kind`s group multiple Impl-Types.
+# prefix
 
-	use
-		mason.Type.Kind _ kind!
-
-	Num-or-Str = new Kind
-		implementors. [ Number String ]
-
-	. 0:Num-or-Str
-	. "0":Num-or-Str
-	. [ 0 ]:Num-or-Str
-
-	# You can also leave the implementors open-ended.
-	Open-Kind = Kind
-		doc. "Anyone can implement this."
-	kind! String Open-Kind
-	kind! Number Open-Kind
-
-Kinds can even implement other Kinds.
-
-You can even implement methods on Kinds, which passes the implementation down to its implementors.
-
-
-# Naming
-
-Mason uses sigils to indicate type.
-This is just a convention and may not always be appropriate.
+Mason uses prefixes to indicate type.
+This is just a convention; the compiler doesn't do anything special.
 
 Looks like | Means | Example
 :-: | :-: | :-:
 `?a` | `?` (option) | `?find`
-`$a` | `$` (promise) | `$read-file "Hello.txt"`
+`$a` | `$` (promise) | `$after-time`
 `@a` | `@` (bag) | `@prime = [ 2 3 5 ]`
 `a->b` | `Map` (from a to b) | `name->address`
 `a~` | `Generator` | `each~`
 `a?` | `Boolean` | `even?`
 
 An optional promise is `?$a`; a promise for an option is `$?a`.
+
 `a!` indicates a function that performs some action rather than just returning a value.

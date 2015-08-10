@@ -1,0 +1,14 @@
+#!/usr/local/bin/node --harmony
+"use strict";
+
+const
+	fs = require("fs"),
+	plist = require("plist"),
+	yaml = require("js-yaml")
+
+const pathYaml = "Mason.tmLanguage.yaml"
+const pathPlist = "Mason.tmLanguage"
+const strYaml = fs.readFileSync(pathYaml, "utf-8")
+const dictYaml = yaml.safeLoad(strYaml)
+const strPlist = plist.build(dictYaml)
+fs.writeFileSync(pathPlist, strPlist, "utf-8")

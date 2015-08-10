@@ -1,7 +1,8 @@
 {
 	"name": "mason-online",
 	"dependencies": {
-		"mason": "andy-hanson/mason",
+		"msl": "andy-hanson/msl",
+		"mason-compile": "andy-hanson/mason-compile",
 		"codemirror": "5.1.0",
 		"es6-shim": "0.27.1",
 		"font-awesome": "4.3.0",

@@ -55,12 +55,46 @@ If you prefer to be curt...
 	array. [ 1 2 ]
 
 
-## Value blocks
+## value blocks
 
-If a block is not an Object, Array, or Map block, its value is the last line.
+If a block is not an object, array, or map block, its value is the last line.
+You don't need to explicitly `return`.
 
 	dos = 2
 	dos
+
+
+## literals
+
+There are the usual constants:
+
+	. true
+	. false
+	. null
+	. undefined
+
+Number literals work as usual.
+
+	. 0
+	. 1.1
+	. 1.1e3
+
+Text surrounded in `"` makes a string.
+Interpolate values with `{}`.
+
+`\` escapes special characters -- `\t` for tab, `\n` for newline, and `\{` and `\\` for theirselves.
+
+Multi-line strings go in indented text.
+
+	use
+		msl.math.methods +
+
+	. "Single-line string?\nNope!"
+
+	. "
+		Let's interpolate with \{+ 1 1}.
+		{+ 1 1}
+
 
 
 # functions
@@ -73,16 +107,9 @@ The body of a function is a block.
 	two-of = |a
 		. a
 		. a
-	single-entry-map = |a b
-		a -> b
-	pair-of = |a b
-		first. a
-		second. b
 
 	. identity 1
 	. two-of 1
-	. single-entry-map 1 2
-	. pair-of 1 2
 	# Parentheses are only needed when a subexpression is itself a function call.
 	. identity (identity 1)
 
@@ -99,7 +126,11 @@ A function with no arguments can be called like `fun()`.
 
 ## this-functions
 
-Normal functions compile to JavaScript's arrow functions. For `function() { }`, which has a new `this` variable, use `.|` and `.!|`. In inner functions, it's safe to use `this`.
+Normal functions compile to JavaScript's arrow functions.
+
+For `function() { }`, which has a new `this` variable, use `.|` and `.!|`.
+
+In inner functions, it's safe to use `this`.
 
 	f = .|
 		|
@@ -107,50 +138,11 @@ Normal functions compile to JavaScript's arrow functions. For `function() { }`, 
 	(f.call 3)()
 
 
+## new
 
+Calling a constructor looks like a function call with `new` in front.
 
-# focus
-
-The focus, `_`, pronounced "it" when reading code, is a good short-lived variable when you don't need a name.
-
-You can assign to it normally as in `_ = 1` or `|_ other args`.
-
-`fun_` is syntax for `(fun _)`.
-
-	use
-		mason.math.methods * +
-
-	twice = |_
-		* _ 2
-	half = |_
-		* _ 0.5
-	two-and-a-half-of = |_
-		+ twice_ half_
-
-	_ = 2
-	. twice_
-	. half_
-	. two-and-a-half-of_
-
-
-
-# strings
-
-Text surrounded in `"` makes a string.
-Interpolate values with `{}`.
-
-`\` escapes special characters -- `\t` for tab, `\n` for newline, and `\{` and `\\` for theirselves.
-
-Multi-line strings go in indented text.
-
-	use
-		mason.math.methods +
-
-	. "Single-line string?\nNope!"
-
-	. "
-		Let's interpolate with \{+ 1 1}.
-		{+ 1 1}
+	new Array 8
 
 
 # modules
@@ -168,6 +160,12 @@ The default export is an entry with the same name as the file name.
 
 	# named export
 	a. 2
+
+If your module does not have any named exports, it is treated as a block and its value is assigned to the default export.
+
+Therefore, the code for a module whose default export is zero is:
+
+	0
 
 
 Module imports go at the top of a script and use a special syntax.
@@ -201,4 +199,18 @@ Module imports go at the top of a script and use a special syntax.
 
 	# Variables only used for tests should go here.
 	use-debug
-		mason.assert assert-call!
+		msl.assert assert-call!
+
+
+# cli
+
+You can continue to use the web interface, but it's time to learn to use the cli.
+
+To test that it's working, and to see modules really in action, try this in a console:
+
+* `sudo npm install -g https://github.com/andy-hanson/mason-cli`
+* `sudo npm install -g amdefine` (We're working on not requiring this.)
+* `mkdir test; cd test`
+* `echo 1 > one.ms`
+* `echo -e "use\n\t.one\nconsole.log one" > main.ms`
+* `mason run main.ms`

@@ -1,5 +1,5 @@
 block params
-- fullTitle = title === undefined ? "Mason" : "Mason." + title
+- fullTitle = path === '' ? 'mason' : `mason.${path}`
 
 doctype html
 html
@@ -22,22 +22,46 @@ html
 			href='http://fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans:400,400italic|Oxygen+Mono')
 		link(rel='stylesheet' href='./style/layout.css')
 	body
+		- pages = 'ms = if try class type <~ misc for'.split(' ')
+
+		mixin link_to(name)
+			if name === 'index'
+				a(href='/').
+					index
+			else
+				a(href=name)
+					= name
+
 		header
 			h1
-				a(href='./index') Mason
-			nav#nav(name='nav')
-				a(href='./basics') ms
-				a(href=('./vars')) =
-				a(href='./conditionals') if
-				a(href='./exceptions') try
-				a(href='./type') :type
-				a(href='./test') test.
-				a(href='./generator')
-					:raw
-						<~
-				a(href='./bag') @
-				a#source(href='https://github.com/andy-hanson/mason')
-					i.fa.fa-github
+				a(href='/') mason
+			nav
+				for page in pages
+					+link_to(page)
 
 		main
-			block content
+			mason-explain
+				block content
+
+		footer
+			- my_idx = pages.indexOf(path)
+			div#prev.prev-next
+				if my_idx !== -1 && 0 < my_idx
+					- prev = pages[my_idx - 1]
+					+link_to(prev)
+
+			div#middle
+				ul
+					li.
+						public domain
+					li
+						a(href='/')
+							i(class='fa fa-home')
+					li
+						a(href='mailto:andy.pj.hanson@gmail.com').
+							contact
+
+			div#next.prev-next
+				if my_idx !== -1 && my_idx < pages.length - 1
+					- next = pages[my_idx + 1]
+					+link_to(next)

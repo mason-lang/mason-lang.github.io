@@ -1,7 +1,5 @@
-Website showing off [mason](https://github.com/andy-hanson/mason).
+Website showing off Mason.
 
-## Build
+See it live at <http://andy-hanson.github.io/mason>.
 
-	npm install
-	bower install
-	./gulp
+Or: `npm install; bower install; ./gulp`, then it's at <http://localhost:8000>.

@@ -2,28 +2,35 @@
 
 html, body
 	background url(../image/bg.gif)
+	font-family 'Patua One'
+
+a
+	text-decoration none
+a:hover
+	border-radius 0.5em
+	background lightsalmon
+
+header-footer-shadow-size = 4px
 
 header
-	background #fff8
-	box-shadow 0 3px 6px gray
+	background-image linear-gradient(#ffe8, #efe8, #eff8)
+	box-shadow 0 header-footer-shadow-size (header-footer-shadow-size * 2) gray
 	margin-bottom 1em
 
 	h1
-		margin-top -0.25em
+		margin-top -0.4em
 		margin-bottom -0.2em
 		font-size 400%
 		text-align center
 
 		a
 			font-weight bold
-			text-decoration none
-			color indigo
+			color #036
 			letter-spacing 0.1em
 			f(val)
 				size = 0.04em
 				size*val size*val size*0.5 silver
 			text-shadow f(.2), f(.4), f(.6), f(.8), f(1)
-			font-family 'Patua One'
 
 	nav
 		overflow auto
@@ -31,31 +38,46 @@ header
 		a
 			display inline-block
 			text-align center
-			width 3em
-			margin 0 1em
+			width 2em
+			padding 0 1em
 
 			font-family Overlock
 			font-weight bold
 			font-size 120%
 			color darkblue
-			text-decoration none
-		a:hover
-			border-radius 1em
-			background lightsalmon
 
-		#source
-			float right
-			font-size 200%
-			width 0
-			margin-bottom -1em
+footer
+	background #efe8
+	box-shadow 0 -header-footer-shadow-size (header-footer-shadow-size * 2) gray
+	margin-top 2em
 
-			color black
+	display flex
 
-			i
-				position absolute
-				transform translate(0, -25%)
-		#source:hover
-			color violet
+	div
+		display inline-block
+
+	.prev-next a
+		font-size 150%
+
+	#prev a:before
+		content "←"
+	#next a:after
+		content "→"
+
+	#middle
+		flex-grow 1
+		text-align center
+
+		ul
+			list-style none
+
+			li
+				display inline
+			li:after
+				content " · "
+			li:last-child:after
+				content none
+
 
 
 mason-editor

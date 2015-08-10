@@ -1,65 +1,66 @@
 'use strict'
 
 const
-	babel = require('gulp-babel'),
 	createServer = require('http-server').createServer,
-	eslint = require('gulp-eslint'),
+	data = require('gulp-data'),
+	fs = require('fs'),
 	gulp = require('gulp'),
 	gulpJade = require('gulp-jade'),
 	jade = require('jade'),
+	mason = require('gulp-mason'),
+	path = require('path'),
+	plist = require('plist'),
 	plumber = require('gulp-plumber'),
 	sourceMaps = require('gulp-sourcemaps'),
 	stylus = require('gulp-stylus'),
-	watch = require('gulp-watch')
+	watch = require('gulp-watch'),
+	yaml = require('js-yaml')
 
-gulp.task('default', [ 'view', 'style', 'lint', 'lib', 'image', 'script', 'serve' ])
+gulp.task('default', [ 'view', 'style', 'editor', 'static', 'script', 'script', 'serve' ])
 
 const
 	watchStream = (name, ext) => {
 		const glob = `assets/${name}/**/*.${ext}`
 		return gulp.src(glob).pipe(watch(glob, { verbose: true })).pipe(plumber())
 	},
-	simple = (name, ext, stream, outName) => {
-		if (outName === undefined)
-			outName = name
+	simple = (name, ext, stream, outDir) => {
 		let _ = watchStream(name, ext)
 		if (stream !== undefined)
 			_ = _.pipe(stream)
-		return _.pipe(gulp.dest(`public/${outName}`))
+		if (outDir === undefined)
+			outDir = name
+		return _.pipe(gulp.dest(`public/${outDir}`))
 	}
 
 gulp.task('view', () => {
 	jade.filters.raw = jade.runtime.escape
-	return simple('view', 'jade', gulpJade({ jade: jade, pretty: true }), '')
+	return watchStream('view', 'jade')
+	.pipe(data(file =>  ({
+		path: file.history[0].replace(file.base, '').replace('.jade', '')
+	})))
+	.pipe(gulpJade({ jade: jade, pretty: true }))
+	.pipe(gulp.dest('public'))
 })
 
 gulp.task('style', () => simple('style', 'styl', stylus()))
 
-gulp.task('lib', () =>
-	gulp.src('bower_components/**/*', { base: 'bower_components' })
-	.pipe(watch('bower_components', { verbose: true }))
-	.pipe(gulp.dest('public/lib')))
+gulp.task('static', () => simple('static', '*', undefined, ''))
 
-gulp.task('image', () => simple('image', '*'))
+gulp.task('editor', () => {
+	const pathYaml = 'assets/static/editor/Mason.tmLanguage.yaml'
+	const pathPlist = 'public/editor/Mason.tmLanguage'
+	const strYaml = fs.readFileSync(pathYaml, 'utf-8')
+	const dictYaml = yaml.safeLoad(strYaml)
+	const strPlist = plist.build(dictYaml)
+	fs.writeFileSync(pathPlist, strPlist, "utf-8")
+})
 
 gulp.task('script', () =>
-	watchStream('script', 'js')
+	watchStream('script', 'ms')
 	.pipe(sourceMaps.init())
-	.pipe(babel({
-		modules: 'amd',
-		whitelist: [ 'es6.destructuring', 'es6.modules', 'strict' ]
-	}))
+	// TODO: module style option: amdefine, amd, commonjs
+	.pipe(mason({ forceNonLazyModule: true, includeAmdefine: false, checks: true, verbose: true }))
 	.pipe(sourceMaps.write('.'))
 	.pipe(gulp.dest('public/script')))
 
-gulp.task('lint', () =>
-	gulp.src('assets/script/**/*.js')
-	.pipe(eslint())
-	.pipe(eslint.format())
-	.pipe(eslint.failOnError()))
-
-gulp.task('serve', () => {
-	const port = 8000
-	createServer({ root: 'public' }).listen(port)
-	console.log(`Serving at localhost:${port}`)
-})
+gulp.task('serve', () => { createServer({ root: 'public' }).listen(8000) })

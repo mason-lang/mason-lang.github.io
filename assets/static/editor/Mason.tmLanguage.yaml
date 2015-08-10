@@ -1,0 +1,233 @@
+# I use `support.constant` for lazy things
+
+name: Mason
+scopeName: source.mason
+fileTypes:
+- ms
+uuid: 857c9cc3-2862-4a05-87e7-115318008707
+
+patterns:
+
+- comment: Empty string
+  name: string
+  match: \"\"
+
+- comment: 1-indented multi-line string (begins/ends with 0 indents)
+  name: string
+  begin: "^[^\t\"]*\"$"
+  end: ^(?=[^\t])
+  patterns:
+  - name: constant.character
+    comment: Escaped character
+    match: \\.
+  - name: entity.other.attribute-name
+    comment: Interpolation
+    match: \{[^\}]*\}
+- comment: 2-indented multi-line string (begin w/ 1 indent, ends with <=1 indent)
+  name: string
+  begin: "^\t[^\t\"]*\"$"
+  end: ^\t{,1}(?=[^\t])
+  patterns:
+  - name: constant.character
+    match: \\.
+  - name: entity.other.attribute-name
+    match: \{[^\}]*\}
+- comment: 3-indented multi-line string (begins w/ 2 indents, ends with <=2 indents)
+  name: string
+  begin: "^\t\t[^\t\"]*\"$"
+  end: ^\t{,2}(?=[^\t])
+  patterns:
+  - name: constant.character
+    match: \\.
+  - name: entity.other.attribute-name
+    match: \{[^\}]*\}
+- comment: 4-indented multi-line string (begins w/ 3 indents, ends with <=3 indents)
+  name: string
+  begin: "^\t\t\t[^\t\"]*\"$"
+  end: ^\t{,3}(?=[^\t])
+  patterns:
+  - name: constant.character
+    match: \\.
+  - name: entity.other.attribute-name
+    match: \{[^\}]*\}
+- comment: 5-indented multi-line string (begins w/ 4 indents, ends with <=4 indents)
+  name: string
+  begin: "^\t\t\t\t[^\t\"]*\"$"
+  end: ^\t{,4}(?=[^\t])
+  patterns:
+  - name: constant.character
+    match: \\.
+  - name: entity.other.attribute-name
+    match: \{[^\}]*\}
+- comment: 6-indented multi-line string (begins w/ 5 indents, ends with <=5 indents)
+  name: string
+  begin: "^\t\t\t\t\t[^\t\"]*\"$"
+  end: ^\t{,5}(?=[^\t])
+  patterns:
+  - name: constant.character
+    match: \\.
+  - name: entity.other.attribute-name
+    match: \{[^\}]*\}
+
+- comment: Single-line string
+  name: string
+  begin: \"
+  end: \"|\n
+  patterns:
+  - name: constant.character
+    comment: Escaped character
+    match: \\.
+  - name: entity.other.attribute-name
+    comment: Interpolation
+    match: \{[^\}]*\}
+
+- comment: Multi-line comment
+  name: comment
+  begin: '###'
+  end: '###'
+  patterns:
+  - name: invalid
+    match: "TODO"
+- comment: Comment
+  name: comment
+  begin: '#'
+  end: \n
+  patterns:
+  - name: invalid
+    match: "TODO"
+
+- comment: Region
+  name: keyword
+  match: ^\s*region([^\n]*)\n
+  captures:
+    '1':
+      name: entity.other.attribute-name
+
+- comment: Dict assignment
+  name: storage
+  match: \S+\.\s
+  captures:
+    # Group 1 is an entire variable
+    # Group 2 is the variable name
+    '4':
+      # Colon before type
+      name: comment
+    '5':
+      # Type
+      name: support.type
+    '6':
+      # Tilde
+      name: comment
+    '7':
+      # Rename
+      name: entity.other.attribute-name
+    '8':
+      #Dot
+      name: comment
+
+- comment: JavaScript reserved word
+  name: keyword
+  match: (await|enum|implements|interface|package|private|protected|public)(\s)
+
+- comment: JavaScript keyword
+  name: keyword
+  match: (arguments|const|delete|eval|instanceof|let|return|typeof|var|void|while|with)(\s)
+
+- comment: Mason reserved word
+  name: keyword
+  match: (abstract|data|final|gen!?|goto!|is|isa|of!?|to|until!?|while!?)(\s)
+
+- comment: Mason keyword
+  name: keyword
+  match: (_|->|and|as|assert!|break!?|built|case!?|catch!?|class|construct!|continue!|debug|debugger|do!?|else|except!?|false|finally!|forbid!|@for~?|for!?|get|if!?|in|is|new|not|null|or|out|pass|set!|super|static|switch!?|this|this-module-directory|throw!|true|try!?|undefined|unless!?|use!?|use-debug|use~|<~|<~~)(\s)
+
+- comment: Bracket
+  name: keyword
+  match: "[\\(\\[\\{\\}\\]\\)]"
+
+- comment: Number literal
+  name: constant.numeric
+  match: -?\d+(\.\d+)?
+
+- commment: Type test. (Type *not* in fun or assign)
+  name: support.type
+  match: (:)\S+
+  captures:
+    '1':
+      # The `:` is greyed out.
+      name: comment
+
+- comment: Access of a member.
+  name: keyword
+  match: \.
+
+- comment: Impure call
+  name: variable.parameter
+  match: ([^\.\s]+!)
+
+- comment: Function
+  name: variable.parameter
+  begin: (\~?!?\|)
+  beginCaptures:
+    '1':
+      name: comment
+  # Entire rest of the line is the function header.
+  end: \n
+  patterns:
+    # `_` is special name, even as arg
+    - name: keyword
+      match: _
+    - name: support.type
+      match: (\:)\S+
+      captures:
+        '1':
+          name: comment
+    - name: comment
+      match: '#.*'
+
+- comment: Local assignment
+  name: variable.parameter
+  match: (([^\s:]+)(:([^\s]+))?\s)+((=)|(:=)|(::=)|(~=)|(<~~?))\s
+  captures:
+    # Group 1 is an entire variable (including type+rename)
+    # Group 2 is the variable name
+    '3':
+      # Colon before type
+      name: comment
+    '4':
+      # Type
+      name: support.type
+    '5':
+      # Tilde
+      name: comment
+    '6':
+      # Equals
+      name: comment
+    '8':
+      # Mutate
+      name: entity.name.function
+    '9':
+      # Declare mutable
+      name: entity.name.function
+    '10':
+      # Lazy
+      name: comment
+    '11':
+      # Yield or YieldTo
+      name: comment
+
+- comment: Lazy
+  name: keyword
+  match: \~
+
+- comment: Focus call
+  name: constant.language
+  match: \S+(_)
+  captures:
+    '1':
+      name: keyword
+
+- comment: Reference to a local variable.
+  name: variable
+  match: ([^\s\.\(\)\[\]\{\}]+)
+
