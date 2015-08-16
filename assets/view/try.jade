@@ -1,4 +1,71 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./try.md
+	+hdr('throw!')
+	section
+		p You can throw errors as in JavaScript.
+		p If you throw a #[code String], it will be converted to an #[code Error] for you.
+
+	mason-editor
+		pre.
+			throw! "This code throws a fit!"
+
+	+hdr('assert!')
+
+	section
+		p Usually, you'll only need to throw an exception under certain conditions.
+
+	mason-editor
+		pre.
+			use
+				msl.compare =?
+
+			assert! true
+			forbid! =? 0 1
+			assert! false throw! "Custom error"
+
+	section
+		p When asserting the result of a function call, the error message will include the function called and its arguments.
+
+
+	hdr('except')
+
+	section
+		p You can save yourself from an exception with #[code except].
+
+	mason-editor
+		pre.
+			except
+				try
+					throw!
+				catch
+					1
+				# This part is optional.
+				finally!
+					pass
+
+	section
+		p There's also a statement version.
+		p Note that #[code try] changes to #[code try!].
+
+	mason-editor
+		pre.
+			. 0
+			except!
+				try!
+					throw!
+				catch!
+					. 1
+				finally!
+					. 2
+
+	section
+		p #[code catch] can take a parameter, the focus by default.
+
+	mason-editor
+		pre.
+			except
+				try
+					throw!
+				catch
+					_.message

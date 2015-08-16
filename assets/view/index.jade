@@ -1,4 +1,74 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./index.md
+	section
+		p Mason is a new language compiling to JavaScript.
+		p See the #[a(href='./ms') guide] to start learning.
+
+	+hdr('use')
+	section
+		p Currently, you'll need to install bleeding-edge #[a(href='https://github.com/nodejs/node') io.js].
+		pre.
+			git clone https://github.com/nodejs/node.git
+			cd node
+			git checkout next+1
+			./configure
+			make
+			sudo make install
+
+		p If you use #[a(href='https://github.com/creationix/nvm') nvm]:
+		pre nvm alias default iojs
+
+	section
+		p To learn mason, use #[a(href='https://github.com/andy-hanson/mason-cli') mason-cli] and the live editors on this site.
+		p The CLI isn't suitable for projects. For those, use #[a(href='https://github.com/andy-hanson/gulp-mason') gulp-mason].
+		p Sample projects:
+		ul
+			li
+				a(href='https://github.com/andy-hanson/thrifty-threesome-thriller') thrifty-threesome-thriller
+			li
+				a(href='https://github.com/andy-hanson/mason-online') this site
+
+	+hdr('edit')
+	section
+		h2 #[a(href='https://sublimetext.com/') sublime] / #[a(href='https://macromates.com/') textmate]
+		section
+			p A tmLanguage file is available #[a(href='./editor/Mason.tmLanguage') here].
+			p To install in Sublime Text 3:
+			pre.
+				curl #{rootUrl}/editor/Mason.tmLanguage > \
+					~/.config/sublime-text-3/Packages/User/Mason.tmLanguage
+
+	+hdr('contribute')
+	section
+		p There's lots of work do be done on mason.
+		p Current Mason projects are:
+		table
+			- root = 'https://github.com/andy-hanson/'
+			tr
+				td #[a(href='#{root}msl') msl]
+				td standard library
+			tr
+				td #[a(href='#{root}mason-compile') mason-compile]
+				td compiler
+			tr
+				td #[a(href='#{root}mason-cli') mason-cli]
+				td command line interface
+			tr
+				td #[a(href='#{root}gulp-mason') gulp-mason]
+				td #[a(href='http://gulpjs.com') gulp] plugin
+
+		p Future projects:
+		table
+			tr
+				td grunt-contrib-mason
+				td #[a(href='http://gruntjs.com') grunt] plugin
+			tr
+				td broccoli-mason
+				td #[a(href='http://broccolijs.com') broccoli] plugin
+			tr
+				td mason-emacs
+				td Emacs skin
+			tr
+				td mason-vim
+				td Vim skin

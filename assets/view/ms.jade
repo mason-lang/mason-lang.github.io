@@ -1,4 +1,248 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./ms.md
+	- var quote = '"'
+
+	hdr('about')
+	section
+		p This guide shows off mason's syntax and standard library.
+		p.
+			All mason programs must use the
+			#[a(href='https://github.com/andy-hanson/msl') msl (Mason Standard Library)] package.
+		p.
+			The web site's examples are editable, but you should learn
+			the #[a(href='https://github.com/andy-hanson/mason-cli') cli] too.
+		p Run this in a console:
+		pre.
+			sudo npm install -g https://github.com/andy-hanson/mason-cli
+			sudo npm install -g https://github.com/andy-hanson/msl
+			sudo npm install -g amdefine # We're working on not requiring this.
+			echo "console.log 1" > test.ms
+			mason run test.ms
+
+	hdr('syntax')
+	section
+		p.
+			Most character sequences are valid names, if they have no special characters
+			(#[code () [] {} #{quote} # | : . ~ _ , ` ; , % ^ & \] or whitespace),
+			do not start with a digit, and are not keywords.
+		p Blocks of code are written as tab-indented blocks of text.
+		p You don't need semicolons, commas, or curly braces.
+		p #[code #] starts a line comment.
+		p #[code ###] starts and ends a multi-line comment.
+
+	hdr('blocks')
+
+	hdr2('objects')
+	section
+		p Objects are written as indented blocks of #[code key. value] pairs.
+		p Click #[i(class='fa fa-refresh')] to see output.
+
+	mason-editor
+		pre.
+			x. 1
+			y. 2
+
+	section
+		p Object keys are also local variables.
+
+	mason-editor
+		pre.
+			one. 1
+			uno. one
+
+	hdr2('arrays')
+	section
+		p Arrays are also written in indented blocks.
+		p Each line beginning with #[code .], followed by a space, writes a new entry to it.
+
+	mason-editor
+		pre.
+			. 1
+			. 2
+
+	hdr2('map')
+	section
+		p Maps follow the same pattern.
+		p Each line with a #[code ->] writes an entry to the map.
+
+	mason-editor
+		pre.
+			1 -> 2
+			3 -> 4
+
+	hdr2('short forms')
+	section
+		p If you prefer to be curt:
+
+	mason-editor
+		pre.
+			obj. (a. 1 b. 2)
+			array. [ 1 2 ]
+
+	hdr2('value blocks')
+	section
+		p If a block is not an object, array, or map block, its value is the last line.
+		p You don't need to explicitly #[code return].
+
+	mason-editor
+		pre.
+			dos = 2
+			dos
+
+	hdr('literals')
+	section
+		p There are the usual constants:
+
+	mason-editor
+		pre.
+			. true
+			. false
+			. null
+			. undefined
+
+	section
+		p Number literals work as usual.
+
+	mason-editor
+		pre.
+			. 0
+			. 1.1
+			. 1.1e3
+
+	section
+		p
+			| Text surrounded in
+			code.
+				"
+			| makes a string.
+		p Interpolate values with #[code {}].
+		p.
+			#[code \] escapes special characters --
+			#[code \t] for a tab, #[code \n] for a newline,
+			and #[code \{] and #[code \\] for theirselves.
+
+		p Multi-line strings go in indented text.
+
+	mason-editor
+		pre.
+			use
+				msl.math.methods +
+
+			. "Single-line string?\nNope!"
+
+			. "
+				Let's interpolate with \{+ 1 1}.
+				{+ 1 1}
+
+	hdr('functions')
+	section
+		p Functions are written with a #[code |] followed by space-separated arguments.
+		p The body of a function is a block.
+
+	mason-editor
+		pre.
+			identity = |a
+				a
+			two-of = |a
+				. a
+				. a
+
+			. identity 1
+			. two-of 1
+			# Parentheses are only needed when a subexpression is itself a function call.
+			. identity (identity 1)
+
+	section
+		p When you don't want to return a value from a function, use #[code !|].
+		p If you don't need to do anything in a block, use #[code pass].
+		p A function with no arguments is called like #[code fun()].
+
+	mason-editor
+		pre.
+			say-hi! = !|
+				pass
+			say-hi!()
+
+	hdr2('this-functions')
+	section
+		p Normal functions compile to JavaScript's arrow functions.
+		p For #[code function() { }], which has a new #[code this] variable, use #[code .|] and #[code .!|].
+		p In inner functions, it's safe to use #[code this].
+
+	mason-editor
+		pre.
+			f = .|
+				|
+					this
+			(f.call 3)()
+
+	hdr2('new')
+	section
+		p Calling a constructor looks like a function call with #[code new] in front.
+
+	mason-editor
+		pre.
+			new Array 8
+
+	hdr('modules')
+	section
+		p Every file is a module with a default export and named exports.
+		p A module is written like an object block.
+		p The default export is an entry with the same name as the file name.
+
+	mason-editor
+		pre.
+			# my-module.ms
+
+			# default export
+			my-module. 1
+
+			# named export
+			a. 2
+
+	section
+		p.
+			If your module does not have any named exports,
+			it is treated as a block and its value is assigned to the default export.
+		p So, the code for a module whose default export is zero is:
+
+	mason-editor
+		pre.
+			0
+
+	section
+		p Module imports go at the top of a script and use a special syntax.
+
+	mason-editor(compilable=false)
+		pre.
+			# This example won't run.
+			use
+				# Uses the global module `fs`.
+				# Could be in node_modules or a registered RequireJS path.
+				fs
+
+				# File "brother.ms" (or ".js") in the same directory.
+				.brother
+
+				# ./brother-dir/nephew.ms
+				.brother-dir.nephew
+
+				# ../aunt.ms
+				..aunt
+
+				# ../../aunt/cousin.ms
+				...aunt.cousin
+
+				# Creates a local `a` equal to the module's default export.
+				a
+
+				# Imports named exports `b` and `c` as locals.
+				a b c
+
+				# Both combined. The default export is still called `a`, not `_`.
+				a _ b c
+
+			# Variables only used for tests should go here.
+			use-debug
+				msl.assert assert-call!

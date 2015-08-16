@@ -87,14 +87,14 @@ patterns:
   end: '###'
   patterns:
   - name: invalid
-    match: "TODO"
+    match: TODO
 - comment: Comment
   name: comment
   begin: '#'
   end: \n
   patterns:
   - name: invalid
-    match: "TODO"
+    match: TODO
 
 - comment: Region
   name: keyword

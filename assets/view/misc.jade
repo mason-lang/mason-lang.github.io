@@ -1,4 +1,121 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./misc.md
+	hdr('with')
+
+	section
+		p #[code with] lets you create an empty object and build it up by modifying it.
+		p It assigns to the focus, or to a new local.
+
+	mason-editor
+		pre.
+			. with [ ]
+				_.push 1
+				_.push 2
+			. with new Object as o
+				o.x = 1
+				o.y = 2
+
+	hdr('sub')
+
+	section
+		p #[+ms('sub')] is a #[+ms('Method')] with special syntax.
+		p It does #[+ms('Map')] lookups, #[+ms('Seq')] lookups by index, and partially applies functions.
+
+	mason-editor
+		pre.
+			use
+				msl.@.Map.Map assoc!
+				msl.compare =?
+				msl.math.methods +
+			map =
+				1 -> 1
+			. map[1]
+
+			# This calls `sub` with 2 arguments.
+			set-one! = assoc![map 1]
+			set-one! 2
+			. map[1]
+
+			# This calls `sub` with 1 argument.
+			+2 = +[(+ 1 1)]
+			. +2 1
+
+	section
+		p Note that you can't use #[code [ ]] to dynamically grab a property from an object.
+		p For that, use #[+ms('p')], #[+ms('?p')], and #[+ms('send')].
+
+
+	hdr('lazy')
+
+	section
+		p If you don't know that a value is always used, it's wasteful to always compute it.
+		p Use #[code ~] before a local (with no space) to declare it to be lazy.
+		p A lazy local will be evaluated at most once; the result is cached.
+
+	mason-editor
+		pre.
+			show-amount = |number name
+				~plural =
+					global.console.log "Calculating plural for {name}"
+					"{name}s"
+				switch number
+					0
+						"Yes, we have no {plural}."
+					1
+						"One more {name}."
+					else
+						"Plenty of {plural}."
+
+			. show-amount 2 "grape"
+			. show-amount 1 "melon"
+			. show-amount 0 "banana"
+
+	section
+		p Functions can be declared to accept lazy arguments.
+		p Prefix an expression with `~` (or wrap it in `~( )`) to pass it lazily.
+		p (Again, with no space.)
+
+	mason-editor
+		pre.
+			# Mason's `and` expression could be implemented with a lazy function.
+			my-and = |cond-1 ~cond-2
+				case
+					cond-1
+						cond-2
+					else
+						false
+
+			. my-and true true
+
+			. my-and true ~
+				global.console.log "This will be called."
+				false
+
+			. my-and false ~
+				global.console.log "Never called."
+				true
+
+
+	hdr('region')
+
+	section
+		p #[code region] visually groups your code.
+		p The code of the region goes in an indented block, but does #[i not] introduce a new program block.
+
+	mason-editor
+		pre.
+			use
+				msl.math.methods *
+
+			region Nums
+				one. 1
+				two. 2
+
+			region Funs
+				double. |_
+					# `two` is in the same scope as `double`.
+					* _ 2
+
+			region Calculated Nums
+				four. double two

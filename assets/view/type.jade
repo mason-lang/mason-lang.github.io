@@ -1,4 +1,157 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./type.md
+	section
+		p A #[+ms('Type')] is something that #[+ms('contains?')] a certain set of values.
+		p When declaring a local, use #[code :] to assert its type.
+		p For return types, write the type right after the #[code |].
+
+	mason-editor
+		pre.
+			number-to-string = |:String _:Number
+				"{_}"
+
+			number-to-string [ ]
+
+	section
+		p You can also use #[code value:Type] (with no spaces) to call #[code contains?].
+		p If the value is missing, the test is on the focus.
+
+	mason-editor
+		pre.
+			. 1:Number
+			. 1:String
+			_ = "one"
+			. :Number
+			. :String
+
+
+	+hdr('types', 'types of types')
+
+	+hdr2('Pred-Type')
+	section
+		p Any predicate can become a Type.
+	mason-editor
+		pre.
+			use
+				msl.compare =?
+				msl.Type.Pred-Type
+
+			Three = new Pred-Type
+				predicate. =?[3]
+
+			. 3:Three
+			. 4:Three
+
+
+	+hdr2('Impl-Type')
+	section
+		p A #[+ms('Kind')] of Type with an associated prototype.
+		p Most types are #[+ms('Impl-Type')]s.
+		p All functions are considered Impl-Types because they might be constructors.
+		p In Mason you should use #[code class] and #[code Kind] to create Impl-Types.
+
+
+	+hdr2('Kind')
+	section
+		p #[+ms('Kind')]s group multiple #[+ms('Impl-Type')]s.
+		p #[code Kind]s can even implement other #[code Kind]s.
+
+	mason-editor
+		pre.
+			use
+				msl.Type.Kind _ kind!
+
+			Num-or-Str = new Kind
+				implementors. [ Number String ]
+
+			. 0:Num-or-Str
+			. "0":Num-or-Str
+			. [ 0 ]:Num-or-Str
+
+			# You can also leave the implementors open-ended.
+			Open-Kind = new Kind
+				doc. "Anyone can implement this."
+			kind! String Open-Kind
+			kind! Number Open-Kind
+
+
+	+hdr('method')
+
+	section
+		p #[+ms('Method')]s are functions that act differently on different #[code Impl-Type]s.
+		p The implementation function chosen depends on the first parameter.
+		p.
+			Methods use a #[code Symbol], #[code method.impl-symbol],
+			to store the implementation,
+			so they don't risk conflicts with other methods.
+		p (You can also manually supply a string for it, as was done for `to-string`.)
+		p #[+ms('impl!')] creates a method implementation in a type's prototype.
+		p #[+ms('self-impl!')] implements the method directly on some object.
+
+	mason-editor
+		pre.
+			use
+				msl.Type.Method _ impl! self-impl!
+
+			magnitude = new Method
+				# This is called when the argument isn't implemented for.
+				default. .|
+					"{this}".length
+				allow-null?. true
+
+			# This modifies Number.prototype.
+			impl! magnitude Number .|
+				this
+			impl! magnitude String .|
+				.length
+
+			# This modifies String, not String.prototype.
+			self-impl! magnitude String .|
+				42
+
+			. magnitude 1
+			. magnitude "two"
+			. magnitude String
+			# This uses the default implementation.
+			. magnitude null
+
+	section
+		p.
+			You can implement a Method on a Kind,
+			which will pass the implementation down to its implementors
+			(recursively, if its implementors are also Kinds).
+
+
+	+hdr('prefix')
+
+	section
+		p Mason uses prefixes and suffixes to indicate type.
+		p This is just a convention; the compiler doesn't do anything special.
+
+	table
+		thead
+			tr
+				td Looks like
+				td Means
+		tr
+			td #[code ?a]
+			td #[+ms('?')] (option)
+		tr
+			td #[code $a]
+			td #[+ms('$')] (promise)
+		tr
+			td #[code @a]
+			td #[+ms('@')] (bag)
+		tr
+			td #[code a->b]
+			td #[+ms('Map')] (from a to b)
+		tr
+			td #[code a~]
+			td #[+ms('Generator')] (see #[a(href='./<~')<~])
+		tr
+			td #[code a?]
+			td #[code Boolean]
+
+	p An optional promise is #[code ?$a]; a promise for an option is #[code $?a].
+	p #[code a!] indicates a function that performs some action rather than just returning a value.

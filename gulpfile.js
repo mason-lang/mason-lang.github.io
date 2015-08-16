@@ -5,26 +5,30 @@ const
 	data = require('gulp-data'),
 	fs = require('fs'),
 	gulp = require('gulp'),
-	gulpJade = require('gulp-jade'),
-	jade = require('jade'),
+	jade = require('gulp-jade'),
 	mason = require('gulp-mason'),
 	path = require('path'),
 	plist = require('plist'),
 	plumber = require('gulp-plumber'),
 	sourceMaps = require('gulp-sourcemaps'),
+	svg2png = require('svg2png'),
 	stylus = require('gulp-stylus'),
 	watch = require('gulp-watch'),
 	yaml = require('js-yaml')
 
-gulp.task('default', [ 'view', 'style', 'editor', 'static', 'script', 'script', 'serve' ])
+gulp.task('default', [ 'view', 'style', 'editor', 'icon', 'static', 'script', 'script', 'serve' ])
 
 const
-	watchStream = (name, ext) => {
-		const glob = `assets/${name}/**/*.${ext}`
-		return gulp.src(glob).pipe(watch(glob, { verbose: true })).pipe(plumber())
+	doAndWatch = (src, action) => {
+		action()
+		watch(src, action)
 	},
+	watchGlob = glob =>
+		gulp.src(glob).pipe(watch(glob, { verbose: true })).pipe(plumber()),
+	watchDir = (name, ext) =>
+		watchGlob(`assets/${name}/**/*.${ext}`),
 	simple = (name, ext, stream, outDir) => {
-		let _ = watchStream(name, ext)
+		let _ = watchDir(name, ext)
 		if (stream !== undefined)
 			_ = _.pipe(stream)
 		if (outDir === undefined)
@@ -33,30 +37,41 @@ const
 	}
 
 gulp.task('view', () => {
-	jade.filters.raw = jade.runtime.escape
-	return watchStream('view', 'jade')
+	return watchGlob([ 'assets/view/**/*.jade', '!assets/view/lib/**/*' ])
 	.pipe(data(file =>  ({
 		path: file.history[0].replace(file.base, '').replace('.jade', '')
 	})))
-	.pipe(gulpJade({ jade: jade, pretty: true }))
+	.pipe(jade())
 	.pipe(gulp.dest('public'))
 })
 
 gulp.task('style', () => simple('style', 'styl', stylus()))
 
-gulp.task('static', () => simple('static', '*', undefined, ''))
-
 gulp.task('editor', () => {
-	const pathYaml = 'assets/static/editor/Mason.tmLanguage.yaml'
-	const pathPlist = 'public/editor/Mason.tmLanguage'
-	const strYaml = fs.readFileSync(pathYaml, 'utf-8')
-	const dictYaml = yaml.safeLoad(strYaml)
-	const strPlist = plist.build(dictYaml)
-	fs.writeFileSync(pathPlist, strPlist, "utf-8")
+	const src = 'assets/static/editor/Mason.tmLanguage.yaml'
+	const dest = 'public/editor/Mason.tmLanguage'
+	doAndWatch(src, () => {
+		const strYaml = fs.readFileSync(src, 'utf-8')
+		const dictYaml = yaml.safeLoad(strYaml)
+		const strPlist = plist.build(dictYaml)
+		if (!fs.existsSync('public/editor'))
+			fs.mkdirSync('public/editor')
+		fs.writeFileSync(dest, strPlist, "utf-8")
+	})
 })
 
+// TODO: svg icons obviate this
+gulp.task('icon', () => {
+	const src = 'assets/static/icon.svg'
+	doAndWatch(src, () => {
+		svg2png(src, 'public/icon.png', err => { if (err) throw err })
+	})
+})
+
+gulp.task('static', () => simple('static', '*', undefined, ''))
+
 gulp.task('script', () =>
-	watchStream('script', 'ms')
+	watchDir('script', 'ms')
 	.pipe(sourceMaps.init())
 	// TODO: module style option: amdefine, amd, commonjs
 	.pipe(mason({ forceNonLazyModule: true, includeAmdefine: false, checks: true, verbose: true }))

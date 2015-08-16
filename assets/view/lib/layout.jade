@@ -1,5 +1,7 @@
-block params
-- fullTitle = path === '' ? 'mason' : `mason.${path}`
+include mixins
+
+- fullTitle = path === 'index' ? 'mason' : `mason.${path}`
+- rootUrl = 'https://andy-hanson.github.io/mason'
 
 doctype html
 html
@@ -7,30 +9,26 @@ html
 		title #{fullTitle}
 		meta(charset='utf-8')
 
+		link(rel='icon' href='icon.png')
+
 		// Shim
 		link(rel='stylesheet' href='./style/reset.css')
-		script(src='./lib/es6-shim/es6-shim.min.js')
 		script(src='./lib/webcomponentsjs/webcomponents.js')
 
 		// ID needed because mason-editor.js is not run inside of this.
 		link#link-mason-editor(rel='import' href='./mason-editor.html')
-		link(rel='import' href='./mason-explain.html')
 
 		// I'd like to include this in mason-editor.jade, but RequireJS won't let me.
 		script(src='./lib/requirejs/require.js' data-main='./script/index.js')
-		link(rel='stylesheet'
+		link(rel='stylesheet',
 			href='http://fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans:400,400italic|Oxygen+Mono')
 		link(rel='stylesheet' href='./style/layout.css')
+
 	body
-		- pages = 'ms = if try class type <~ misc for'.split(' ')
+		- var pages = [ 'ms', '=', 'if', 'try', 'class', 'type', '<~', 'misc', 'for' ]
 
 		mixin link_to(name)
-			if name === 'index'
-				a(href='/').
-					index
-			else
-				a(href=name)
-					= name
+			a(href="#{name === 'index' ? '/' : name}")= name
 
 		header
 			h1
@@ -40,11 +38,10 @@ html
 					+link_to(page)
 
 		main
-			mason-explain
-				block content
+			block content
 
 		footer
-			- my_idx = pages.indexOf(path)
+			- var my_idx = pages.indexOf(path)
 			div#prev.prev-next
 				if my_idx !== -1 && 0 < my_idx
 					- prev = pages[my_idx - 1]
@@ -52,14 +49,12 @@ html
 
 			div#middle
 				ul
-					li.
-						public domain
+					li public domain
 					li
 						a(href='/')
 							i(class='fa fa-home')
 					li
-						a(href='mailto:andy.pj.hanson@gmail.com').
-							contact
+						a(href='mailto:andy.pj.hanson@gmail.com') contact
 
 			div#next.prev-next
 				if my_idx !== -1 && my_idx < pages.length - 1

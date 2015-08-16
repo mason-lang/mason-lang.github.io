@@ -1,4 +1,60 @@
-extends layout
+extends lib/layout
 
 block content
-	include:raw ./=.md
+	+hdr('locals')
+	section
+		p #[code =] declares a new immutable local.
+		p #[code ::=] declares a mutable one and #[code :=] mutates it.
+
+	mason-editor
+		pre.
+			a = 0
+			. a
+			b ::= 1
+			. b
+			b := 2
+			. b
+
+	section
+		p Locals are local to the block they're declared in.
+		p The compiler will stop you if you try to access an uninitialized local.
+
+	+hdr('properties')
+
+	section
+		p To access a property on an object, use #[code obj.prop].
+		p To access a property on #[code this], use #[code .prop].
+
+	mason-editor
+		pre.
+			obj = (x. 0)
+			. obj.x
+			f = .|
+				.x
+			. f.call obj
+
+	section
+		p Object properties assignment has a similar syntax to local assignment.
+		p #[code =] creates a readonly property, while `::=` creates a mutable one.
+		p #[code :=] compiles to JavaScript's normal property assignment, meaning it mutates of creates properties on the fly.
+
+	mason-editor
+		pre.
+			obj = (x. 0)
+			obj.y = 1
+			obj.z ::= 2
+			obj.z := 3
+			obj
+
+	section
+		p To access a property of variable name, use #[+ms('p')] or #[+ms('send')].
+
+	mason-editor
+		pre.
+			use
+				msl.Object p send
+
+			obj = (x. 0 f. .|
+				.x
+			. p obj "x"
+			. send obj "f"

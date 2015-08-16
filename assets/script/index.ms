@@ -9,7 +9,7 @@ window.requirejs.config
 
 success = |boot-order
 	(Object.getOwnPropertyDescriptor boot-order "_get").value.get()
-	window.require [ "../script/mason-explain" ]
+	window.require [ "../script/mason-editor/mason-editor" ]
 # TODO: This should be unnecessary because mason deps should automatically use! boot
 window.require [ "msl/private/boot-order" ] success |err
 	throw! err

@@ -1,0 +1,72 @@
+mixin hdr(name, fullName)
+	- fullName = fullName || name
+	a(href='./#{path}##{name}')
+		h1(id='#{name}')= fullName
+
+mixin hdr2(name, fullName)
+	- fullName = fullName || name
+	a(href='./#{path}##{name}')
+		h2(id='#{name}')= fullName
+
+-
+	var ms_s = {
+		'!': '!',
+		'@': '@.@',
+		'$': '$',
+		'$ing': '$',
+		'--!': '@.@!',
+		'++': '@.@',
+		'++!': '@.@!',
+		'=>': 'Type.Type',
+		'=?': 'compare',
+		'<?': 'compare',
+		'?': '@.?',
+		'Alias-Type': 'Type.Alias-Type',
+		'contains?': 'Type.Type',
+		curry: 'Function',
+		Deque: '@.Deque',
+		extract: 'Type.Type',
+		'?find': '@.@',
+		'gen-next!': 'Generator.gen-next!',
+		Generator: 'Generator',
+		'Hash-Map!': '@.Map.Hash-Map',
+		'Hash-Set': '@.Hash-Set',
+		'Heap-Priority-Queue!': '@.Heap-Priority-Queue',
+		'Id-Map!': '@.Map.Id-Map!',
+		'id-memoize': 'Function',
+		'Id-Set!': '@.Id-Set!',
+		'id=?': 'js',
+		'impl!': 'Type.Method',
+		'Impl-Type': 'Type.Impl-Type',
+		iterator: '@.@',
+		Kind: 'Type.Kind',
+		'Lazy-Stream': '@.Lazy-Stream',
+		LList: '@.LList',
+		Map: '@.Map.Map',
+		Method: 'Type.Method',
+		'p': 'Object',
+		'?p': 'Object',
+		'?pop!': '@.Priority-Queue!',
+		'Pred-Type': 'Type.Pred-Type',
+		Range: '@.Range',
+		send: 'Object',
+		'self-impl!': 'Type.Method',
+		Seq: '@.Seq',
+		sub: 'methods',
+		Stream: '@.Stream',
+		'Type': 'Type.Type',
+		'Weak-Id-Map!': '@.Map.Weak-Id-Map!',
+		'Wrap-Type': 'Type.Wrap-Type'
+	}
+	var export_paths  = { }
+	for (var key of Object.keys(ms_s)) {
+		var url = ms_s[key]
+		var rel_url = url.replace('.', '/')
+		var escaped_url = rel_url.replace('@', '%40').replace('?', '%3F')
+		export_paths[key] = `https://github.com/andy-hanson/msl/tree/master/src/${escaped_url}.ms`
+	}
+
+mixin ms(name)
+	- var url = export_paths[name]
+	- if (url === undefined) throw new Error(`No doc link for ${name}`)
+	a(href='#{url}')= name
