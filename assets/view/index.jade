@@ -21,7 +21,7 @@ block content
 
 	section
 		p To learn mason, use #[a(href='https://github.com/andy-hanson/mason-cli') mason-cli] and the live editors on this site.
-		p The CLI isn't suitable for projects. For those, use #[a(href='https://github.com/andy-hanson/gulp-mason') gulp-mason].
+		p The CLI isn't suitable for projects. For those, use a #[a(href='/#build-systems') build system].
 		p Sample projects:
 		ul
 			li
@@ -41,34 +41,39 @@ block content
 
 	+hdr('contribute')
 	section
-		p There's lots of work do be done on mason.
-		p Current Mason projects are:
+		p Main projects are:
 		table
-			- root = 'https://github.com/andy-hanson/'
+			mixin my(name)
+				a(href='https://github.com/andy-hanson/#{name}')= name
 			tr
-				td #[a(href='#{root}msl') msl]
+				td #[+my('msl')]
 				td standard library
 			tr
-				td #[a(href='#{root}mason-compile') mason-compile]
+				td #[+my('mason-compile')]
 				td compiler
 			tr
-				td #[a(href='#{root}mason-cli') mason-cli]
+				td #[+my('mason-cli')]
 				td command line interface
+
+		p#build-systems Mason plugins exist for these build systems:
+		table
 			tr
-				td #[a(href='#{root}gulp-mason') gulp-mason]
-				td #[a(href='http://gulpjs.com') gulp] plugin
+				td #[+my('broccoli-mason')]
+				td #[a(href='https://github.com/broccolijs/broccoli') broccoli]
+			tr
+				td #[+my('fly-mason')]
+				td #[a(href='https://github.com/flyjs/fly') fly]
+			tr
+				td #[+my('gulp-mason')]
+				td #[a(href='http://gulpjs.com') gulp]
 
 		p Future projects:
 		table
-			tr
-				td grunt-contrib-mason
-				td #[a(href='http://gruntjs.com') grunt] plugin
-			tr
-				td broccoli-mason
-				td #[a(href='http://broccolijs.com') broccoli] plugin
 			tr
 				td mason-emacs
 				td Emacs skin
 			tr
 				td mason-vim
 				td Vim skin
+
+		p #[a(href='mailto:andy.pj.hanson@gmail.com') Contact me] if you are interested in working with one of these.

@@ -1,5 +1,8 @@
-Website showing off Mason.
+Website showing off [mason](https://andy-hanson.github.io/mason).
 
-See it live at <http://andy-hanson.github.io/mason>.
+# Build
 
-Or: `npm install; bower install; ./gulp`, then it's at <http://localhost:8000>.
+	npm install
+	bower install
+	sudo npm install -g broccoli-cli
+	broccoli serve

@@ -57,7 +57,7 @@ block content
 		pre.
 			show-amount = |number name
 				~plural =
-					global.console.log "Calculating plural for {name}"
+					console.log "Calculating plural for {name}"
 					"{name}s"
 				switch number
 					0
@@ -89,11 +89,11 @@ block content
 			. my-and true true
 
 			. my-and true ~
-				global.console.log "This will be called."
+				console.log "This will be called."
 				false
 
 			. my-and false ~
-				global.console.log "Never called."
+				console.log "Never called."
 				true
 
 

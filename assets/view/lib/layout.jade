@@ -1,5 +1,6 @@
 include mixins
 
+- path = filename.match(/assets\/view\/(.+).jade/)[1]
 - fullTitle = path === 'index' ? 'mason' : `mason.${path}`
 - rootUrl = 'https://andy-hanson.github.io/mason'
 
@@ -9,7 +10,7 @@ html
 		title #{fullTitle}
 		meta(charset='utf-8')
 
-		link(rel='icon' href='icon.png')
+		link(rel='icon' href='icon.svg')
 
 		// Shim
 		link(rel='stylesheet' href='./style/reset.css')
@@ -28,7 +29,7 @@ html
 		- var pages = [ 'ms', '=', 'if', 'try', 'class', 'type', '<~', 'misc', 'for' ]
 
 		mixin link_to(name)
-			a(href="#{name === 'index' ? '/' : name}")= name
+			a(href="#{name === 'index' ? '/' : `${name}.html`}")= name
 
 		header
 			h1

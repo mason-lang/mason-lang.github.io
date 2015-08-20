@@ -1,17 +1,15 @@
 {
 	"private": true,
 	"devDependencies": {
-		"gulp": "3.9.0",
-		"gulp-data": "1.2.0",
-		"gulp-jade": "1.1.0",
-		"gulp-plumber": "1.0.1",
-		"gulp-sourcemaps": "1.5.2",
-		"gulp-stylus": "2.0.6",
-		"gulp-watch": "4.3.4",
-		"http-server": "0.8.0",
+		"broccoli": "0.16.7",
+		"broccoli-filter": "1.2.0",
+		"broccoli-funnel": "0.2.8",
+		"broccoli-jade": "1.0.1",
+		"broccoli-mason": "andy-hanson/broccoli-mason",
+		"broccoli-merge-trees": "0.2.3",
+		"broccoli-stylus": "2.1.0",
 		"js-yaml": "3.3.1",
-		"plist": "1.1.0",
-		"svg2png": "1.1.1"
+		"plist": "1.1.0"
 	},
 	"license": "WTFPL"
 }
