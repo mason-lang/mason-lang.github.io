@@ -1,0 +1,23 @@
+{
+  "name": "mason-compile",
+  "main": "dist/**/*",
+  "ignore": [
+    "dist/node-only"
+  ],
+  "dependencies": {
+    "esast": "andy-hanson/esast"
+  },
+  "moduleType": "amd",
+  "license": "WTFPL",
+  "private": true,
+  "homepage": "https://github.com/andy-hanson/mason-compile",
+  "_release": "803e87ccb2",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "803e87ccb2214008a0d1409f0c86c6a15023a2eb"
+  },
+  "_source": "git://github.com/andy-hanson/mason-compile.git",
+  "_target": "*",
+  "_originalSource": "andy-hanson/mason-compile"
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><title>tour/= - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.jade, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga')
+ga('create', 'UA-66651880-1', 'auto')
+ga('send', 'pageview')
+</script><script src="/lib/requirejs/require.js"></script><script>requirejs.config({
+	baseUrl: '/lib',
+	paths: {
+		marked: 'marked/marked.min',
+		msl: 'msl/dist',
+		'mason-compile': 'mason-compile/dist'
+	}
+})
+// kludge: need to require bootstrap because mason modules lazily load using _ms
+require(['msl/private/bootstrap'], () =>
+	require(['../script/mason-editor/mason-editor']), err => { throw err })
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/=#locals"><h1 id="locals">locals</h1></a><section><p><code>=</code> declares a local.
+<span class="aside">So does in <code>a. b</code> in object builders.</span></p><p><code>:=</code> changes the value of a previously declared local.
+<span class="aside">For object builders, this does <em>not</em> change <code>built</code>.</span>
+</p></section><mason-editor><pre>a = 1
+. a
+a := 2
+. a
+</pre></mason-editor><section><p>Locals are local to the block they're declared in.</p><p>The compiler will stop you if you try to access an uninitialized local.</p></section><a href="/tour/=#properties"><h1 id="properties">properties</h1></a><section><p>To access a property on an object, use <code>obj.prop</code>.</p><p>To access a property on <code>this</code>, use <code>.prop</code>.</p></section><mason-editor><pre>obj = (x. 0)
+. obj.x
+f = .|
+	.x
+. f.call obj
+</pre></mason-editor><section><p>Object properties assignment has a similar syntax to local assignment.</p><p><code>=</code> creates a new property <span class="aside">throwing if it already exists</span>.</p><p><code>:=</code> compiles to JavaScript's normal property assignment, meaning it mutates or creates properties on the fly.</p></section><mason-editor><pre>obj = (x. 1)
+obj.y = 1
+obj.y := 2
+|| := creates the property if necessary.
+obj.z := 3
+obj
+</pre></mason-editor><section><p>To access a property whose name must be computed, use <code>obj."foo"</code></p></section><mason-editor><pre>obj =
+	"wierd name". 1
+obj."wierd name"</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="basic">basic</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="if">if</a></div></footer></body></html>

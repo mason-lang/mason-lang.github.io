@@ -1,0 +1,17 @@
+{
+  "name": "msl",
+  "moduleType": "amd",
+  "main": "dist/**/*",
+  "license": "WTFPL",
+  "private": true,
+  "homepage": "https://github.com/andy-hanson/msl",
+  "_release": "548d2d8aba",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "548d2d8aba7056244348284ccae82c904270bc77"
+  },
+  "_source": "git://github.com/andy-hanson/msl.git",
+  "_target": "*",
+  "_originalSource": "andy-hanson/msl"
+}

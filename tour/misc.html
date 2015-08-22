@@ -1,0 +1,67 @@
+<!DOCTYPE html><html><head><title>tour/misc - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.jade, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga')
+ga('create', 'UA-66651880-1', 'auto')
+ga('send', 'pageview')
+</script><script src="/lib/requirejs/require.js"></script><script>requirejs.config({
+	baseUrl: '/lib',
+	paths: {
+		marked: 'marked/marked.min',
+		msl: 'msl/dist',
+		'mason-compile': 'mason-compile/dist'
+	}
+})
+// kludge: need to require bootstrap because mason modules lazily load using _ms
+require(['msl/private/bootstrap'], () =>
+	require(['../script/mason-editor/mason-editor']), err => { throw err })
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/misc#&amp;"><h1 id="&amp;">&amp;</h1></a><section><p><code>&</code> lets you write simple functions one one line.</p><p>Use <code>&()</code> to write a function of one argument, the focus, on one line.</p><p>There are more short forms for named methods:</p><ul><li><code>obj&foo</code> is short for <code>obj.foo.bind obj</code>.</li><li><code>.&foo</code> is short for <code>this&foo</code>.</li><li><p><code>&foo</code> is short for:</p><mason-editor no-eval><pre>|_ ...args
+	_.foo ...args</pre></mason-editor></li></ul><p><code>&.foo</code> is short for <code>&(_.foo)</code>.</p></section><mason-editor><pre>. @keep [1 2 3 4] &(divisible? _ 2)
+. @map [1 2 3] 'foo&repeat
+. @map [1 2] &toString
+. @map ['a 'bb 'ccc] &.length
+</pre></mason-editor><a href="/tour/misc#with"><h1 id="with">with</h1></a><section><p><code>with</code> lets you create an empty object and build it up by modifying it.</p><p>It assigns to the focus, or to a new local specified with <code>as</code>.</p></section><mason-editor><pre>. with []
+	_.push 1
+	_.push 2
+. with new Object as o
+	o.x = 1
+	o.y = 2
+</pre></mason-editor><a href="/tour/misc#pipe"><h1 id="pipe">pipe</h1></a><section><p>A common pattern is to repeatedly apply transforms to a value.</p><p>With <code>pipe</code>, <code>_</code> on each line of the indented block represents the value of the previous line.</p><p>The start value goes before the indented block. <span class="aside"><code>[1 2 3 4 5]</code> in this example.</span></p></section><mason-editor><pre>pipe [1 2 3 4 5]
+	@keep _ &(divisible? _ 2)
+	sum_
+|| Same as: sum (@keep [1 2 3 4 5] &(divisible? _ 2))
+</pre></mason-editor><section><p>If you ever get stuck having to use a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent API</a>, <code>pipe</code> could help reduce the pain.</p></section><a href="/tour/misc#destructuring"><h1 id="destructuring">destructuring</h1></a><section><p>If a value is an object and you need several of its fields,
+extract them all by writing multiple names before the <code>=</code>.
+</p></section><mason-editor><pre>obj =
+	a. 1
+	b. 2
+a b = obj
+. a
+. b
+</pre></mason-editor><section><p>Array destructuring is planned...</p></section><a href="/tour/misc#sub"><h1 id="sub">sub</h1></a><section><p><a href="//github.com/mason-lang/msl/tree/master/src/methods.ms">sub</a> is a <a href="//github.com/mason-lang/msl/tree/master/src/Type/Method.ms">Method</a> with special syntax.</p><p>It does <a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> lookups, <a href="//github.com/mason-lang/msl/tree/master/src/%40/Seq.ms">Seq</a> lookups by index.</p><p>It also <a href="//rosettacode.org/wiki/Partial_function_application">partially applies</a> functions.</p><p>Remember that spaces are significant:
+<code>a[b]</code> calls <code>sub</code> on <code>a</code> while <code>a [b]</code> calls <code>a</code> on an Array.
+</p></section><mason-editor><pre>map =
+	1 -> 1
+. map[1]
+
+foo = |a b c
+	[a b c]
+|| Call `sub` with 2 arguments.
+bar = foo[1 2]
+. bar 3
+
+|| Call `sub` with 1 argument.
++2 = +[(+ 1 1)]
+. +2 1
+</pre></mason-editor><section><p>Sub syntax can also be used to add values with <code>=</code> and <code>:=</code>, which behave identically.</p><p>You can remove values with <code>del</code>, which returns a <a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> of the value that was there.</p></section><mason-editor><pre>map = empty Map
+map[1] = 2
+. map[1]
+. del map[1]
+. del map[1]
+</pre></mason-editor><section><p>Many types also support <code>sub</code>, as in <code>Array[Number]</code>.
+Usually this is just the identity, so it's just for documentation.
+</p></section><a href="/tour/misc#range"><h1 id="range">range</h1></a><section><p>This syntax simply calls the <a href="//github.com/mason-lang/msl/tree/master/src/%40/Range.ms">Range</a> constructor.</p><p><code>a..b</code> is inclusive and <code>a...b</code> is exclusive of <code>b</code>.</p><p><code>..</code> splits tokens earlier than <code>.</code>,
+so you can write <code>0...array.length</code> but have to write <code>(0...6).by 2</code>.</p><p><code>a...</code> is an infinite range.</p></section><mason-editor><pre>. 0..1
+. 2...4
+. (4...8).by 2
+. @take 8... 3</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="type">type</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="for">for</a></div></footer></body></html>

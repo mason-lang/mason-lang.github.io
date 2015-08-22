@@ -1,0 +1,20 @@
+#logo {
+  display: block;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+#logo img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: -0.5em;
+  width: 20rem;
+}
+#logo strong {
+  font-family: "Pac Libertas";
+  font-size: 150%;
+}
+@font-face {
+  font-family: "Pac Libertas";
+  src: url("/font/pac-libertas.ttf");
+}

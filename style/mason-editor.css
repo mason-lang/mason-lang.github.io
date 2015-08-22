@@ -1,0 +1,112 @@
+@import '//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css';
+@import '../lib/codemirror/lib/codemirror.css';
+@import '../lib/codemirror/theme/monokai.css';
+@import '../lib/codemirror/theme/base16-light.css';
+mason-editor {
+  display: block;
+  box-shadow: 0 3px 6px #808080;
+  border-radius: 2em;
+}
+mason-editor output #outContainer {
+  display: flex;
+  flex-direction: row;
+  background: #f0ffff;
+}
+mason-editor output #status {
+  flex-basis: 2em;
+  text-align: center;
+}
+mason-editor output #out {
+  flex-basis: auto;
+}
+mason-editor output #out .warning {
+  color: #dc143c;
+}
+mason-editor output #out .error {
+  color: #b22222;
+}
+mason-editor output #out .loc {
+  font-weight: bold;
+  color: #2e8b57;
+  margin-right: 1em;
+}
+mason-editor output #out .code {
+  font-weight: bold;
+  color: #4b0082;
+}
+mason-editor output #statusIcon {
+  margin: 0.25em;
+  font-size: 1.5em;
+}
+mason-editor output #statusIcon.fa-check {
+  color: #7fff00;
+}
+mason-editor output #statusIcon.fa-exclamation {
+  color: #ff6347;
+}
+mason-editor output #statusIcon.fa-refresh {
+  color: cornflowerBlue;
+  cursor: pointer;
+}
+mason-editor output .spinning {
+  -webkit-animation: spin 2s;
+  -moz-animation: spin 2s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: steps(8);
+  -moz-animation-timing-function: steps(8);
+}
+@-moz-keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+mason-editor .CodeMirror {
+  height: 100%;
+}
+mason-editor #ms .CodeMirror {
+  font-size: 14px;
+  border-top-left-radius: 2em;
+  border-top-right-radius: 2em;
+}
+mason-editor #js .CodeMirror {
+  font-size: 12px;
+}
+mason-editor #js {
+  border-bottom-left-radius: 2em;
+  border-bottom-right-radius: 2em;
+  overflow: hidden;
+  max-height: 0.5em;
+  transition: max-height 1s;
+}
+mason-editor[no-eval] #ms .CodeMirror {
+  border-bottom-left-radius: 2em;
+  border-bottom-right-radius: 2em;
+}

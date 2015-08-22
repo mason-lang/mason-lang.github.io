@@ -1,0 +1,77 @@
+<!DOCTYPE html><html><head><title>tour/if - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.jade, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga')
+ga('create', 'UA-66651880-1', 'auto')
+ga('send', 'pageview')
+</script><script src="/lib/requirejs/require.js"></script><script>requirejs.config({
+	baseUrl: '/lib',
+	paths: {
+		marked: 'marked/marked.min',
+		msl: 'msl/dist',
+		'mason-compile': 'mason-compile/dist'
+	}
+})
+// kludge: need to require bootstrap because mason modules lazily load using _ms
+require(['msl/private/bootstrap'], () =>
+	require(['../script/mason-editor/mason-editor']), err => { throw err })
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/if#boolean operations"><h1 id="boolean operations">boolean operations</h1></a><section><p>These work just like JavaScript's <code>&& || !</code>.</p><p>In Mason, keywords automatically group with the rest of the line. (Or up until the next closing parenthesis, but due to this rule you'll rarely need parentheses.)</p><p>Since <code>not</code> has only one argument, the entire expression after it is its argument.</p><p><code>and</code> and <code>or</code> expect many arguments, so their arguments are the multiple expressions after them.</p><p>So, <code>not a b</code> is <code>not (a b)</code>, but <code>and a b</code> is <code>(and a b)</code>.</p><p>Remember, keywords eat up the rest of the line after them.</p></section><mason-editor><pre>. not false
+. and true true
+|| `and`/`or` can take any number of arguments
+. or false false true
+|| nand and nor are simply:
+. not and true false
+. not or false false
+|| The `or` here takes up the rest of the line, so it's parsed as `and true (or false true)`.
+. and true or false true
+</pre></mason-editor><section><p>Please don't use these as control structures; they are forbidden to be used as statements. <code>if</code> handles that instead.</p></section><a href="/tour/if#if"><h1 id="if">if</h1></a><section><p><code>if</code> and <code>unless</code> return a value only when their condition is true.</p><p>When used as expressions, these are <a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> values.</p><p>These parse the block specially by taking it for theirselves before anything else can.</p></section><mason-editor><pre>. if true 0
+. if (or true false) 1
+. unless not true
+	2
+|| `unless` eats the block before `and` can, so this works:
+. unless and true false
+	3
+|| `un-?` has *1* argument; `if` eats the rest of the line.
+|| (un-? gets an option's value or throws.)
+. un-? if true 4
+</pre></mason-editor><section><p>There is no <code>else</code> expression to go with <code>if</code>; use <code>cond</code> or <code>case</code> (both below) instead.</p></section><a href="/tour/if#cond"><h1 id="cond">cond</h1></a><section><p>For simple conditionals, use <code>cond</code>. This is like JavaScript's ternary operator.</p><p>Like anything else, the "else" value can go in a block. What if you want blocks for both "then" and "else"? Use <a href="#case"><code>case</code></a>.</p></section><mason-editor><pre>. cond true 'then 'else
+. cond false 'then
+	'else
+</pre></mason-editor><a href="/tour/if#switch"><h1 id="switch">switch</h1></a><section><p>This is just like JavaScript's.</p><p>You don't need to <code>break</code> explicitly. Fallthrough is not supported.</p><p>To handle multiple cases the same way, just write multiple values on one line.</p><p><code>else</code> handles anything not covered by another case.</p></section><mason-editor><pre>f = |number
+	switch number
+		0
+			"zero"
+		1 2
+			"a small number"
+		else
+			"some other number"
+. f 0
+. f 1
+. f 2
+. f 3
+</pre></mason-editor><section><p>If there is no <code>else</code>, an error will be thrown for an unhandled case.</p><p>(If you really want to do nothing, just write <code>pass</code> in the <code>else</code> block.)</p></section><a href="/tour/if#focus"><h1 id="focus">focus</h1></a><section><p>The focus, <code>_</code>, is a good short-lived variable when you don't need a name.</p><p>There's some helpful syntax for using it:</p><ul><li>Many expressions implicitly assign to the focus.</li><li><code>fun_</code> is short for <code>(fun _)</code>.</li><li><code>:Type</code> is short for <code>_:Type</code>. (See <a href="./type">types</a>)</li></ul></section><a href="/tour/if#case"><h1 id="case">case</h1></a><section><p><code>case</code> allows any expression as a test.</p><p>Tests are tried from top to bottom until one matches.</p><p>Just like <code>switch</code>, a missing <code>else</code> compiles to throwing an error.</p><p>An expression written after <code>case</code> on the same line will become the focus.</p></section><mason-editor><pre>rate-guess = |guess
+	case guess
+		|| implicitly, `_ = guess`
+		&lt? _ 7
+			"Too low!"
+		&gt? _ 7
+			"Too high!"
+		else
+			"You got it!"
+
+. rate-guess 6
+. rate-guess 8
+. rate-guess 7
+</pre></mason-editor><section><p> Use <code>|case</code> or <code>|switch</code> and it will implicitly make the focus the argument.</p></section><mason-editor><pre>rate-guess = |case
+	=? _ 7
+		"You got it!"
+	else
+		"Off by {- _ 7}"
+
+. rate-guess 1337
+
+rate-guess-2 = |switch
+	7
+		"You got it!"
+
+. rate-guess-2 7</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="=">=</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="try">try</a></div></footer></body></html>

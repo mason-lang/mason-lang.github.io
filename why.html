@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head><title>why - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.jade, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga')
+ga('create', 'UA-66651880-1', 'auto')
+ga('send', 'pageview')
+</script><script src="/lib/requirejs/require.js"></script><script>requirejs.config({
+	baseUrl: '/lib',
+	paths: {
+		marked: 'marked/marked.min',
+		msl: 'msl/dist',
+		'mason-compile': 'mason-compile/dist'
+	}
+})
+// kludge: need to require bootstrap because mason modules lazily load using _ms
+require(['msl/private/bootstrap'], () =>
+	require(['../script/mason-editor/mason-editor']), err => { throw err })
+</script></head><body><header><h1><a href="/">mason</a></h1><!-- overridden by tour subheader.--><!-- to get here from tour users click on 'mason' at top.--><nav><a href="why">why?</a><a href="setup">setup</a><a href="tour">tour</a></nav></header><main><section><p>Mason is designed to <em>reduce</em> the syntax of JavaScript (JS) and <em>expand</em> its capabilities.</p><p>Its goals are:</p><ul><li>Be syntactically light. No <code>{ } ( ) , ;</code> all over the place.</li><li><p>Everything JS can do, Mason can do better.</p><p>This means the core language is just JavaScript <span class="aside">minus syntax</span>.
+Mason functions are JS functions, Mason classes are JS classes, Mason modules are JS modules.</p><p>You can convert a JS project to Mason without changing the design at all.</p></li><li>Mason uses a mandatory standard library <span class="aside">a small one</span> called <a href="//github.com/mason-lang/msl">msl</a> to provide basic functionality missing from JS.
+Many of msl's functions are builtins that are implicitly imported.
+<span class="aside">For example, JS's <code>==</code> can't be overloaded, so Mason programs use the <a href="//github.com/mason-lang/msl/tree/master/src/compare.ms">=?</a> method from msl instead.</span></li><li>Don't impose any style.
+Mason isn't X-oriented for <em>any</em> X.
+This leads to it being bigger and less "pure", but more useful as a JS substitute.
+It adds new features but doesn't force you to use them.
+</li></ul><p>So what features does it add? You'll read them all in the <a href="./tour">tour</a>, but here's a preview:</p><ul><li><a href="tour/basic#build">Build</a> syntax for constructing objects, lists, and maps. It's also a nice syntax for declarative data.</li><li>Most statements are also values.
+For example, <a href="tour/if#if">if</a> returns an optional value.</li><li><a href="tour/try#assert">Assertions</a></li><li><a href="tour/class#method functions">Method functions</a>: functions that can be polymorphically implemented by many types, including builtin types.</li><li><a href="tour/class#kind">Kinds</a>: abstract types that support multiple inheritance and can be safely implemented by builtin types.</li><li><a href="tour/type">Type</a> declaration syntax, with dynamic type checks.</li><li><a href="tour/async">Async</a> functions</li></ul><p>Planned features:</p><ul><li>HTML construction syntax (like <a href="//facebook.github.io/react/docs/jsx-in-depth.html">JSX</a> but not bound to any framework, good for both client and server)</li><li>Discriminated union syntax (actually just a class heirarchy)</li><li><a href="//github.com/jeffmo/es-class-static-properties-and-fields">Class properties</a></li><li><a href="//github.com/wycats/javascript-decorators">Decorators</a></li><li>Lazy builders (useful for lazy <a href="tour/for#@for">@for</a> loops)</li></ul><p>It's under active development <a href="//github.com/mason-lang">here</a>.</p><p>In addition to language/msl features, it needs:</p><ul><li><a href="gruntjs.com">grunt</a>-mason</li><li>emacs/vim support</li><li>Finish <a href="//github.com/mason-lang/mason-doc">mason-doc</a></li><li>Users!</li></ul><p>Have a comment about the language?
+<a href="//gitter.im/mason-lang/mason-compile">Chat on gitter</a> or
+<a href="mailto:andy.pj.hanson@gmail.com">contact me directly</a>.
+</p></section></main><footer><div id="prev" class="prev-next"></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"></div></footer></body></html>
