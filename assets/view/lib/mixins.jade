@@ -1,3 +1,5 @@
+- gitRoot = 'https://github.com/mason-lang'
+
 mixin hdr(name, fullName)
 	- fullName = fullName || name
 	a(href='./#{path}.html##{name}')
@@ -63,10 +65,13 @@ mixin hdr2(name, fullName)
 		var url = ms_s[key]
 		var rel_url = url.replace('.', '/')
 		var escaped_url = rel_url.replace('@', '%40').replace('?', '%3F')
-		export_paths[key] = `https://github.com/andy-hanson/msl/tree/master/src/${escaped_url}.ms`
+		export_paths[key] = `#{gitRoot}/msl/tree/master/src/${escaped_url}.ms`
 	}
 
 mixin ms(name)
 	- var url = export_paths[name]
 	- if (url === undefined) throw new Error(`No doc link for ${name}`)
 	a(href='#{url}')= name
+
+mixin ms-project(name)
+	a(href='#{gitRoot}/#{name}')= name

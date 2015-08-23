@@ -3,24 +3,11 @@ extends lib/layout
 block content
 	- var quote = '"'
 
-	hdr('about')
 	section
-		p This guide shows off mason's syntax and standard library.
-		p.
-			All mason programs must use the
-			#[a(href='https://github.com/andy-hanson/msl') msl (Mason Standard Library)] package.
-		p.
-			The web site's examples are editable, but you should learn
-			the #[a(href='https://github.com/andy-hanson/mason-cli') cli] too.
-		p Run this in a console:
-		pre.
-			sudo npm install -g https://github.com/andy-hanson/mason-cli
-			sudo npm install -g https://github.com/andy-hanson/msl
-			sudo npm install -g amdefine # We're working on not requiring this.
-			echo "console.log 1" > test.ms
-			mason run test.ms
+		p All Mason programs must use the #[+ms-project('msl')] (Mason Standard Library) package.
+		p The examples can be run on the site, but you may want to #[a(href='/setup.html') install mason] too.
 
-	hdr('syntax')
+	+hdr('syntax')
 	section
 		p.
 			Most character sequences are valid names, if they have no special characters
@@ -31,9 +18,9 @@ block content
 		p #[code #] starts a line comment.
 		p #[code ###] starts and ends a multi-line comment.
 
-	hdr('blocks')
+	+hdr('blocks')
 
-	hdr2('objects')
+	+hdr2('objects')
 	section
 		p Objects are written as indented blocks of #[code key. value] pairs.
 		p Click #[i(class='fa fa-refresh')] to see output.
@@ -51,7 +38,7 @@ block content
 			one. 1
 			uno. one
 
-	hdr2('arrays')
+	+hdr2('arrays')
 	section
 		p Arrays are also written in indented blocks.
 		p Each line beginning with #[code .], followed by a space, writes a new entry to it.
@@ -61,7 +48,7 @@ block content
 			. 1
 			. 2
 
-	hdr2('map')
+	+hdr2('map')
 	section
 		p Maps follow the same pattern.
 		p Each line with a #[code ->] writes an entry to the map.
@@ -71,7 +58,7 @@ block content
 			1 -> 2
 			3 -> 4
 
-	hdr2('short forms')
+	+hdr2('short forms')
 	section
 		p If you prefer to be curt:
 
@@ -80,7 +67,7 @@ block content
 			obj. (a. 1 b. 2)
 			array. [ 1 2 ]
 
-	hdr2('value blocks')
+	+hdr2('value blocks')
 	section
 		p If a block is not an object, array, or map block, its value is the last line.
 		p You don't need to explicitly #[code return].
@@ -90,7 +77,7 @@ block content
 			dos = 2
 			dos
 
-	hdr('literals')
+	+hdr('literals')
 	section
 		p There are the usual constants:
 
@@ -135,7 +122,7 @@ block content
 				Let's interpolate with \{+ 1 1}.
 				{+ 1 1}
 
-	hdr('functions')
+	+hdr('functions')
 	section
 		p Functions are written with a #[code |] followed by space-separated arguments.
 		p The body of a function is a block.
@@ -164,7 +151,7 @@ block content
 				pass
 			say-hi!()
 
-	hdr2('this-functions')
+	+hdr2('this-functions')
 	section
 		p Normal functions compile to JavaScript's arrow functions.
 		p For #[code function() { }], which has a new #[code this] variable, use #[code .|] and #[code .!|].
@@ -177,7 +164,7 @@ block content
 					this
 			(f.call 3)()
 
-	hdr2('new')
+	+hdr2('new')
 	section
 		p Calling a constructor looks like a function call with #[code new] in front.
 
@@ -185,7 +172,7 @@ block content
 		pre.
 			new Array 8
 
-	hdr('modules')
+	+hdr('modules')
 	section
 		p Every file is a module with a default export and named exports.
 		p A module is written like an object block.

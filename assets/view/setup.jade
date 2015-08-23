@@ -1,0 +1,52 @@
+extends lib/layout
+
+block content
+	h1 node
+	section
+		p.
+			Even if you only plan to use mason in the browser,
+			you'll still need to install #[a(href='https://nodejs.org') node.js].
+
+		p Since Mason uses new features, you'll need to install the very latest version.
+		pre.
+			git clone https://github.com/nodejs/node.git
+			cd node
+			git checkout next+1
+			./configure
+			make
+			sudo make install
+
+		p If you use #[a(href='https://github.com/creationix/nvm') nvm]:
+		pre nvm alias default iojs
+
+	+hdr('start')
+	section
+		p To test out your node installation, try running this:
+		pre.
+			mkdir test; cd test
+			sudo npm install -g mason-cli
+			npm install amdefine msl
+			echo 'console.log "hello world!"' > hello.ms
+			mason run hello.ms
+		p #[+ms-project('mason-cli')] is good for scripts, but for projects you should use a build system.
+
+	+hdr('build')
+	section
+		p Mason does not come with a build tool.
+		p Instead, it works with existing build systems.
+		ul
+			li #[+ms-project('broccoli-mason')]
+			li #[+ms-project('fly-mason')]
+			li #[+ms-project('gulp-mason')]
+
+	+hdr('edit')
+	section
+		h2 #[a(href='https://sublimetext.com/') sublime] / #[a(href='https://macromates.com/') textmate]
+		section
+			p A tmLanguage file is available #[a(href='./editor/Mason.tmLanguage') here].
+			p To install in Sublime Text 3:
+			pre.
+				curl #{rootUrl}/editor/Mason.tmLanguage > \
+					~/.config/sublime-text-3/Packages/User/Mason.tmLanguage
+
+

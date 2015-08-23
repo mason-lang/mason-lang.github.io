@@ -2,7 +2,7 @@ include mixins
 
 - path = filename.match(/assets\/view\/(.+).jade/)[1]
 - fullTitle = path === 'index' ? 'mason' : `mason.${path}`
-- rootUrl = 'https://andy-hanson.github.io/mason'
+- rootUrl = 'http://mason-lang.org'
 
 doctype html
 html
@@ -13,51 +13,42 @@ html
 		link(rel='icon' href='icon.svg')
 
 		// Shim
-		link(rel='stylesheet' href='./style/reset.css')
-		script(src='./lib/webcomponentsjs/webcomponents.js')
+		link(rel='stylesheet' href='/style/reset.css')
+		script(src='/lib/webcomponentsjs/webcomponents.js')
 
 		// ID needed because mason-editor.js is not run inside of this.
-		link#link-mason-editor(rel='import' href='./mason-editor.html')
+		link#link-mason-editor(rel='import' href='/mason-editor.html')
 
 		// I'd like to include this in mason-editor.jade, but RequireJS won't let me.
-		script(src='./lib/requirejs/require.js' data-main='./script/index.js')
+		script(src='/lib/requirejs/require.js' data-main='/script/index.js')
 		link(rel='stylesheet',
 			href='http://fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans:400,400italic|Oxygen+Mono')
-		link(rel='stylesheet' href='./style/layout.css')
+		link(rel='stylesheet' href='/style/layout.css')
 
 	body
-		- var pages = [ 'ms', '=', 'if', 'try', 'class', 'type', '<~', 'misc', 'for' ]
-
-		mixin link_to(name)
-			a(href="#{name === 'index' ? '/' : `${name}.html`}")= name
-
 		header
 			h1
 				a(href='/') mason
-			nav
-				for page in pages
-					+link_to(page)
+
+			block subheader
+				// default, can change
+				nav
+					a(href='tour') tour
+					a(href='setup.html') setup
 
 		main
 			block content
 
 		footer
-			- var my_idx = pages.indexOf(path)
 			div#prev.prev-next
-				if my_idx !== -1 && 0 < my_idx
-					- prev = pages[my_idx - 1]
-					+link_to(prev)
+				block foot-prev
 
 			div#middle
 				ul
 					li public domain
-					li
-						a(href='/')
-							i(class='fa fa-home')
+					li #[a(href='#{gitRoot}') #[i.fa.fa-github]]
 					li
 						a(href='mailto:andy.pj.hanson@gmail.com') contact
 
 			div#next.prev-next
-				if my_idx !== -1 && my_idx < pages.length - 1
-					- next = pages[my_idx + 1]
-					+link_to(next)
+				block foot-next

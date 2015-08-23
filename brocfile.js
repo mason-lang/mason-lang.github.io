@@ -17,7 +17,7 @@ const
 	// Have to funnel it twice to get imports to work.
 	// https://github.com/sindresorhus/broccoli-jade#a-note-about-include-paths
 	view = funnel(
-		jade(funnel('assets/view', { srcDir: '/', destDir: 'assets/view', exclude: ['lib/*'] })),
+		jade(funnel('assets/view', { srcDir: '/', destDir: 'assets/view', exclude: ['**/lib/*.jade'] })),
 		{ srcDir: 'assets/view', destDir: '/' }),
 	style = funnel(
 		stylus(funnel('assets/style', { exclude: ['lib.styl'] }), { include: [ 'assets/style' ] }),

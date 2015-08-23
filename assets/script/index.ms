@@ -1,5 +1,5 @@
 window.requirejs.config
-	baseUrl. "./lib"
+	baseUrl. "/lib"
 	paths. (marked. "marked/marked.min" msl. "msl/dist" mason-compile. "mason-compile/dist")
 	scriptType. case
 		(new RegExp "firefox").test window.navigator.userAgent

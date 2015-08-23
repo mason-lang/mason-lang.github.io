@@ -1,8 +1,12 @@
-Website showing off [mason](https://andy-hanson.github.io/mason).
+Website showing off [mason](http://mason-lang.org).
 
-# Build
+## Run
 
 	npm install
 	bower install
 	sudo npm install -g broccoli-cli
 	broccoli serve
+
+## Build
+
+	broccoli build public

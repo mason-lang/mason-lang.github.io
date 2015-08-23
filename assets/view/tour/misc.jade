@@ -1,7 +1,7 @@
 extends lib/layout
 
 block content
-	hdr('with')
+	+hdr('with')
 
 	section
 		p #[code with] lets you create an empty object and build it up by modifying it.
@@ -16,7 +16,7 @@ block content
 				o.x = 1
 				o.y = 2
 
-	hdr('sub')
+	+hdr('sub')
 
 	section
 		p #[+ms('sub')] is a #[+ms('Method')] with special syntax.
@@ -46,7 +46,7 @@ block content
 		p For that, use #[+ms('p')], #[+ms('?p')], and #[+ms('send')].
 
 
-	hdr('lazy')
+	+hdr('lazy')
 
 	section
 		p If you don't know that a value is always used, it's wasteful to always compute it.
@@ -97,7 +97,7 @@ block content
 				true
 
 
-	hdr('region')
+	+hdr('region')
 
 	section
 		p #[code region] visually groups your code.

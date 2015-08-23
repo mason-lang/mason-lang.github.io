@@ -1,0 +1,27 @@
+extends ../../lib/layout
+
+block subheader
+	- var pages = [ '=', 'if', 'try', 'class', 'type', '<~', 'misc', 'for' ]
+
+	mixin link_to(name)
+		if name === 'index'
+			a(href='/') tour
+		else
+			a(href="#{name}.html")= name
+
+	nav
+		for page in pages
+			+link_to(page)
+
+
+- var my_idx = pages.indexOf(path)
+
+block foot-prev
+	if my_idx !== -1 && 0 < my_idx
+		- prev = pages[my_idx - 1]
+		+link_to(prev)
+
+block foot-next
+	if my_idx !== -1 && my_idx < pages.length - 1
+		- next = pages[my_idx + 1]
+		+link_to(next)
