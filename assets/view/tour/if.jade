@@ -51,6 +51,7 @@ block content
 		p #[code switch] efficiently branches based on a value.
 		p Unlike with JavaScript, you don't need #[code break].
 		p Fallthrough is not supported.
+		p To handle multiple cases in the same way, use #[code or].
 
 	mason-editor
 		pre.
@@ -58,14 +59,17 @@ block content
 				switch number
 					0
 						"zero"
+					or 1 2
+						"a small number"
 					else
 						"some other number"
 			. f 0
 			. f 1
+			. f 3
 
 	section
 		p If there is no #[code else], an error will be thrown for an unhandled case.
-		p (If you want to do nothing, just write `pass` in the `else` block.)
+		p (If you want to do nothing, just write #[code pass] in the #[code else] block.)
 		p #[code switch!] is the statement version.
 
 

@@ -1,5 +1,3 @@
-# I use `support.constant` for lazy things
-
 name: Mason
 scopeName: source.mason
 fileTypes:
@@ -139,7 +137,7 @@ patterns:
 
 - comment: Mason keyword
   name: keyword
-  match: (_|->|and|as|assert!|break!?|built|case!?|catch!?|class|construct!|continue!|debug|debugger|do!?|else|except!?|false|finally!|forbid!|@for~?|for!?|get|if!?|in|is|new|not|null|or|out|pass|set!|super|static|switch!?|this|this-module-directory|throw!|true|try!?|undefined|unless!?|use!?|use-debug|use~|<~|<~~)(\s)
+  match: (_|->|and|as|assert!|break!?|built|case!?|catch!?|class|construct!|continue!|debug|debugger|do!?|else|except!?|false|finally!|forbid!|@for~?|for!?|get|if!?|ignore|in|is|name|new|not|null|or|out|pass|set!|super|static|switch!?|this||throw!|true|try!?|undefined|unless!?|use!?|use-debug|use~|<~|<~~)(\s)
 
 - comment: Bracket
   name: keyword
@@ -147,7 +145,7 @@ patterns:
 
 - comment: Number literal
   name: constant.numeric
-  match: -?\d+(\.\d+)?
+  match: -?(0(x|o|b))?\d+(\.\d+)?
 
 - commment: Type test. (Type *not* in fun or assign)
   name: support.type

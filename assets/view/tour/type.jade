@@ -85,7 +85,7 @@ block content
 			Methods use a #[code Symbol], #[code method.impl-symbol],
 			to store the implementation,
 			so they don't risk conflicts with other methods.
-		p (You can also manually supply a string for it, as was done for `to-string`.)
+		p.aside You can also manually supply a string for it, as was done for #[code to-string].
 		p #[+ms('impl!')] creates a method implementation in a type's prototype.
 		p #[+ms('self-impl!')] implements the method directly on some object.
 
@@ -95,6 +95,7 @@ block content
 				msl.Type.Method _ impl! self-impl!
 
 			magnitude = new Method
+				name.
 				# This is called when the argument isn't implemented for.
 				default. .|
 					"{this}".length
@@ -124,7 +125,6 @@ block content
 
 
 	+hdr('prefix')
-
 	section
 		p Mason uses prefixes and suffixes to indicate type.
 		p This is just a convention; the compiler doesn't do anything special.
@@ -136,19 +136,19 @@ block content
 				td Means
 		tr
 			td #[code ?a]
-			td #[+ms('?')] (option)
+			td #[+ms('?')] #[span.aside option]
 		tr
 			td #[code $a]
-			td #[+ms('$')] (promise)
+			td #[+ms('$')] #[span.aside promise]
 		tr
 			td #[code @a]
-			td #[+ms('@')] (bag)
+			td #[+ms('@')] #[span.aside bag]
 		tr
 			td #[code a->b]
-			td #[+ms('Map')] (from a to b)
+			td #[+ms('Map')] #[span.aside from a to b]
 		tr
 			td #[code a~]
-			td #[+ms('Generator')] (see #[a(href='./<~')<~])
+			td #[+ms('Generator')] #[span.aside #[a(href='./<~') <~]]
 		tr
 			td #[code a?]
 			td #[code Boolean]

@@ -6,9 +6,8 @@ block content
 		p.
 			Even if you only plan to use mason in the browser,
 			you'll still need to install #[a(href='https://nodejs.org') node.js].
-
 		p Since Mason uses new features, you'll need to install the very latest version.
-		pre.
+		pre.command.
 			git clone https://github.com/nodejs/node.git
 			cd node
 			git checkout next+1
@@ -45,7 +44,7 @@ block content
 		section
 			p A tmLanguage file is available #[a(href='./editor/Mason.tmLanguage') here].
 			p To install in Sublime Text 3:
-			pre.
+			pre.command.
 				curl #{rootUrl}/editor/Mason.tmLanguage > \
 					~/.config/sublime-text-3/Packages/User/Mason.tmLanguage
 

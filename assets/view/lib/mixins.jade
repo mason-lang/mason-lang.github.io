@@ -2,12 +2,12 @@
 
 mixin hdr(name, fullName)
 	- fullName = fullName || name
-	a(href='./#{path}.html##{name}')
+	a(href='/#{path}.html##{name}')
 		h1(id='#{name}')= fullName
 
 mixin hdr2(name, fullName)
 	- fullName = fullName || name
-	a(href='./#{path}.html##{name}')
+	a(href='/#{path}.html##{name}')
 		h2(id='#{name}')= fullName
 
 -

@@ -10,7 +10,6 @@ use
 	.evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
-# TODO: use helpers
 template = elem (elem "#link-mason-editor").import "template"
 
 MasonEditor = class HTML-Element
@@ -89,4 +88,3 @@ MasonEditor = class HTML-Element
 
 document.registerElement "mason-editor"
 	prototype. MasonEditor.prototype
-

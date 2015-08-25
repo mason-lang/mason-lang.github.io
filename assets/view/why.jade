@@ -1,0 +1,215 @@
+extends lib/layout
+
+block content
+	section
+		p Mason:
+		ul
+			li Makes simple code dead simple.
+			li Is #[em very] syntactically light.
+			li Does #[em not] intruduce any new paradigms. #[span.aside= "We don't need another!"]
+			li
+				p.
+					Is just javascript
+					#[span.aside #[a(href='https://github.com/lukehoban/es6features') ecmascript 6]]
+					with no semantic changes.
+				p You can replace javascript files with Mason files one-by-one without breaking your project.
+		p Mason looks like this. #[span.aside Go ahead and run it with #[i(class='fa fa-refresh')]!]
+
+		mason-editor
+			pre.
+				use
+					msl.math.Number divisible? log
+					msl.math.methods +
+
+				a = 99
+				b = + 1 a
+				c = log 10 b
+				+ 1 c
+
+		p Perhaps once in a while we must remind ourselves of the virtues of simple code:
+		ul
+			li
+				h3 Every value has a name.
+				p.
+					A human has gone through and said what each part of the program means.
+					#[span.aside For the sample program they mean nothing, but use your imagination.]
+			li
+				h3 The control flow is clear.
+				p When #[code c =] is reached, #[var +] is no longer running.
+			li
+				h3 Data flow is clear.
+				p What does #[var +] need? #[code 1] and #[var a].
+			li
+				h3 The program is readable in chunks.
+				p.
+					You can only keep so much in mind at once.
+					Were the program written as one large expression,
+					it would be harder to notice when some detail is wrong.
+
+		p What are we missing?
+
+		ul
+			li
+				h3 Polymorphism
+				p.
+					Rather than calling a known function #[var f],
+					lookup #[code "f"] in #[var a] and hope it stores a function there.
+					Then run it.
+			li
+				h3 Higher-order functions
+				p.
+					This is the same thing as polymorphism,
+					where functions are objects with a #[code [call]] method.
+				p.
+					For the same reason, both make control flow unclear —
+					you have to look at the code for the function you're calling to see
+					if and when and how many times your callback gets called.
+			li
+				h3 {latest fad}
+				p.
+					You don't #[em need] local variable names if you write in a concatenative style!
+					#[span.aside Your readers might miss them though.]
+
+		p.
+			Languages "oriented" around advanced features cause programmers
+			to use them in situations where they are unnecessary.
+		p.
+			In Mason, you only use what you need.
+			Mason supports many advanced features (all of javascript's and more),
+			but doesn't actively encourage any of them.
+
+	+hdr('syntax')
+	section
+		p Mason has a strict syntax.
+		p For a given expression, there is only one obvious string representation.
+		p.
+			If you want to express your artistic flair, get #[a(href='https://blender.org/') Blender].
+			Don't spend all day aligning #[code =] signs.
+		p Some languages have 'optional' parentheses, but in Mason, what is not mandatory is forbidden.
+		p Having a loose syntax would lead to typos and painting-the-bikeshed over linter configuration.
+		br
+		p Mason is not verbose, but it's not terse. What's the difference?
+
+		ul
+			li
+				h3 Verbose:
+				pre.code.
+					const x = a();
+					for (let _ of b())
+					{
+						c(x, _);
+					}
+
+			li
+				h3 Terse:
+				pre.code.
+					((x)=>b().forEach((_)=>c(x,_))(a())
+
+			li
+				h3 Mason:
+				pre.code.
+					x = a()
+					for! b()
+						c x _
+
+		p.
+			Javascript programmers have a choice of writing verbose code
+			or writing multiple expressions on one line.
+		p.
+			In Mason, you are encouraged to almost never put subexpressions in parentheses —
+			to instead declare a local variable — and Mason makes this easy.
+
+	+hdr('structure')
+	section
+		p "Oriented" languages often use their pet feature as the only way to organize code.
+		p Mason allows many ways to organize code:
+
+		ul
+			li subexpressions
+			li local variables
+			li closures
+			li functions #[span.aside module exports]
+			li classes/methods #[span.aside alternative to above]
+			li regions
+			li modules
+			li directories
+			li packages
+
+		p There is no one right level to use. Instead, use all levels.
+		p.
+			Think about it: if you only have one function per package,
+			functions and packages become the same thing
+			and your collection of 1000 packages is just as bad as a collection of 1000 functions in one package.
+		p.
+			When you use all levels,
+			your program is organized like a tree with relatively few parts to deal with at one time.
+		p.
+			You can even nest local variables in mason.
+			This keeps the number of locals per block down.
+
+	mason-editor
+		pre.
+			use
+				msl.math.methods +
+
+			a =
+				a1 = 1
+				a2 = 2
+				+ a1 a2
+			b =
+				b1 = 3
+				b2 = 4
+				+ b1 b2
+			# There are only 2 locals in this (outer) block rather than 6.
+			+ a b
+
+	section
+		p.
+			Closures are not just for higher-order functions.
+			If a function is only called in one place, consider moving it to that place and making it a closure.
+			This increases locality.
+
+	mason-editor
+		pre.
+			use
+				msl.math.methods + /
+
+			average-of-4 = |a b c d
+				mid = |x y
+					/ (+ x y) 2
+				ab = mid a b
+				cd = mid c d
+				mid ab cd
+
+			average-of-4 2 4 6 8
+
+
+	+hdr('methods')
+	section
+		p Although it supports all of javascript's dynamic capabilities, Mason encourages more static code.
+		p Usually you can place functions directly in a module, not attached to a class.
+		p.
+			Other modules using that function must explicitly mention it in their #[code use] block,
+			making dependencies easier to see.
+		p.
+			When don't need polymorphism, use a Function, but when you need it, #[+ms('Method')]s to the rescue!
+
+	mason-editor
+		pre.
+			use
+				msl.Type.Method
+
+			m = new Method (name. "m")
+
+			X = class
+				m |
+					1
+
+			m (new X)
+
+	section
+		p.
+			Methods are called just like functions, meaning they are statically imported.
+			Classes implement methods by implementing the Method object, not just some string.
+		p This way you avoid the dynamism of just using strings everywhere.
+		p Read more #[a(href='./tour/type.html#method') here].

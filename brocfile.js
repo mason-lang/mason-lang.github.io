@@ -23,9 +23,9 @@ const
 		stylus(funnel('assets/style', { exclude: ['lib.styl'] }), { include: [ 'assets/style' ] }),
 		{ srcDir: '/', destDir: 'style' }),
 	tmLanguage = yamlToPlist(funnel('assets/static/editor', { srcDir: '/', destDir: 'editor' })),
-	script_lib = funnel('bower_components', { srcDir: '/', destDir: 'lib' }),
+	lib = funnel('bower_components', { srcDir: '/', destDir: 'lib' }),
 	script = funnel(
 		mason('assets/script', { forceNonLazyModule: true, includeAmdefine: false }),
 		{ srcDir: '/', destDir: 'script' })
 
-module.exports = merge([view, style, tmLanguage, 'assets/static', script_lib, script])
+module.exports = merge([view, style, /*tmLanguage,*/ 'assets/static', lib, script])

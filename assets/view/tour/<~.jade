@@ -42,13 +42,11 @@ block content
 		pre.
 			use
 				msl.@.Range
-				msl.Generator gen-next!
-				msl.math.Number incr
 
 			taking = |stream getter
 				generator = getter()
 				for stream
-					value done = gen-next! generator _
+					value done = generator.next _
 					if! done
 						break value
 
@@ -65,8 +63,7 @@ block content
 	mason-editor
 		pre.
 			use
-				msl.Generator gen-next!
-				msl.math.Number incr
+				mason.math.methods +
 
 			# Interjects itself into assignments and increments the number.
 			incrementing = |yields-numbers
@@ -76,7 +73,7 @@ block content
 					value done = gen-next! generator last-value
 					if! done
 						break value
-					last-value := incr value
+					last-value := + 1 value
 
 			incrementing ~|
 				two <~ 1

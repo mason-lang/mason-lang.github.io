@@ -80,6 +80,7 @@ footer
 mason-editor
 	// Prevents FOUC. Overwritten by mason-editor.js.
 	visibility hidden
+
 	margin 1em 10%
 	min-width 400px
 
@@ -103,9 +104,6 @@ main
 		text-align center
 		color darkmagenta
 		font-family Overlock
-
-		span
-			background white
 
 	h1-line()
 		content ''
@@ -136,7 +134,7 @@ main
 		font-style italic
 	strong
 		font-style bold
-	code
+	code, var
 		font-family 'Oxygen Mono'
 		font-weight bold
 		color maroon
@@ -167,11 +165,24 @@ main
 
 	ul
 		margin 1em
-
 		li
-			list-style disc inside
+			margin 0.5em 0
+			list-style none
 
-	section pre
-		margin 1em
-		color chartreuse
-		background black
+	pre.code, pre.command
+		margin 1em 4em
+		color white
+		font-weight bold
+		background #000b
+		border-radius-right 99em
+
+	h3
+		font-size 100%
+		font-weight bold
+
+	.aside
+		color #444
+	.aside:before
+		content "("
+	.aside:after
+		content ")"

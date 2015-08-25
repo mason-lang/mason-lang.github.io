@@ -1,4 +1,77 @@
 extends lib/layout
 
 block content
-	p TODO: @for, @for~, for!, for, break, break!, continue!
+	+hdr('for!')
+	section
+		p #[code for!] allows for simple loops.
+
+	mason-editor
+		pre.
+			use
+				msl.compare =?
+				msl.math.methods +
+
+			n ::= 0
+			. n
+			for!
+				n := + 1 n
+				. n
+				if! =? n 10
+					break!
+
+	section
+		p You can also loop over a collection.
+		p If you provide no name, the elements will be assigned to the #[a(href='./if.html#focus') focus].
+
+	mason-editor
+		pre.
+			use
+				msl.@.Range
+				msl.compare =?
+
+			. 0
+			for! new Range 1 5
+				. _
+			for! n in new Range 5 100
+				. n
+				# You can include break! statements to stop looping through a collection.
+				if! =? n 10
+					break!
+
+	+hdr('for')
+	section
+		p To return a value from a loop, use #[code for] and #[code break].
+		p Just like #[code for!], #[code for] works looping over a collection too.
+
+	mason-editor
+		pre.
+			use
+				msl.compare =?
+				msl.math.methods +
+
+			n ::= 0
+			for
+				n := + 1 n
+				if! =? n 10
+					break n
+
+	+hdr('@for')
+	section
+		p Use #[code @for] to store the results in an array.
+
+	mason-editor
+		pre.
+			use
+				msl.math.methods +
+
+			@for [ 1 2 3 ]
+				+ _ 1
+
+	section
+		p You can also use a list builder inside.
+
+	mason-editor
+		pre.
+			@for [ 1 2 ]
+				. _
+				. _

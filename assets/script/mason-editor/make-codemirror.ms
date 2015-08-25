@@ -3,7 +3,6 @@ use!
 	.codemirror-mason-mode
 use
 	codemirror.lib.codemirror
-	msl.math.Number infinity
 	msl.Object object-merge
 
 common-opts =
@@ -12,7 +11,7 @@ common-opts =
 	lineNumbers. true
 	lineWrapping. true
 	# Entire CodeMirror is rendered.
-	viewportMargin. infinity
+	viewportMargin. Number.POSITIVE_INFINITY
 
 
 special = |special-opts
