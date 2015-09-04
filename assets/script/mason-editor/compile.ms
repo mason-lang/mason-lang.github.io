@@ -4,12 +4,13 @@ use
 	mason-compile.CompileError
 	..U.dom new-elem
 
-|ms-code
+x = |ms-code
 	_ = compile ms-code
 		includeAmdefine. false
 		includeSourceMap. false
 		includeModuleName. false
 		forceNonLazyModule. true
+		useBoot. false
 	res = _.result
 	success?. not res:Error
 	result. case res
@@ -19,3 +20,4 @@ use
 			compileErrorToDomSpan_
 		else
 			new-elem "span" _.stack
+x

@@ -113,9 +113,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.math.methods +
-
 			. "Single-line string?\nNope!"
 
 			. "
@@ -233,3 +230,8 @@ block content
 			# Variables only used for tests should go here.
 			use-debug
 				msl.assert assert-call!
+
+	section
+		p.
+			Certain values such as #[+ms('+')] are builtins -- you don't have to explitly use them.
+			The necessary imports will be added for you.

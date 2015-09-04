@@ -10,9 +10,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.to-string
-
 			# If superclass is missing, it will be Object, so this is just for show.
 			Point = class
 				construct! x y
@@ -43,12 +40,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.@.@
-				msl.@.@-Type empty
-				msl.compare =?
-				msl.Type.Kind kind!
-
 			Point = class
 				do!
 					# Point isn't really an @, but I'm here to prove a point.

@@ -1,29 +1,19 @@
 # TODO: mason-dom package
 
 use
-	msl.@.@ _ empty! iterator
+	global document HTMLElement Node NodeList
 	msl.@.@-Type _ from-stream
-	msl.@.Seq.Seq _ +>!
 	msl.Function Action
 	msl.js defined?
-	msl.Type.Kind kind! self-kind!
-	msl.Type.Method impl! impl-for self-impl!
 	msl.Type.Pred-Type ObjLit
-	msl.Type.Type =>
 
-Node. global.Node
-Node-List. global.NodeList
-Element. global.Element
-HTML-Element. global.HTMLElement
+kind! NodeList Seq
+self-kind! NodeList @-Type
 
-
-kind! Node-List Seq
-self-kind! Node-List @-Type
-
-self-impl! from-stream Node-List |stream
+self-impl! from-stream NodeList |stream
 	=> Array stream
 
-impl! iterator Node-List (impl-for iterator Array)
+impl! iterator NodeList (impl-for iterator Array)
 
 impl! empty! Node .!|
 	for!
@@ -48,7 +38,7 @@ elem. |a b
 		else
 			document.querySelectorAll a
 
-on. |event-name:String elem:HTML-Element action:Action
+on. |event-name:String elem:HTMLElement action:Action
 	elem.addEventListener event-name action
 
 replace-node!. |old-node:Node new-node:Node

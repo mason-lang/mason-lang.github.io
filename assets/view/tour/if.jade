@@ -39,9 +39,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				mason.@.? un-?
-
 			# un-? has *1* argument: the `if` expression.
 			un-? if true
 				0
@@ -85,9 +82,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				mason.math.methods * +
-
 			twice = |_
 				* _ 2
 			half = |_
@@ -105,15 +99,13 @@ block content
 		p Tests are tried from top to bottom until one matches.
 
 	mason-editor
+		- lt = "<"
 		pre.
-			use
-				mason.compare <?
-
 			rate-guess = |a
 				case
-					<? a 7
+					#{lt}? a 7
 						"Too low!"
-					<? 7 a
+					#{lt}? 7 a
 						"Too high!"
 					else
 						"You got it!"
@@ -128,10 +120,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				mason.compare =?
-				mason.math.methods -
-
 			rate-guess = |a
 				case a
 					=? _ 7

@@ -1,18 +1,18 @@
 use
+	global document HTMLElement
 	msl.$ $after $done
-	msl.compare =?
 	msl.js defined?
 	msl.to-string inspect
 	msl.Try $catch
 	require
-	..U.dom elem HTML-Element on set-content!
+	..U.dom elem on set-content!
 	.compile
 	.evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
 template = elem (elem "#link-mason-editor").import "template"
 
-MasonEditor = class HTML-Element
+MasonEditor = class HTMLElement
 	"attachedCallback" !|
 		unless! defined? .initialCode
 			.initialCode := .textContent.trim()

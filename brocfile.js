@@ -28,4 +28,4 @@ const
 		mason('assets/script', { forceNonLazyModule: true, includeAmdefine: false }),
 		{ srcDir: '/', destDir: 'script' })
 
-module.exports = merge([view, style, /*tmLanguage,*/ 'assets/static', lib, script])
+module.exports = merge([view, style, tmLanguage, 'assets/static', lib, script])

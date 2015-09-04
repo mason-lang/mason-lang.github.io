@@ -1,9 +1,5 @@
 use
 	codemirror.lib.codemirror
-	msl.@.Set.Set
-	msl.compare <=?
-	msl.Type.Method _ self-impl!
-	msl.Type.Type =>
 
 codemirror.defineMode "mason" |
 	# Declares styles for various Mason tokens.
@@ -18,6 +14,7 @@ codemirror.defineMode "mason" |
 	lineComment. "#"
 
 next-token = new Method
+	name.
 	args. [ "state" "stream" ]
 
 # atom bracket comment def error keyword link number property string tag variable variable-2

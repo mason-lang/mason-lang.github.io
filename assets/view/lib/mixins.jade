@@ -11,12 +11,14 @@ mixin hdr2(name, fullName)
 		h2(id='#{name}')= fullName
 
 -
+	// TODO: use builtins map for this
 	var ms_s = {
 		'!': '!',
 		'@': '@.@',
 		'$': '$',
 		'$ing': '$',
 		'--!': '@.@!',
+		'+', 'math.methods',
 		'++': '@.@',
 		'++!': '@.@!',
 		'=>': 'Type.Type',

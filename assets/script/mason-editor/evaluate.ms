@@ -1,13 +1,12 @@
 use
 	msl.$
-	msl.compare =?
 
 |-require- js
 	fun = Function "define" js
 	new $ |resolve reject
 		define = |required do-define!
 			exports = required.shift()
-			assert! =? exports "exports" throw! "Not a Mason module!"
+			assert! =? exports "exports"
 			successful-require = !|...modules
 				except!
 					try!

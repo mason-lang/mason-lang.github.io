@@ -12,9 +12,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.@.Seq.Stream
-
 			# The Stream context treats the yielded values as elements of a @.
 			new Stream ~|
 				<~ 1
@@ -40,9 +37,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.@.Range
-
 			taking = |stream getter
 				generator = getter()
 				for stream
@@ -62,9 +56,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				mason.math.methods +
-
 			# Interjects itself into assignments and increments the number.
 			incrementing = |yields-numbers
 				generator = yields-numbers()
@@ -85,9 +76,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.@.Seq.Stream
-
 			yield-both = ~|a b
 				<~ a
 				<~ b

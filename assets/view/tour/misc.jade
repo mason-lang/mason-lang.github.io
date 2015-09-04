@@ -24,10 +24,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.@.Map.Map assoc!
-				msl.compare =?
-				msl.math.methods +
 			map =
 				1 -> 1
 			. map[1]
@@ -55,15 +51,15 @@ block content
 
 	mason-editor
 		pre.
-			show-amount = |number name
+			show-amount = |number amount-of
 				~plural =
-					console.log "Calculating plural for {name}"
-					"{name}s"
+					console.log "Calculating plural for {amount-of}"
+					"{amount-of}s"
 				switch number
 					0
 						"Yes, we have no {plural}."
 					1
-						"One more {name}."
+						"One more {amount-of}."
 					else
 						"Plenty of {plural}."
 
@@ -78,6 +74,9 @@ block content
 
 	mason-editor
 		pre.
+			use
+				msl.io.console log!
+
 			# Mason's `and` expression could be implemented with a lazy function.
 			my-and = |cond-1 ~cond-2
 				case
@@ -89,11 +88,11 @@ block content
 			. my-and true true
 
 			. my-and true ~
-				console.log "This will be called."
+				log! "This will be called."
 				false
 
 			. my-and false ~
-				console.log "Never called."
+				log! "Never called."
 				true
 
 
@@ -105,9 +104,6 @@ block content
 
 	mason-editor
 		pre.
-			use
-				msl.math.methods *
-
 			region Nums
 				one. 1
 				two. 2
