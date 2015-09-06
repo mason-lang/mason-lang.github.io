@@ -3,8 +3,7 @@ const
 	jade = require('broccoli-jade'),
 	mason = require('broccoli-mason'),
 	merge = require('broccoli-merge-trees'),
-	stylus = require('broccoli-stylus'),
-	yamlToPlist = require('./broccoli-yaml-to-plist')
+	stylus = require('broccoli-stylus')
 
 // Get jade to pass filename along
 jade.prototype.processString = function(str, filename) {
@@ -22,10 +21,9 @@ const
 	style = funnel(
 		stylus(funnel('assets/style', { exclude: ['lib.styl'] }), { include: [ 'assets/style' ] }),
 		{ srcDir: '/', destDir: 'style' }),
-	tmLanguage = yamlToPlist(funnel('assets/static/editor', { srcDir: '/', destDir: 'editor' })),
 	lib = funnel('bower_components', { srcDir: '/', destDir: 'lib' }),
 	script = funnel(
 		mason('assets/script', { forceNonLazyModule: true, includeAmdefine: false }),
 		{ srcDir: '/', destDir: 'script' })
 
-module.exports = merge([view, style, tmLanguage, 'assets/static', lib, script])
+module.exports = merge([view, style, 'assets/static', lib, script])

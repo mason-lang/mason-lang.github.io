@@ -21,7 +21,7 @@ block content
 	+hdr('start')
 	section
 		p To test out your node installation, try running this:
-		pre.
+		pre.command.
 			mkdir test; cd test
 			sudo npm install -g mason-cli
 			npm install amdefine msl
@@ -40,12 +40,7 @@ block content
 
 	+hdr('edit')
 	section
-		h2 #[a(href='https://sublimetext.com/') sublime] / #[a(href='https://macromates.com/') textmate]
-		section
-			p A tmLanguage file is available #[a(href='./editor/Mason.tmLanguage') here].
-			p To install in Sublime Text 3:
-			pre.command.
-				curl #{rootUrl}/editor/Mason.tmLanguage > \
-					~/.config/sublime-text-3/Packages/User/Mason.tmLanguage
-
-
+		p Mason syntaxes exist for these text editors:
+		ul
+			li #[+ms-project('mason-atom')] for #[a(href='https://atom.io') atom]
+			li #[+ms-project('mason-tmLanguage')] for #[a(href='https://sublimetext.com') sublime] and #[a(href='https://macromates.com') textmate]

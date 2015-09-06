@@ -1,15 +1,12 @@
 {
 	"private": true,
 	"devDependencies": {
-		"broccoli": "0.16.7",
-		"broccoli-filter": "1.2.0",
+		"broccoli": "0.16.8",
 		"broccoli-funnel": "0.2.8",
 		"broccoli-jade": "1.0.1",
 		"broccoli-mason": "andy-hanson/broccoli-mason",
 		"broccoli-merge-trees": "0.2.3",
-		"broccoli-stylus": "2.1.0",
-		"js-yaml": "3.3.1",
-		"plist": "1.1.0"
+		"broccoli-stylus": "3.0.0"
 	},
 	"license": "WTFPL"
 }
