@@ -1,20 +1,19 @@
-extends ../../lib/layout
+extends ../_lib/layout
 
 block subheader
 	- var pages = [ '=', 'if', 'try', 'class', 'type', '<~', 'misc', 'for' ]
+	- var page = path.match(/tour\/(.+)/)[1]
+	- var my_idx = pages.indexOf(page)
 
 	mixin link_to(name)
 		if name === 'index'
 			a(href='/') tour
 		else
-			a(href="#{name}.html")= name
+			a(href="#{name}")= name
 
 	nav
 		for page in pages
 			+link_to(page)
-
-
-- var my_idx = pages.indexOf(path)
 
 block foot-prev
 	if my_idx !== -1 && 0 < my_idx

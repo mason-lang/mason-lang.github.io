@@ -2,8 +2,8 @@ use
 	codemirror.lib.codemirror
 
 codemirror.defineMode "mason" |
-	# Declares styles for various Mason tokens.
-	# Styles defined in codemirror.css, prefixed with "cm-".
+	| Declares styles for various Mason tokens.
+	| Styles defined in codemirror.css, prefixed with "cm-".
 	startState. |
 		state. PlainState
 	token. |stream state
@@ -11,15 +11,15 @@ codemirror.defineMode "mason" |
 		new-state style = next-token state.state stream
 		state.state := new-state
 		style
-	lineComment. "#"
+	lineComment. "|\s"
 
 next-token = new Method
 	name.
-	args. [ "state" "stream" ]
+	args. ["state" "stream"]
 
-# atom bracket comment def error keyword link number property string tag variable variable-2
+|| styles available:
+|| atom bracket comment def error keyword link number property string tag variable variable-2
 styles =
-	# TODO: renames in order
 	assign-local. "atom"
 	brace. "keyword"
 	comment. "comment"
@@ -48,7 +48,7 @@ Indented-String-State = class
 			else
 				next-token PlainState stream
 
-# TODO: singleton
+todo singleton
 PlainState = new Object
 self-impl! next-token PlainState .|stream
 	case
@@ -58,7 +58,7 @@ self-impl! next-token PlainState .|stream
 		else
 			new-state. this
 			style. case stream
-				_.eat "#"
+				_.match new RegExp "\\|?\\| "
 					_.skipToEnd()
 					styles.comment
 				_.match new RegExp "region"
@@ -81,18 +81,13 @@ self-impl! next-token PlainState .|stream
 				_.match new RegExp "\\S+_"
 					styles.focus-call
 				_.match new RegExp "[^\\s\\.\\(\\)\\[\\]\\\{\\}]+"
-					# TODO:SYNTAX ternary
-					case
-						stream.current().trim():keywords
-							styles.keyword
-						else
-							styles.local
+					cond stream.current().trim():keywords styles.keyword styles.local
 				_.eat "."
 					styles.member
 				else
 					stream.next()
 					styles.plain
 
-# TODO: Use mason-compile.Lang
+todo Use mason-compile.Lang
 keywords-string = "_|->|and|as|assert!|break|break!|built|case|case!|catch|catch!|class|construct!|continue!|debug|debugger|do!|else|except|except!|false|finally!|forbid!|@for|@for|for|for!|get|if|if!|in|is|new|not|null|or|out|pass|returning|set!|super|static|switch|switch!|this|this-module-directory|throw!|true|try|try!|undefined|unless|unless!|use|use!|use-debug|use~|<~|<~~"
 keywords = => Set (keywords-string.split "|")

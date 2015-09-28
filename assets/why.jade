@@ -1,4 +1,4 @@
-extends lib/layout
+extends _lib/layout
 
 block content
 	section
@@ -8,10 +8,7 @@ block content
 			li Is #[em very] syntactically light.
 			li Does #[em not] intruduce any new paradigms. #[span.aside= "We don't need another!"]
 			li
-				p.
-					Is just javascript
-					#[span.aside #[a(href='https://github.com/lukehoban/es6features') ecmascript 6]]
-					with no semantic changes.
+				p Is just javascript #[span.aside ecmascript 6] with no semantic changes.
 				p You can replace javascript files with Mason files one-by-one without breaking your project.
 		p Mason looks like this. #[span.aside Go ahead and run it with #[i(class='fa fa-refresh')]!]
 
@@ -82,7 +79,7 @@ block content
 		p Mason has a strict syntax.
 		p For a given expression, there is only one obvious string representation.
 		p.
-			If you want to express your artistic flair, get #[a(href='https://blender.org/') Blender].
+			If you want to express your artistic flair, get #[a(href='//blender.org/') Blender].
 			Don't spend all day aligning #[code =] signs.
 		p Some languages have 'optional' parentheses, but in Mason, what is not mandatory is forbidden.
 		p Having a loose syntax would lead to typos and painting-the-bikeshed over linter configuration.
@@ -159,7 +156,7 @@ block content
 				b1 = 3
 				b2 = 4
 				+ b1 b2
-			# There are only 2 locals in this (outer) block rather than 6.
+			|| There are only 2 locals in this (outer) block rather than 6.
 			+ a b
 
 	section
@@ -198,7 +195,8 @@ block content
 			use
 				msl.Type.Method
 
-			m = new Method (name. "m")
+			m = new Method
+				name.
 
 			X = class
 				m |
@@ -211,4 +209,4 @@ block content
 			Methods are called just like functions, meaning they are statically imported.
 			Classes implement methods by implementing the Method object, not just some string.
 		p This way you avoid the dynamism of just using strings everywhere.
-		p Read more #[a(href='./tour/type.html#method') here].
+		p Read more #[a(href='./tour/type#method') here].

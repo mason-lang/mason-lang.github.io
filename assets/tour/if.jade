@@ -1,4 +1,4 @@
-extends lib/layout
+extends _layout
 
 block content
 	section
@@ -39,7 +39,7 @@ block content
 
 	mason-editor
 		pre.
-			# un-? has *1* argument: the `if` expression.
+			|| un-? has *1* argument: the `if` expression.
 			un-? if true
 				0
 
@@ -148,7 +148,7 @@ block content
 			. not false
 			. and true true
 			. or true false
-			# nand and nor are simply:
+			|| nand and nor are simply:
 			. not and true false
 			. not or false false
 

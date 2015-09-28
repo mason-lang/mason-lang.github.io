@@ -1,13 +1,16 @@
-- gitRoot = 'https://github.com/mason-lang'
+- path = filename.match(/assets\/(.+).jade/)[1]
+- fullTitle = path === 'index' ? 'mason' : `${path} - mason programming language`
+- rootUrl = '//mason-lang.org'
+- gitRoot = '//github.com/mason-lang'
 
 mixin hdr(name, fullName)
 	- fullName = fullName || name
-	a(href='/#{path}.html##{name}')
+	a(href='/#{path}##{name}')
 		h1(id='#{name}')= fullName
 
 mixin hdr2(name, fullName)
 	- fullName = fullName || name
-	a(href='/#{path}.html##{name}')
+	a(href='/#{path}##{name}')
 		h2(id='#{name}')= fullName
 
 -
@@ -31,7 +34,7 @@ mixin hdr2(name, fullName)
 		Deque: '@.Deque',
 		extract: 'Type.Type',
 		'?find': '@.@',
-		'gen-next!': 'Generator.gen-next!',
+		'gen-next!': 'Generator',
 		Generator: 'Generator',
 		'Hash-Map!': '@.Map.Hash-Map',
 		'Hash-Set': '@.Hash-Set',
@@ -67,7 +70,7 @@ mixin hdr2(name, fullName)
 		var url = ms_s[key]
 		var rel_url = url.replace('.', '/')
 		var escaped_url = rel_url.replace('@', '%40').replace('?', '%3F')
-		export_paths[key] = `#{gitRoot}/msl/tree/master/src/${escaped_url}.ms`
+		export_paths[key] = `${gitRoot}/msl/tree/master/src/${escaped_url}.ms`
 	}
 
 mixin ms(name)

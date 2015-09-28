@@ -1,6 +1,3 @@
-use
-	msl.$
-
 |-require- js
 	fun = Function "define" js
 	new $ |resolve reject

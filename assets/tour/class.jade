@@ -1,4 +1,4 @@
-extends lib/layout
+extends _layout
 
 block content
 	section
@@ -10,7 +10,7 @@ block content
 
 	mason-editor
 		pre.
-			# If superclass is missing, it will be Object, so this is just for show.
+			|| If superclass is missing, it will be Object, so this is just for show.
 			Point = class
 				construct! x y
 					.x ::= x
@@ -19,8 +19,8 @@ block content
 				to-string |
 					"({.x} {.y})"
 
-				# The `|` doesn't need a `.` in front; that's implied.
-				# It does need `!` and `~` where appropriate.
+				|| The `|` doesn't need a `.` in front; that's implied.
+				|| It does need `!` and `~` where appropriate.
 				"transpose!" !|
 					y = .y
 					.y := .x
@@ -42,14 +42,11 @@ block content
 		pre.
 			Point = class
 				do!
-					# Point isn't really an @, but I'm here to prove a point.
-					kind! _ @
 					_.origin = new _ 0 0
 
 				static
-					# If it's an @ it should define "empty."
 					empty |
-						Point.origin
+						.origin
 					"from-array" |arr
 						assert! =? 2 arr.length
 						new Point arr[0] arr[1]
@@ -59,8 +56,33 @@ block content
 					.y = y
 
 			. empty Point
-			. Point.from-array [ 1 2 ]
+			. Point.from-array [1 2]
 
 	p.
 		The parts of a class *must* come in this order:
 		#[code do!], #[code static], #[code construct!], then methods.
+
+	+hdr('get/set!')
+
+	section
+		p Getters and setters are also supported.
+
+	mason-editor
+		pre.
+			Point = class
+				construct! x y
+					.x ::= x
+					.y ::= y
+
+				get "len"
+					Math.sqrt (+ (* .x .x) (* .y .y))
+
+				set! "len"
+					scale = / _ .len
+					.x := * .x scale
+					.y := * .y scale
+
+			p = new Point 3 4
+			. p.len
+			p.len := 25
+			. p

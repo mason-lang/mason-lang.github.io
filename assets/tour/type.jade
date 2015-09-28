@@ -1,4 +1,4 @@
-extends lib/layout
+extends _layout
 
 block content
 	section
@@ -11,7 +11,7 @@ block content
 			number-to-string = |:String _:Number
 				"{_}"
 
-			number-to-string [ ]
+			number-to-string []
 
 	section
 		p You can also use #[code value:Type] (with no spaces) to call #[code contains?].
@@ -55,19 +55,23 @@ block content
 	section
 		p #[+ms('Kind')]s group multiple #[+ms('Impl-Type')]s.
 		p #[code Kind]s can even implement other #[code Kind]s.
+		p.
+			#[code name.] is shorthand for #[code name. "Num-or-Str"].
+			It looks for the assignment that it's part of and uses that for the name.
 
 	mason-editor
 		pre.
 			Num-or-Str = new Kind
-				implementors. [ Number String ]
+				name.
+				implementors. [Number String]
 
 			. 0:Num-or-Str
 			. "0":Num-or-Str
-			. [ 0 ]:Num-or-Str
+			. [0]:Num-or-Str
 
-			# You can also leave the implementors open-ended.
+			|| You can also leave the implementors open-ended.
 			Open-Kind = new Kind
-				doc. "Anyone can implement this."
+				name.
 			kind! String Open-Kind
 			kind! Number Open-Kind
 

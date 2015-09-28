@@ -1,11 +1,11 @@
-extends lib/layout
+extends _layout
 
 block content
 	- var quote = '"'
 
 	section
 		p All Mason programs must use the #[+ms-project('msl')] (Mason Standard Library) package.
-		p The examples can be run on the site, but you may want to #[a(href='/setup.html') install mason] too.
+		p The examples can be run on the site, but you may want to #[a(href='/setup') install mason] too.
 
 	+hdr('syntax')
 	section
@@ -15,8 +15,8 @@ block content
 			do not start with a digit, and are not keywords.
 		p Blocks of code are written as tab-indented blocks of text.
 		p You don't need semicolons, commas, or curly braces.
-		p #[code #] starts a line comment.
-		p #[code ###] starts and ends a multi-line comment.
+		p #[code |] at the start of the line is for a doc comment.
+		p #[code ||] starts an ignored comment.
 
 	+hdr('blocks')
 
@@ -65,7 +65,7 @@ block content
 	mason-editor
 		pre.
 			obj. (a. 1 b. 2)
-			array. [ 1 2 ]
+			array. [1 2]
 
 	+hdr2('value blocks')
 	section
@@ -74,8 +74,8 @@ block content
 
 	mason-editor
 		pre.
-			dos = 2
-			dos
+			two = 2
+			two
 
 	+hdr('literals')
 	section
@@ -94,8 +94,10 @@ block content
 	mason-editor
 		pre.
 			. 0
-			. 1.1
-			. 1.1e3
+			. -1.1
+			. 0b10
+			. 0o10
+			. 0x10
 
 	section
 		p
@@ -134,7 +136,7 @@ block content
 
 			. identity 1
 			. two-of 1
-			# Parentheses are only needed when a subexpression is itself a function call.
+			|| Parentheses are only needed when a subexpression is itself a function call.
 			. identity (identity 1)
 
 	section
@@ -167,7 +169,7 @@ block content
 
 	mason-editor
 		pre.
-			new Array 8
+			new Object
 
 	+hdr('modules')
 	section
@@ -177,12 +179,12 @@ block content
 
 	mason-editor
 		pre.
-			# my-module.ms
+			|| my-module.ms
 
-			# default export
+			|| default export
 			my-module. 1
 
-			# named export
+			|| named export
 			a. 2
 
 	section

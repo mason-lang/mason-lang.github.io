@@ -10,7 +10,7 @@ common-opts =
 	indentWithTabs. true
 	lineNumbers. true
 	lineWrapping. true
-	# Entire CodeMirror is rendered.
+	|| Entire CodeMirror is rendered.
 	viewportMargin. Number.POSITIVE_INFINITY
 
 

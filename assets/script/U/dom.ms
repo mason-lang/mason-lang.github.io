@@ -1,4 +1,4 @@
-# TODO: mason-dom package
+todo mason-dom package
 
 use
 	global document HTMLElement Node NodeList
@@ -56,7 +56,11 @@ do-set-content! = !|elem content
 			elem.appendChild _
 		:@
 			for! sub in _
-				elem.appendChild sub
+				elem.appendChild case sub
+					:String
+						document.createTextNode_
+					else
+						_
 
 new-elem. |elem-type:String b c
 	with document.createElement elem-type as elem

@@ -2,11 +2,10 @@ use
 	global document HTMLElement
 	msl.$ $after $done
 	msl.js defined?
-	msl.to-string inspect
 	msl.Try $catch
 	require
 	..U.dom elem on set-content!
-	.compile
+	.compile-or-span
 	.evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
@@ -27,7 +26,7 @@ MasonEditor = class HTMLElement
 		.statusIcon = e "#statusIcon"
 		.out = e "#out"
 
-		# Only expand JS when hovering. CSS animations for this in mason-editor.styl.
+		|| Only expand JS when hovering. CSS animations for this in mason-editor.styl.
 		on "mouseover" js !|
 			js.style.max-height := "{(elem js ".CodeMirror").offsetHeight}px"
 		on "mouseout" js !|
@@ -50,7 +49,7 @@ MasonEditor = class HTMLElement
 		unless! =? "working" .status
 			.setStatus "working"
 			msCode = .ms.getValue()
-			success? result = compile msCode
+			success? result = compile-or-span msCode
 			case!
 				success?
 					.js.setValue result

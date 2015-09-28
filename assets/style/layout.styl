@@ -1,8 +1,15 @@
 @require 'lib'
 
+@import '//fonts.googleapis.com/css?family=Overlock|Patua+One|PT+Sans:400,400italic|PT+Mono'
+
+*
+	margin 0
+	padding 0
+
 html, body
-	background url(../image/bg.gif)
+	background url('../image/bg.gif')
 	font-family 'Patua One'
+	height 100%
 
 a
 	text-decoration none
@@ -12,7 +19,7 @@ a:hover
 header-footer-shadow-size = 4px
 
 header
-	background-image linear-gradient(#ffe8, #efe8, #eff8)
+	background linear-gradient(#ffe8, #efe8, #eff8)
 	box-shadow 0 header-footer-shadow-size (header-footer-shadow-size * 2) gray
 	margin-bottom 1em
 
@@ -47,7 +54,7 @@ header
 
 footer
 	background #efe8
-	box-shadow 0 -header-footer-shadow-size (header-footer-shadow-size * 2) gray
+	box-shadow 0 (header-footer-shadow-size * -1) (header-footer-shadow-size * 2) gray
 	margin-top 2em
 
 	display flex
@@ -135,12 +142,12 @@ main
 	strong
 		font-style bold
 	code, var
-		font-family 'Oxygen Mono'
+		font-family 'PT Mono'
 		font-weight bold
 		color maroon
 
 	a
-		font-family 'Oxygen Mono'
+		font-family 'PT Mono'
 		color indigo
 		font-weight bold
 		text-decoration none

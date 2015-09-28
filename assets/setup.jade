@@ -1,22 +1,11 @@
-extends lib/layout
+extends _lib/layout
 
 block content
 	h1 node
 	section
 		p.
 			Even if you only plan to use mason in the browser,
-			you'll still need to install #[a(href='https://nodejs.org') node.js].
-		p Since Mason uses new features, you'll need to install the very latest version.
-		pre.command.
-			git clone https://github.com/nodejs/node.git
-			cd node
-			git checkout next+1
-			./configure
-			make
-			sudo make install
-
-		p If you use #[a(href='https://github.com/creationix/nvm') nvm]:
-		pre nvm alias default iojs
+			you'll still need to install #[a(href='//nodejs.org') node.js].
 
 	+hdr('start')
 	section
@@ -34,13 +23,14 @@ block content
 		p Mason does not come with a build tool.
 		p Instead, it works with existing build systems.
 		ul
+			li #[+ms-project('jstransformer-mason')] (for #[a(href='//dum-build.org') dum])
 			li #[+ms-project('broccoli-mason')]
-			li #[+ms-project('fly-mason')]
 			li #[+ms-project('gulp-mason')]
+			li #[+ms-project('fly-mason')]
 
 	+hdr('edit')
 	section
 		p Mason syntaxes exist for these text editors:
 		ul
-			li #[+ms-project('mason-atom')] for #[a(href='https://atom.io') atom]
-			li #[+ms-project('mason-tmLanguage')] for #[a(href='https://sublimetext.com') sublime] and #[a(href='https://macromates.com') textmate]
+			li #[+ms-project('mason-atom')] for #[a(href='//atom.io') atom]
+			li #[+ms-project('mason-tmLanguage')] for #[a(href='//sublimetext.com') sublime] and #[a(href='//macromates.com') textmate]

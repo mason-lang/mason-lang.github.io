@@ -3,9 +3,7 @@
 	"dependencies": {
 		"msl": "andy-hanson/msl",
 		"mason-compile": "andy-hanson/mason-compile",
-		"codemirror": "5.1.0",
-		"font-awesome": "4.3.0",
-		"requirejs": "2.1.17",
-		"webcomponentsjs": "0.6.0"
+		"codemirror": "5.7.0",
+		"requirejs": "2.1.20"
 	}
 }
