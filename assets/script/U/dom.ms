@@ -1,11 +1,8 @@
 todo mason-dom package
 
-use
+import
 	global document HTMLElement Node NodeList
 	msl.@.@-Type _ from-stream
-	msl.Function Action
-	msl.js defined?
-	msl.Type.Pred-Type ObjLit
 
 kind! NodeList Seq
 self-kind! NodeList @-Type
@@ -55,8 +52,8 @@ do-set-content! = !|elem content
 		:Node
 			elem.appendChild _
 		:@
-			for! sub in _
-				elem.appendChild case sub
+			for! sub-elem of _
+				elem.appendChild case sub-elem
 					:String
 						document.createTextNode_
 					else

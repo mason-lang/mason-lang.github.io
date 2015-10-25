@@ -1,7 +1,7 @@
-use!
+import!
 	codemirror.mode.javascript.javascript
 	.codemirror-mason-mode
-use
+import
 	codemirror.lib.codemirror
 	msl.Object object-merge
 
@@ -21,10 +21,10 @@ special = |special-opts
 		codemirror dom-element all-opts
 
 ms-code-mirror. special
-	mode. "mason"
-	theme. "monokai"
+	mode. 'mason
+	theme. 'monokai
 
 js-code-mirror. special
-	mode. "javascript"
-	readOnly. "true"
-	theme. "base16-light"
+	mode. 'javascript
+	readOnly. 'true
+	theme. 'base16-light

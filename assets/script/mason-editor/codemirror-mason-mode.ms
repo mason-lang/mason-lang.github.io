@@ -1,7 +1,7 @@
-use
+import
 	codemirror.lib.codemirror
 
-codemirror.defineMode "mason" |
+codemirror.defineMode 'mason |
 	| Declares styles for various Mason tokens.
 	| Styles defined in codemirror.css, prefixed with "cm-".
 	startState. |
@@ -15,25 +15,25 @@ codemirror.defineMode "mason" |
 
 next-token = new Method
 	name.
-	args. ["state" "stream"]
+	args. ['state 'stream]
 
 || styles available:
 || atom bracket comment def error keyword link number property string tag variable variable-2
 styles =
-	assign-local. "atom"
-	brace. "keyword"
-	comment. "comment"
-	focus-call. "variable-2"
-	function. "def"
-	invalid. "error"
-	keyword. "keyword"
-	local. "variable-3"
-	member. "comment"
-	number. "number"
-	plain. "variable-3"
-	ms-region. "comment"
-	string. "string"
-	type. "atom"
+	assign-local. 'atom
+	brace. 'keyword
+	comment. 'comment
+	focus-call. 'variable-2
+	function. 'def
+	invalid. 'error
+	keyword. 'keyword
+	local. 'variable-3
+	member. 'comment
+	number. 'number
+	plain. 'variable-3
+	ms-region. 'comment
+	string. 'string
+	type. 'atom
 
 Indented-String-State = class
 	construct! current-indent
@@ -61,7 +61,7 @@ self-impl! next-token PlainState .|stream
 				_.match new RegExp "\\|?\\| "
 					_.skipToEnd()
 					styles.comment
-				_.match new RegExp "region"
+				_.match new RegExp 'region
 					_.skipToEnd()
 					styles.ms-region
 				_.match new RegExp "\".*\""

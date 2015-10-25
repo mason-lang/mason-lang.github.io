@@ -203,7 +203,7 @@ block content
 	mason-editor(compilable=false)
 		pre.
 			# This example won't run.
-			use
+			import
 				# Uses the global module `fs`.
 				# Could be in node_modules or a registered RequireJS path.
 				fs
@@ -230,10 +230,10 @@ block content
 				a _ b c
 
 			# Variables only used for tests should go here.
-			use-debug
+			import-debug
 				msl.assert assert-call!
 
 	section
 		p.
-			Certain values such as #[+ms('+')] are builtins -- you don't have to explitly use them.
+			Certain values such as #[+ms('+')] are builtins -- you don't have to explitly import them.
 			The necessary imports will be added for you.

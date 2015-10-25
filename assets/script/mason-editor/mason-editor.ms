@@ -1,18 +1,16 @@
-use
+import
 	global document HTMLElement
 	msl.$ $after $done
-	msl.js defined?
-	msl.Try $catch
 	require
 	..U.dom elem on set-content!
 	.compile-or-span
 	.evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
-template = elem (elem "#link-mason-editor").import "template"
+template = elem (elem "#link-mason-editor").import 'template
 
 MasonEditor = class HTMLElement
-	"attachedCallback" !|
+	'attachedCallback !|
 		unless! defined? .initialCode
 			.initialCode := .textContent.trim()
 
@@ -27,27 +25,27 @@ MasonEditor = class HTMLElement
 		.out = e "#out"
 
 		|| Only expand JS when hovering. CSS animations for this in mason-editor.styl.
-		on "mouseover" js !|
+		on 'mouseover js !|
 			js.style.max-height := "{(elem js ".CodeMirror").offsetHeight}px"
-		on "mouseout" js !|
+		on 'mouseout js !|
 			js.style.max-height := "0.5em"
 
-		.setStatus "writing"
-		.ms.on "changes" !|
-			.setStatus "writing"
+		.setStatus 'writing
+		.ms.on 'changes !|
+			.setStatus 'writing
 		.statusIcon.onclick := !|
 			.compile()
 
 		.ms.setValue .initialCode
 
-		.style.visibility := "visible"
+		.style.visibility := 'visible
 
-	"setContent" !|code
+	'setContent !|code
 		.initialCode := code
 
-	"compile" !|
-		unless! =? "working" .status
-			.setStatus "working"
+	'compile !|
+		unless! =? 'working .status
+			.setStatus 'working
 			msCode = .ms.getValue()
 			success? result = compile-or-span msCode
 			case!
@@ -57,33 +55,33 @@ MasonEditor = class HTMLElement
 				else
 					.-show-compile-error result
 
-	"evaluate" !|js
+	'evaluate !|js
 		f = $after (evaluate require js) |val
 			.out.textContent := inspect val
-			.setStatus "compiled"
-		$done ($catch f |err
+			.setStatus 'compiled
+		$done (f.catch |err
 			.-show-eval-error err.stack
 
-	"-show-compile-error" !|error-elem
+	'-show-compile-error !|error-elem
 		.js.setValue ""
-		.setStatus "error"
+		.setStatus 'error
 		set-content! .out error-elem
 
-	"-show-eval-error" !|error-elem
-		.setStatus "error"
+	'-show-eval-error !|error-elem
+		.setStatus 'error
 		set-content! .out error-elem
 
-	"setStatus" !|status
+	'setStatus !|status
 		.status := status
 		.statusIcon.className := switch status
-			"compiled"
+			'compiled
 				"fa fa-check"
-			"writing"
+			'writing
 				"fa fa-refresh"
-			"working"
+			'working
 				"fa fa-refresh spinning"
-			"error"
+			'error
 				"fa fa-exclamation"
 
-document.registerElement "mason-editor"
+document.registerElement 'mason-editor
 	prototype. MasonEditor.prototype
