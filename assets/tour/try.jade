@@ -1,14 +1,14 @@
 extends _layout
 
 block content
-	+hdr('throw!')
+	+hdr('throw')
 	section
 		p You can throw errors as in JavaScript.
 		p If you throw a #[code String], it will be converted to an #[code Error] for you.
 
 	mason-editor
 		pre.
-			throw! "This code throws a fit!"
+			throw "This code throws a fit!"
 
 	+hdr('assert!')
 
@@ -17,9 +17,9 @@ block content
 
 	mason-editor
 		pre.
-			assert! true
-			forbid! =? 0 1
-			assert! false throw! "Custom error"
+			assert true
+			forbid =? 0 1
+			assert false throw "Custom error"
 
 	section
 		p When asserting the result of a function call, the error message will include the function called and its arguments.
@@ -32,37 +32,22 @@ block content
 
 	mason-editor
 		pre.
-			except
+			. except
 				try
-					throw!
+					throw
 				catch
 					1
-				# This part is optional.
-				finally!
+				|| This part is optional.
+				finally
 					pass
-
-	section
-		p There's also a statement version.
-		p Note that #[code try] changes to #[code try!].
-
-	mason-editor
-		pre.
-			. 0
-			except!
-				try!
-					throw!
-				catch!
-					. 1
-				finally!
-					. 2
 
 	section
 		p #[code catch] can take a parameter, the focus by default.
 
 	mason-editor
 		pre.
-			except
+			. except
 				try
-					throw!
+					throw
 				catch
 					_.message

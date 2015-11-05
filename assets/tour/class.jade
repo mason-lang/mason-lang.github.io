@@ -12,7 +12,7 @@ block content
 		pre.
 			|| If superclass is missing, it will be Object, so this is just for show.
 			Point = class
-				construct! x y
+				construct x y
 					.x ::= x
 					.y ::= y
 
@@ -21,7 +21,7 @@ block content
 
 				|| The `|` doesn't need a `.` in front; that's implied.
 				|| It does need `!` and `~` where appropriate.
-				"transpose!" !|
+				'transpose! !|
 					y = .y
 					.y := .x
 					.x := y
@@ -35,19 +35,20 @@ block content
 
 	section
 		p The class itself can have its own functionality.
-		p A #[code do!] block sets the focus to the class.
+		p A #[code do] block sets the focus to the class.
 		p #[code static] defines static methods on the class.
 
 	mason-editor
 		pre.
 			Point = class
-				do!
+				do
 					_.origin = new _ 0 0
 
 				static
 					empty |
 						.origin
-					"from-array" |arr
+
+					'from-array |arr
 						assert! =? 2 arr.length
 						new Point arr[0] arr[1]
 
@@ -60,9 +61,9 @@ block content
 
 	p.
 		The parts of a class *must* come in this order:
-		#[code do!], #[code static], #[code construct!], then methods.
+		#[code do], #[code static], #[code construct], then methods.
 
-	+hdr('get/set!')
+	+hdr('get/set')
 
 	section
 		p Getters and setters are also supported.
@@ -70,14 +71,15 @@ block content
 	mason-editor
 		pre.
 			Point = class
-				construct! x y
+				construct x y
 					.x ::= x
 					.y ::= y
 
-				get "len"
+				get 'len
 					Math.sqrt (+ (* .x .x) (* .y .y))
 
-				set! "len"
+				|| Setter has `_` as its implicit parameter.
+				set 'len
 					scale = / _ .len
 					.x := * .x scale
 					.y := * .y scale

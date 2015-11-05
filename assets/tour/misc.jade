@@ -28,75 +28,15 @@ block content
 				1 -> 1
 			. map[1]
 
+			foo = |a b c
+				[a b c]
 			|| Call `sub` with 2 arguments.
-			set-one! = assoc![map 1]
-			set-one! 2
-			. map[1]
+			bar = foo[1 2]
+			. bar 3
 
 			|| Call `sub` with 1 argument.
 			+2 = +[(+ 1 1)]
 			. +2 1
-
-	section
-		p Note that you can't use #[code []] to dynamically grab a property from an object.
-		p For that, use #[+ms('p')], #[+ms('?p')], and #[+ms('send')].
-
-
-	+hdr('lazy')
-
-	section
-		p If you don't know that a value is always used, it's wasteful to always compute it.
-		p Use #[code ~] before a local (with no space) to declare it to be lazy.
-		p A lazy local will be evaluated at most once; the result is cached.
-
-	mason-editor
-		pre.
-			import
-				msl.io.console log!
-
-			show-amount = |number amount-of
-				~plural =
-					log! "Calculating plural for {amount-of}"
-					"{amount-of}s"
-				switch number
-					0
-						"Yes, we have no {plural}."
-					1
-						"One more {amount-of}."
-					else
-						"Plenty of {plural}."
-
-			. show-amount 2 "grape"
-			. show-amount 1 "melon"
-			. show-amount 0 "banana"
-
-	section
-		p Functions can be declared to accept lazy arguments.
-		p Prefix an expression with `~` (or wrap it in `~( )`) to pass it lazily.
-		p (Again, with no space.)
-
-	mason-editor
-		pre.
-			import
-				msl.io.console log!
-
-			my-and = |cond-1 ~cond-2
-				case
-					cond-1
-						cond-2
-					else
-						false
-
-			. my-and true true
-
-			. my-and true ~
-				log! "This will be called."
-				false
-
-			. my-and false ~
-				log! "Never called."
-				true
-
 
 	+hdr('region')
 
@@ -106,14 +46,14 @@ block content
 
 	mason-editor
 		pre.
-			region Nums
-				one. 1
-				two. 2
+			obj =
+				region Nums
+					one. 1
+					two. 2
 
-			region Funs
-				double. |_
-					|| `two` is in the same scope as `double`.
-					* _ 2
+				region Funs
+					double. *[two]
 
-			region Calculated Nums
-				four. double two
+				region Calculated Nums
+					four. double two
+			obj.double obj.four

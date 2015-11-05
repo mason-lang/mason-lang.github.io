@@ -37,6 +37,7 @@ block content
 				msl.Type.Pred-Type
 
 			Three = new Pred-Type
+				name.
 				predicate. =?[3]
 
 			. 3:Three
@@ -93,25 +94,25 @@ block content
 		pre.
 			magnitude = new Method
 				name.
-				# This is called when the argument isn't implemented for.
+				|| This is called when there is no implementation for the first argument.
 				default. .|
 					"{this}".length
 				allow-null?. true
 
-			# This modifies Number.prototype.
+			|| This modifies Number.prototype (safely, using a Symbol)
 			impl! magnitude Number .|
 				this
 			impl! magnitude String .|
 				.length
 
-			# This modifies String, not String.prototype.
+			|| This modifies String, not String.prototype.
 			self-impl! magnitude String .|
-				42
+				3
 
 			. magnitude 1
-			. magnitude "two"
+			. magnitude "#2"
 			. magnitude String
-			# This uses the default implementation.
+			|| This uses the default implementation.
 			. magnitude null
 
 	section
@@ -143,9 +144,6 @@ block content
 		tr
 			td #[code a->b]
 			td #[+ms('Map')] #[span.aside from a to b]
-		tr
-			td #[code a~]
-			td #[+ms('Generator')] #[span.aside #[a(href='./<~') <~]]
 		tr
 			td #[code a?]
 			td #[code Boolean]

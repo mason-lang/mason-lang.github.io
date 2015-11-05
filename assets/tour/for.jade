@@ -1,62 +1,52 @@
 extends _layout
 
 block content
-	+hdr('for!')
+	+hdr('for')
 	section
-		p #[code for!] allows for simple loops.
+		p #[code for] allows for simple loops.
 
 	mason-editor
 		pre.
 			n ::= 0
 			. n
-			for!
+			for
 				n := + 1 n
 				. n
-				if! =? n 10
-					break!
+				if =? n 10
+					break
 
 	section
 		p You can also loop over a collection.
-		p If you provide no name, the elements will be assigned to the #[a(href='./if#focus') focus].
+		p If you provide no element name, it will be the #[a(href='./if#focus') focus].
 
 	mason-editor
 		pre.
 			. 0
-			for! new Range 1 5
-				. _
-			for! n in new Range 5 100
+			for n of 1..4
 				. n
-				|| `break!` statements stop the loop early.
-				if! =? n 10
-					break!
+			for 5..99
+				. _
+				if =? _ 10
+					break
 
-	+hdr('for')
 	section
-		p To return a value from a loop, use #[code for] and #[code break].
-		p Just like #[code for!], #[code for] works looping over a collection too.
+		p To return a value from the loop, provide it to #[code break].
 
 	mason-editor
 		pre.
 			n ::= 0
-			for
+			. for
 				n := + 1 n
-				if! =? n 10
+				if =? n 10
 					break n
 
 	+hdr('@for')
 	section
-		p Use #[code @for] to store the results in an array.
+		p Use #[code @for] to create a bag as you loop.
+		p This makes it a map, flat-map, and filter all in one.
 
 	mason-editor
 		pre.
-			@for [1 2 3]
-				+ 1 _
-
-	section
-		p You can also use a list builder inside.
-
-	mason-editor
-		pre.
-			@for [1 2]
-				. _
-				. _
+			@for [1 2 3 4]
+				if divisible? _ 2
+					. _

@@ -21,10 +21,10 @@ block content
 	section
 		p.
 			More specifically, a #[code Generator] is a mutable value which
-			the context calls the #[+ms('gen-next!')] method on,
+			the context calls the #[code ('next')] method on,
 			causing it to execute code up until the next yield.
 		p.
-			#[code gen-next!] could be called in an asynchronous callback,
+			#[code next] could be called in an asynchronous callback,
 			or the context could choose to stop calling the generator at all.
 		p #[code Generator]s are useful when:
 		ul
@@ -41,18 +41,19 @@ block content
 				generator = getter()
 				for stream
 					value done = generator.next _
-					if! done
+					if done
 						break value
 
-			taking (new Range 0 10) ~|
+			taking 0..9 ~|
 				. <~
 				. <~
 				. <~
 
 	section
-		p #[code a <~ b] both sends a value to the context and takes one back.
-		p It's the same as #[code a = <~ b].
-		p Note that #[code (<~ 1)] is an expression and #[code a <~ 1] is a statement.
+		p.
+			#[code a <~ b] both sends a value to the context and takes one back.
+			It's the same as #[code a = <~ b].
+		p Note that #[code (a <~ 1)] as an expression calls #[code a] on #[code <~ 1].
 
 	mason-editor
 		pre.
@@ -61,8 +62,8 @@ block content
 				generator = yields-numbers()
 				last-value ::= undefined
 				for
-					value done = gen-next! generator last-value
-					if! done
+					value done = generator.next last-value
+					if done
 						break value
 					last-value := + 1 value
 

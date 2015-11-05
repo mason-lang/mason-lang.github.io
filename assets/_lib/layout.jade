@@ -34,7 +34,9 @@ html
 					'mason-compile': 'mason-compile/dist'
 				}
 			})
-			require([ "../script/mason-editor/mason-editor" ])
+			//kludge
+			require(['msl/private/bootstrap'], () =>
+				require(['../script/mason-editor/mason-editor']), err => { throw err })
 
 	body
 		header

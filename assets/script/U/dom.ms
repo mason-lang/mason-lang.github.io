@@ -13,9 +13,10 @@ self-impl! from-stream NodeList |stream
 impl! iterator NodeList (impl-for iterator Array)
 
 impl! empty! Node .!|
-	for!
-		unless! .firstChild
-			break!
+	todo SYNTAX while
+	for
+		unless .firstChild
+			break
 		.removeChild .firstChild
 
 impl! +>! Node .|_
@@ -46,13 +47,13 @@ set-content!. !|elem:Node content
 	do-set-content! elem content
 
 do-set-content! = !|elem content
-	case! content
+	case content
 		:String
 			elem.textContent := _
 		:Node
 			elem.appendChild _
 		:@
-			for! sub-elem of _
+			for sub-elem of _
 				elem.appendChild case sub-elem
 					:String
 						document.createTextNode_
@@ -61,13 +62,13 @@ do-set-content! = !|elem content
 
 new-elem. |elem-type:String b c
 	with document.createElement elem-type as elem
-		case! b
+		case b
 			not defined?_
-				forbid! defined? c
+				forbid defined? c
 			:ObjLit
 				Object.assign elem b
-				if! defined? c
+				if defined? c
 					do-set-content! elem c
 			else
 				do-set-content! elem b
-				forbid! defined? c
+				forbid defined? c

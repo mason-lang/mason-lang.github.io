@@ -6,8 +6,6 @@ import
 compile-or-span. |ms-code
 	_ = compile ms-code
 		includeSourceMap. false
-		includeModuleName. false
-		useBoot. false
 	res = _.result
 	success?. not res:Error
 	result. case res
@@ -25,9 +23,9 @@ todo use
 || format-warning-for-html = |warning:Warning
 ||	format warning 'warning
 
-format = |warning kind
+format = |warning className
 	todo use dom helpers
-	new-elem 'span (className. kind)
+	new-elem 'span (className. className)
 		. new-elem 'span (className. 'loc textContent. warning.loc)
 		. new-elem 'message (className. 'message)
 			new Stream |

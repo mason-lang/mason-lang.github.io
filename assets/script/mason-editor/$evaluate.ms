@@ -3,10 +3,10 @@
 	new $ |resolve reject
 		define = |required do-define!
 			exports = required.shift()
-			assert! =? exports 'exports
+			assert =? exports 'exports
 			successful-require = !|...modules
-				except!
-					try!
+				except
+					try
 						exports = new Object
 						modules.unshift exports
 						do-define! ...modules
@@ -16,7 +16,7 @@
 								exports.default
 							else
 								exports
-					catch! err
+					catch err
 						reject err
 
 			-require- required successful-require reject

@@ -1,17 +1,17 @@
 import
 	global document HTMLElement
-	msl.$ $after $done
+	msl.$ $done
 	require
 	..U.dom elem on set-content!
 	.compile-or-span
-	.evaluate
+	.$evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
 template = elem (elem "#link-mason-editor").import 'template
 
 MasonEditor = class HTMLElement
 	'attachedCallback !|
-		unless! defined? .initialCode
+		unless defined? .initialCode
 			.initialCode := .textContent.trim()
 
 		set-content! this (document.importNode template.content true)
@@ -30,48 +30,46 @@ MasonEditor = class HTMLElement
 		on 'mouseout js !|
 			js.style.max-height := "0.5em"
 
-		.setStatus 'writing
+		.set-status! 'writing
 		.ms.on 'changes !|
-			.setStatus 'writing
-		.statusIcon.onclick := !|
-			.compile()
+			.set-status! 'writing
+		.statusIcon.onclick := .&compile!
 
 		.ms.setValue .initialCode
 
 		.style.visibility := 'visible
 
-	'setContent !|code
-		.initialCode := code
-
-	'compile !|
-		unless! =? 'working .status
-			.setStatus 'working
+	'compile! !|
+		unless =? 'working .status
+			.set-status! 'working
 			msCode = .ms.getValue()
 			success? result = compile-or-span msCode
-			case!
+			case
 				success?
 					.js.setValue result
-					.evaluate result
+					$done (.$evaluate! result)
 				else
 					.-show-compile-error result
 
-	'evaluate !|js
-		f = $after (evaluate require js) |val
-			.out.textContent := inspect val
-			.setStatus 'compiled
-		$done (f.catch |err
-			.-show-eval-error err.stack
+	'$evaluate! $!|js
+		except
+			try
+				val <~ $evaluate require js
+				.out.textContent := inspect val
+				.set-status! 'compiled
+			catch _
+				.-show-eval-error _.stack
 
 	'-show-compile-error !|error-elem
 		.js.setValue ""
-		.setStatus 'error
+		.set-status! 'error
 		set-content! .out error-elem
 
 	'-show-eval-error !|error-elem
-		.setStatus 'error
+		.set-status! 'error
 		set-content! .out error-elem
 
-	'setStatus !|status
+	'set-status! !|status
 		.status := status
 		.statusIcon.className := switch status
 			'compiled

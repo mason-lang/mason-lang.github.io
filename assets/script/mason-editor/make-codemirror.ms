@@ -13,7 +13,6 @@ common-opts =
 	|| Entire CodeMirror is rendered.
 	viewportMargin. Number.POSITIVE_INFINITY
 
-
 special = |special-opts
 	base-opts = object-merge common-opts special-opts
 	|dom-element opts

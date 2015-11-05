@@ -33,10 +33,10 @@ styles =
 	plain. 'variable-3
 	ms-region. 'comment
 	string. 'string
-	type. 'atom
+	"type". 'atom
 
 Indented-String-State = class
-	construct! current-indent
+	construct current-indent
 		.indent = current-indent
 
 	next-token |stream

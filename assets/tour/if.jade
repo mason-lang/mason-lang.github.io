@@ -16,15 +16,17 @@ block content
 				3
 
 	section
-		p These return #[+ms('?')] values.
-		p If you don't want to return a value, use #[code if!] and #[code unless!].
+		p When used as expressions, these are #[+ms('?')] values.
+		p.
+			When placed on a line alone (and it's not the last line of a value block),
+			these compile to statements.
 
 	mason-editor
 		pre.
 			. 0
-			if! true
+			if true
 				. 1
-			unless! false
+			unless false
 				. 2
 
 	section
@@ -67,8 +69,6 @@ block content
 	section
 		p If there is no #[code else], an error will be thrown for an unhandled case.
 		p (If you want to do nothing, just write #[code pass] in the #[code else] block.)
-		p #[code switch!] is the statement version.
-
 
 	+hdr('focus')
 	section
@@ -135,10 +135,6 @@ block content
 
 			. rate-guess-2 7
 
-	section
-		p #[code case!] is the statement version.
-
-
 	+hdr('logic')
 	section
 		p All these conditionals are easier with some boolean helpers.
@@ -158,3 +154,12 @@ block content
 			but without the need for parentheses because
 			the keywords automatically group with the rest of the line,
 			just like #[code if], #[code unless], #[code switch], #[code case], and others.
+
+	+hdr('cond')
+	section
+		p For simple one-line conditionals, use #[code cond].
+
+	mason-editor
+		pre.
+			. cond true 'then 'else
+			. cond false 'then 'else

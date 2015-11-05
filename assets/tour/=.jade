@@ -47,14 +47,10 @@ block content
 			obj
 
 	section
-		p To access a property whose name must be computed, use #[+ms('p')] or #[+ms('send')].
+		p To access a property whose name must be computed, use #[code obj."foo"]
 
 	mason-editor
 		pre.
-			import
-				msl.Object p send
-
-			obj = (x. 0 f. .|
-				.x
-			. p obj "x"
-			. send obj "f"
+			obj =
+				"wierd name". 1
+			obj."wierd name"
