@@ -1,14 +1,23 @@
 extends _lib/layout
 
+block head
+	//move
+	link(rel='stylesheet' href='/style/index.css')
+
 block content
 	section
-		p Mason is a new language compiling to JavaScript.
-		p See #[a(href='./why') why mason?] or the #[a(href='./tour') tour] to start learning.
+		#logo
+			img(src='image/logo.png')
+			strong minus interpunctione ◆ patet disciplinam
+		p Mason is a new programming language compiling to JavaScript.
+		p See #[a(href='./why') why Mason?] or the #[a(href='./tour') tour] to start learning.
 
 	+hdr('examples')
 	section
 		p Mason is used in real projects!
 		ul
+			li
+				a(href='//github.com/dum-build/dum') dum
 			li
 				a(href='//github.com/mason-lang/mason-lang.github.io') this site
 			li

@@ -1,41 +1,45 @@
 import
 	global document HTMLElement
-	msl.$ $done
+	msl.Promise $done
 	require
 	..U.dom elem on set-content!
 	.compile-or-span
 	.$evaluate
 	.make-codemirror ms-code-mirror js-code-mirror
 
-template = elem (elem "#link-mason-editor").import 'template
+template = elem (elem "\#link-mason-editor").import 'template
 
 MasonEditor = class HTMLElement
 	'attachedCallback !|
-		unless defined? .initialCode
-			.initialCode := .textContent.trim()
+		.initialCode := .textContent.trim()
 
 		set-content! this (document.importNode template.content true)
 
 		e = elem[this]
-		ms = e "#ms"
-		js = e "#js"
+
+		ms = e "\#ms"
 		.ms = ms-code-mirror ms
-		.js = js-code-mirror js
-		.statusIcon = e "#statusIcon"
-		.out = e "#out"
-
-		|| Only expand JS when hovering. CSS animations for this in mason-editor.styl.
-		on 'mouseover js !|
-			js.style.max-height := "{(elem js ".CodeMirror").offsetHeight}px"
-		on 'mouseout js !|
-			js.style.max-height := "0.5em"
-
-		.set-status! 'writing
-		.ms.on 'changes !|
-			.set-status! 'writing
-		.statusIcon.onclick := .&compile!
-
 		.ms.setValue .initialCode
+
+		case
+			null? (.getAttribute 'no-eval)
+				js = e "\#js"
+				.js = js-code-mirror js
+				.statusIcon = e "\#statusIcon"
+				.out = e "\#out"
+
+				|| Only expand JS when hovering. CSS animations for this in mason-editor.styl.
+				on 'mouseover js !|
+					js.style.max-height := "#((elem js ".CodeMirror").offsetHeight)px"
+				on 'mouseout js !|
+					js.style.max-height := "0.5em"
+
+				.set-status! 'writing
+				.ms.on 'changes !|
+					.set-status! 'writing
+				.statusIcon.onclick := .&compile!
+			else
+				-! this (e 'output)
 
 		.style.visibility := 'visible
 
@@ -54,7 +58,7 @@ MasonEditor = class HTMLElement
 	'$evaluate! $!|js
 		except
 			try
-				val <~ $evaluate require js
+				val = $ $evaluate require js
 				.out.textContent := inspect val
 				.set-status! 'compiled
 			catch _

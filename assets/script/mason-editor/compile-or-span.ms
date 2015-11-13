@@ -1,33 +1,26 @@
 import
-	mason-compile.compile
-	mason-compile.CompileError
+	mason-compile.Compiler
 	..U.dom new-elem
 
-compile-or-span. |ms-code
-	_ = compile ms-code
-		includeSourceMap. false
+compiler = new Compiler
+	includeSourceMap. false
+
+compile-or-span. |ms-code:Str
+	todo [result. warnings.] = ...
+	_ = compiler.compile ms-code "web-sample.ms"
 	res = _.result
 	success?. not res:Error
-	result. case res
-		success?
-			_
-		:CompileError
-			error->span_
-		else
-			new-elem 'span _.stack
-
-error->span = |error:CompileError
-	format error.warning 'error
+	result. cond success? res.code (format res.errorMessage 'error)
 
 todo use
 || format-warning-for-html = |warning:Warning
 ||	format warning 'warning
 
-format = |warning className
+format = |errorMessage className
 	todo use dom helpers
 	new-elem 'span (className. className)
-		. new-elem 'span (className. 'loc textContent. warning.loc)
+		. new-elem 'span (className. 'loc textContent. errorMessage.loc)
 		. new-elem 'message (className. 'message)
 			new Stream |
-				warning.messageParts |code
+				errorMessage.messageParts |code
 					new-elem 'span (className. 'code textContent. code)

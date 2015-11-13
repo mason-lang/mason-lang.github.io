@@ -3,17 +3,19 @@ extends _layout
 block content
 	+hdr('locals')
 	section
-		p #[code =] declares a new immutable local.
-		p #[code ::=] declares a mutable one and #[code :=] mutates it.
+		p.
+			#[code =] declares a local.
+			#[span.aside So does in #[code a. b] in object builders.]
+		p.
+			#[code :=] changes the value of a previously declared local.
+			#[span.aside For object builders, this does #[em not] change #[code built].]
 
 	mason-editor
 		pre.
-			a = 0
+			a = 1
 			. a
-			b ::= 1
-			. b
-			b := 2
-			. b
+			a := 2
+			. a
 
 	section
 		p Locals are local to the block they're declared in.
@@ -35,14 +37,15 @@ block content
 
 	section
 		p Object properties assignment has a similar syntax to local assignment.
-		p #[code =] creates a readonly property, while `::=` creates a mutable one.
-		p #[code :=] compiles to JavaScript's normal property assignment, meaning it mutates of creates properties on the fly.
+		p #[code =] creates a new property #[span.aside throwing if it already exists].
+		p #[code :=] compiles to JavaScript's normal property assignment, meaning it mutates or creates properties on the fly.
 
 	mason-editor
 		pre.
-			obj = (x. 0)
+			obj = (x. 1)
 			obj.y = 1
-			obj.z ::= 2
+			obj.y := 2
+			|| := creates the property if necessary.
 			obj.z := 3
 			obj
 

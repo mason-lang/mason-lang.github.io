@@ -8,7 +8,7 @@ html
 		meta(name='description'
 			content='Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js.')
 
-		link(rel='icon' href='icon.svg')
+		link(rel='icon' href='/icon.svg')
 
 		// ID needed because mason-editor.js is not run inside of this.
 		link#link-mason-editor(rel='import' href='/mason-editor')
@@ -34,9 +34,11 @@ html
 					'mason-compile': 'mason-compile/dist'
 				}
 			})
-			//kludge
+			// kludge: need to require bootstrap because mason modules lazily load using _ms
 			require(['msl/private/bootstrap'], () =>
 				require(['../script/mason-editor/mason-editor']), err => { throw err })
+
+		block head
 
 	body
 		header

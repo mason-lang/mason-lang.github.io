@@ -1,0 +1,344 @@
+extends _layout
+
+block content
+	- var quote = '"'
+	- var singleQuote = "'"
+
+	section
+		p All Mason programs must use the #[+ms-project('msl')] (Mason Standard Library) package.
+		p The examples can be run on the site, but you may want to #[a(href='/setup') install mason] too.
+
+	+hdr('syntax')
+	section
+		p.
+			Character sequences are valid names if they have no special characters
+			(#[code () [] {} # % ^ & _ | \ : ; #{singleQuote} #{quote} , .] or whitespace),
+			do not start with a digit or #[code ~], and are not keywords.
+		p.
+			Blocks of code are written as indented blocks of text.
+			#[span.aside Tabs by default, but there is a compiler option for spaces.]
+		p.
+			Spaces within a line are significant too, so don't go adding spaces anywhere the examples don't.
+			#[code a. b], #[code a.b], and #[code a .b] all mean different things!
+		p You don't need semicolons, commas, or curly braces, and parentheses are rare.
+		p.
+			Mason generally uses prefix syntax #[span.aside as in #[code + 1 2]]
+			instead of infix #[span.aside #[code 1 + 2] in JavaScript].
+			The few infix operators #[span.aside such as #[code a = 1]] are statements — meaning they only occur once per line, and can't appear as subexpressions —
+			so operator precedence is not necessary.
+		p #[code ||] is an ignored line comment. For other comments, see #[a(href='./doc') doc].
+
+	+hdr('block')
+
+	section
+		p In addition to normal blocks, blocks of code can also build objects, arrays, and maps.
+
+	+hdr2('object')
+	section
+		p Objects are written as indented blocks of #[code key. value] pairs.
+
+	mason-editor
+		pre.
+			x. 1
+			y. 2
+
+	section
+		p Object keys are local variables, so you can use them as if you had used #[code =].
+		p If an object key is a local variable from elsewhere, just write #[code foo.].
+
+	mason-editor
+		pre.
+			one. 1
+			uno. one
+			ein = uno
+			ein.
+
+	+hdr2('array')
+	section
+		p Arrays are also written in indented blocks.
+		p Each line beginning with #[code .], followed by a space, writes a new entry to it.
+		p #[code ...] adds many elements.
+
+	mason-editor
+		pre.
+			. 1
+			. 2
+			... [3 4]
+
+	+hdr2('map')
+	section
+		p Maps follow the same pattern.
+		p Each line with a #[code ->] writes an entry to the map.
+
+	mason-editor
+		pre.
+			1 -> 2
+			3 -> 4
+
+	+hdr2('building')
+	section
+		p Why are these called builders?
+		p It's because they build their result incrementally, making them more advanced than just literals.
+
+	mason-editor
+		pre.
+			. 1
+			if false
+				. 2
+			if true
+				. 3
+
+	+hdr2('short forms')
+	section
+		p You can also do it all on one line.
+
+	mason-editor
+		pre.
+			object. (a. 1 b. 2)
+			array. [1 2]
+
+	+hdr2('value blocks')
+	section
+		p If a block appears in a value position, either it is a builder it returns its last line.
+		.aside Mason doesn't have a #[code return] keyword.
+
+	mason-editor
+		pre.
+			two = 2
+			two
+
+	+hdr2('blocks are values')
+	section
+		p You can use a block anywhere a value is expected.
+		p.
+			It is highly encouraged to use this as an additional level of code organization where possible,
+			instead of writing long flat functions or lots of tiny functions.
+
+	mason-editor
+		pre.
+			a.
+				x = 1
+				x
+			|| `x` not accessible outside of the block
+			b.
+				. 1
+				.
+					|| `. ` expects a value, which can of course be a block!
+					. 2
+					. 3
+
+
+
+	+hdr('literals')
+	section
+		p Constants and numbers work as in JavaScript.
+		.aside #[code undefined] is a constant in Mason compiling to #[code void 0].
+
+	mason-editor
+		pre.
+			. true
+			. false
+			. null
+			. undefined
+			. 0
+			. -1.1
+			. 0b10
+			. 0o10
+			. 0x10
+
+	+hdr2('strings')
+
+	section
+		p Text surrounded in #[code #{quote}] makes a string.
+		p Interpolate values with #[code #()]. For a local name use #[code #foo] without parentheses.
+		p #[code \] escapes special characters as in JavaScript.
+
+		p Multi-line strings go in indented text.
+		.aside.
+			Note that the string's indentation is whatever you add past the block's indentation,
+			so in the example only #[code #equation] is indented.
+
+		p.
+			For short strings, use #[code #{singleQuote}] followed by an identifier.
+			This is useful for the names of events, CSS classes, methods, etc.
+
+	mason-editor
+		pre.
+			wise-man = 'Confucius
+			equation = "1 + 1 = #(+ 1 1)"
+			"
+				#wise-man say:
+					#equation
+				but I don't know if I believe it...
+
+	+hdr2('regexps')
+
+	section
+		p RegExps look just like strings but use #[code `] instead of #[code #{quote}].
+		p You can include any of the flags #[code g i m y] after the closing #[code `].
+		.aside.
+			Flags must appear in alphabetical order.
+			If the #[code y] flag isn't available on your system, you won't be able to compile it yet.
+		p.
+			When interpolated values are RegExps, their
+			#[a(href='//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/source') .source]
+			is interpolated, so regexps can compose. #[span.aside But flags on interpolated regexps are ignored.]
+		.aside Otherwise, interpolated values are converted to strings, and are not escaped, meaning they are treated as regexp code.
+
+	mason-editor
+		pre.
+			hex-digit = `[0-9a-f]`
+			hex-number = `0x#(hex-digit)+`i
+			. hex-number
+			|| We used the `i` flag, so capital letters are OK.
+			. hex-number.test "0xDEADBEEF"
+
+	+hdr('functions')
+	section
+		p Functions are written with #[code |] followed by arguments.
+		p The body of a function is a block #[span.aside meaning it can be a builder].
+		p Calling a function doesn't require parentheses.
+		p For arguments that are theirselves function calls, use #[code ()].
+
+	mason-editor
+		pre.
+			identity = |a
+				a
+			two-of = |a
+				. a
+				. a
+
+			. identity 1
+			. two-of 1
+			|| Parentheses are only needed when a subexpression is itself a function call.
+			. identity (identity 1)
+
+	section
+		p If you want to put a block inside parentheses, just don't include the closing parenthesis.
+
+	mason-editor
+		pre.
+			two-of = |a
+				. a
+				. a
+
+			two-of (two-of
+				. 1
+				. 2
+				|| No closing parenthesis!
+
+	section
+		p For functions with no value, use #[code !|].
+		p If you don't need to do anything in a block, use #[code pass].
+		p A function with no arguments is called like #[code fun()].
+
+	mason-editor
+		pre.
+			do-nothing! = !|
+				pass
+			do-nothing!()
+
+	+hdr2('this-functions')
+	section
+		p Normal functions compile to JavaScript's arrow functions.
+		p For #[code function() { }], which has a new #[code this] variable, use #[code .|] and #[code .!|].
+		p In inner functions, it's safe to use #[code this].
+		p You usually won't need these, because Mason has #[a(href='./class') class syntax].
+
+	mason-editor
+		pre.
+			f = .|
+				|| In here `this` has a different value than outside.
+				|
+					|| In here `this` has the same value as in `f`.
+					this
+			(f.call 3)()
+
+	+hdr2('new')
+	section
+		p Calling a constructor looks like a function call with #[code new] in front.
+
+	mason-editor
+		pre.
+			new Array 4
+
+	+hdr('modules')
+	section
+		p Plans are for Mason to compile to [JavaScript ES6 modules](//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
+		aside Currently it compiles to AMD modules.
+		p A module is written as an object block.
+		p The default export is an entry with the same name as the file name.
+
+	mason-editor(no-eval)
+		pre.
+			|| my-module.ms
+
+			|| default export
+			my-module. 1
+
+			|| named export
+			a. 2
+
+	section
+		p.
+			If your module does not have any named exports,
+			it is treated as a block and its value is assigned to the default export.
+		p So, the code for a module whose default export is zero is:
+
+	mason-editor(no-eval)
+		pre.
+			0
+
+	section
+		p Module imports go at the top of a script and use a special syntax.
+
+	mason-editor(no-eval)
+		pre.
+			import
+				|| Uses the globally available module `fs`.
+				fs
+
+				|| File "brother.ms" (or ".js") in the same directory.
+				.brother
+
+				|| ./brother-dir/nephew.ms
+				.brother-dir.nephew
+
+				|| ../aunt.ms
+				..aunt
+
+				|| ../../aunt/cousin.ms
+				...aunt.cousin
+
+				|| Creates a local `a` equal to the module's default export.
+				a
+
+				|| Imports named exports `b` and `c` as locals.
+				a b c
+
+				|| Both combined. The default export is still called `a`, not `_`.
+				a _ b c
+
+			|| Variables only used for tests should go here.
+			import-debug
+				msl.assert assert-call!
+
+	section
+		p Mason doesn't normally allow global variables (except for builtin globals), but you can declare them using the fake #[code global] module.
+
+	mason-editor
+		pre.
+			import
+				global alert
+
+			alert 'hi
+
+	section
+		p.
+			Some values from #[+ms-project('msl')] such as #[+ms('+')] are builtins — you don't have to explitly import them.
+			The necessary imports will be added for you.
+		p The list of builtins is currently only available #[a(href='//github.com/mason-lang/mason-compile/blob/master/src/private/defaultBuiltins.js') here].
+		p Putting these together, global variables such as #[code Object] are really builtins from the global module. Common JS globals (not including web-specific ones) are builtins.
+		.aside.
+			If you need it #[span.aside hopefully not!],
+			the global variable 'global' #[span.aside an object containing all globals] is shimmed to work on either client or server.

@@ -4,13 +4,15 @@ block content
 	+hdr('throw')
 	section
 		p You can throw errors as in JavaScript.
-		p If you throw a #[code String], it will be converted to an #[code Error] for you.
+		p.
+			If you throw a string, it will be converted to an #[code Error] for you.
+			It has to be a string literal though — #[code throw a] won't work if #[code a] happens to be a String.
 
 	mason-editor
 		pre.
 			throw "This code throws a fit!"
 
-	+hdr('assert!')
+	+hdr('assert')
 
 	section
 		p Usually, you'll only need to throw an exception under certain conditions.
@@ -19,35 +21,72 @@ block content
 		pre.
 			assert true
 			forbid =? 0 1
+			|| `throw` splits the line in two between the condition and the error.
 			assert false throw "Custom error"
 
 	section
-		p When asserting the result of a function call, the error message will include the function called and its arguments.
-
+		p If an explicit #[code throw] isn't given, the compiler tries to create a descriptive error message.
+		p For example, when asserting the result of a function call, the error message will include the function called and its arguments.
 
 	+hdr('except')
 
 	section
 		p You can save yourself from an exception with #[code except].
+		p The error given to to #[code catch] is by default the focus, but you could also provide a name.
 
 	mason-editor
 		pre.
-			. except
+			except
 				try
-					throw
+					throw 'oh-no!
+				|| same as:
+				|| catch foo
+				||	foo
 				catch
-					1
-				|| This part is optional.
+					_
+				|| `finally` is optional
 				finally
 					pass
 
 	section
-		p #[code catch] can take a parameter, the focus by default.
+		p Usually you only need to catch a certain type of exception.
+		p A type on the caught exception means that the exception will not be caught unless it is of that type.
+		p Omitting a variable name before the type makes it the focus.
+		p.
+			You can only provide one untyped #[code catch] and it has to come at the end, much like the #[code else] of a #[code switch].
 
 	mason-editor
 		pre.
-			. except
+			except
 				try
-					throw
+					throw new TypeError 'type-no-good
+				catch r:RangeError
+					r
+				catch :TypeError
+					_
+				catch some-other-error
+					some-other-error
+
+	section
+		p Usually you only need to catch errors in a few lines.
+		p Code in #[code else] happens after the code in #[code try] but errors in it are not caught.
+		p This helps you make clear which specific code is dangerous, moving everything else into #[code else].
+
+
+	mason-editor
+		pre.
+			except
+				try
+					|| `try` is for dangerous code that throws errors!
+					foo = 'success
 				catch
-					_.message
+					'failure
+				else
+					|| `else` is for using values defined in `try`.
+					|| If there are errors here, they won't be caught.
+					foo
+
+	section
+		p If there are any errors in #[code try], #[code else] never runs.
+		p You can read code as: #[em try (something dangerous)... catch (these errors)... else (if nothing was caught)...]
+		.aside #[code else] can use values defined in #[code try], but #[code catch] can't. Why? Because #[code catch] only runs if something went wrong when defining those values.

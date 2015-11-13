@@ -22,6 +22,9 @@ impl! empty! Node .!|
 impl! +>! Node .|_
 	.appendChild _
 
+impl! -! Node .!|_
+	.removeChild _
+
 elem. |a b
 	case
 		defined? b
@@ -36,7 +39,7 @@ elem. |a b
 		else
 			document.querySelectorAll a
 
-on. |event-name:String elem:HTMLElement action:Action
+on. |event-name:Str elem:HTMLElement action:Action
 	elem.addEventListener event-name action
 
 replace-node!. |old-node:Node new-node:Node
@@ -48,19 +51,19 @@ set-content!. !|elem:Node content
 
 do-set-content! = !|elem content
 	case content
-		:String
+		:Str
 			elem.textContent := _
 		:Node
 			elem.appendChild _
 		:@
 			for sub-elem of _
 				elem.appendChild case sub-elem
-					:String
+					:Str
 						document.createTextNode_
 					else
 						_
 
-new-elem. |elem-type:String b c
+new-elem. |elem-type:Str b c
 	with document.createElement elem-type as elem
 		case b
 			not defined?_

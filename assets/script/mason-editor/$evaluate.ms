@@ -1,6 +1,6 @@
 |-require- js
 	fun = Function 'define js
-	new $ |resolve reject
+	new Promise |resolve reject
 		define = |required do-define!
 			exports = required.shift()
 			assert =? exports 'exports

@@ -1,0 +1,71 @@
+extends _layout
+
+block content
+	+hdr('doc')
+
+	section
+		p The previous section should give you everything you need to know to write awesome modules. But how do you brag about them?
+		p.
+			#[code | ] (with a space after it) starts a doc comment.
+			These have to go at the start of an indented block.
+			They go #[em inside] the thing they're documenting.
+
+	mason-editor(no-eval)
+		pre.
+			| This here's my module. Is it not nifty?
+
+			double. |n:Number
+				| Twice a number.
+				* 2 n
+
+			Point. class
+				| Stores x and y.
+
+				construct! .x .y
+					pass
+
+				'transpose |
+					| Point with flipped x and y.
+					new Point .y .x
+
+	section
+		p This part of mason is in its early stages, so as of now these are basically ignored.
+		p Someday there will be something useful in #[+ms-project('mason-doc')].
+
+	+hdr('todo')
+
+	section
+		p.
+			Normal (#[code ||]) comments tell you useful information about the code.
+			#[code todo] comments indicate things you need to change before committing to source control.
+
+	mason-editor(no-eval)
+		pre.
+			|| A single unit.
+			one. 1
+			todo check sign
+			two. -2
+
+	+hdr('region')
+
+	section
+		p #[code region] visually groups your code.
+		p The code of the region goes in an indented block, but does #[i not] introduce a new program block.
+
+	mason-editor
+		pre.
+			obj =
+				region Constants
+					one. 1
+					two. 2
+
+				region Functions
+					|| `region` doesn't create new program blocks.
+					|| Locals from other regions are accessible.
+					double. *[two]
+
+			obj.double obj.two
+
+	section
+		p You made it to the end of the tour!
+		+request-for-comments()

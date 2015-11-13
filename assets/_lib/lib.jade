@@ -3,6 +3,12 @@
 - rootUrl = '//mason-lang.org'
 - gitRoot = '//github.com/mason-lang'
 
+mixin request-for-comments()
+	p.
+		Have a comment about the language?
+		#[a(href='//gitter.im/mason-lang/mason-compile') Chat on gitter] or
+		#[a(href='mailto:andy.pj.hanson@gmail.com') contact me directly].
+
 mixin hdr(name, fullName)
 	- fullName = fullName || name
 	a(href='/#{path}##{name}')
@@ -15,6 +21,7 @@ mixin hdr2(name, fullName)
 
 -
 	// TODO: use builtins map for this
+	//todo: delete some junk
 	var ms_s = {
 		'!': '!',
 		'@': '@.@',
@@ -29,10 +36,12 @@ mixin hdr2(name, fullName)
 		'<?': 'compare',
 		'?': '@.?',
 		'Alias-Type': 'Type.Alias-Type',
-		'contains?': 'Type.Type',
+		Bool: 'Type.primitive',
 		curry: 'Function',
 		Deque: '@.Deque',
+		'each!': '@.@',
 		extract: 'Type.Type',
+		'has-instance?': 'Type.Type',
 		'?find': '@.@',
 		'gen-next!': 'Generator',
 		Generator: 'Generator',
@@ -49,8 +58,10 @@ mixin hdr2(name, fullName)
 		Kind: 'Type.Kind',
 		'Lazy-Stream': '@.Lazy-Stream',
 		LList: '@.LList',
+		'@map': '@.@',
 		Map: '@.Map.Map',
 		Method: 'Type.Method',
+		Num: 'Type.primitive',
 		'p': 'Object',
 		'?p': 'Object',
 		'?pop!': '@.Priority-Queue!',
@@ -59,6 +70,8 @@ mixin hdr2(name, fullName)
 		send: 'Object',
 		'self-impl!': 'Type.Method',
 		Seq: '@.Seq',
+		Str: 'Type.primitive',
+		Sym: 'Type.primitive',
 		sub: 'methods',
 		Stream: '@.Stream',
 		'Type': 'Type.Type',
@@ -73,9 +86,21 @@ mixin hdr2(name, fullName)
 		export_paths[key] = `${gitRoot}/msl/tree/master/src/${escaped_url}.ms`
 	}
 
+
 mixin ms(name)
-	- var url = export_paths[name]
-	- if (url === undefined) throw new Error(`No doc link for ${name}`)
+	-
+		var url = export_paths[name]
+		if (url === undefined) throw new Error(`No doc link for ${name}.`)
+	a(href='#{url}')= name
+
+-
+	var mdn_s = {
+		Symbol: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol'
+	}
+mixin mdn(name)
+	-
+		var url = mdn_s[name]
+		if (url === undefined) throw new Error(`No MDN link for ${name}.`)
 	a(href='#{url}')= name
 
 mixin ms-project(name)

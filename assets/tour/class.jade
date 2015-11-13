@@ -1,26 +1,77 @@
 extends _layout
 
 block content
+	+hdr('method functions')
+
 	section
-		p #[code class] creates a native JavaScript class.
-		p It is the normal way to create a concrete type.
-		p The class body consists of a constructor and method definitions.
+		p.
+			In addition to javascript's named methods #[span.aside #[code object.method()]],
+			mason supports a kind of method that are called like functions #[span.aside #[code method object]].
+			These are #[+ms('Method')] objects.
+			Unlike named methods, these use #[+mdn('Symbol')]s, so they are safe to implement on builtins.
+
+	mason-editor
+		pre.
+			|| The default implementation of a method is implicitly a `.|`, so `this` is freshly bound inside.
+			magnitude = method |
+				- "{this}".length 1
+
+			|| impl! is a builtin function defined in msl/Type/Method.ms
+
+			|| This modifies Number.prototype.
+			impl! magnitude Number .|
+				this
+			impl! magnitude String .|
+				.length
+
+			. magnitude 1
+			. magnitude "2!"
+			|| This uses the default implementation.
+			. magnitude true
+
+	section
+		p If you don't want a default implementation, use `abstract`.
+
+	mason-editor(no-eval)
+		pre.
+			foo. method |
+				abstract
+
+
+	section
+		p Certain methods such as #[+ms('=?')] also work on null and undefined values.
+		aside These have to be manually constructed using the #[+ms('Method')] constructor.
+		p The advantages of method functions are that they:
+		ul
+			li Are regular functions
+			li Can be implemented on builtin types without a risk of conflict
+			li Work on #[code null] and #[undefined] with a default implementation
+			li Make it explicit when a class is implementing part of a polymorphic function
+		p.
+			Much of #[+ms-project('msl')] is implemented as methods
+			#[span.aside such as #[+ms('=?')] and #[+ms('+')]],
+			but you don't have to use them in your own code — both method functions and classic-style methods are fully supported.
+
+	+hdr('class')
+
+	section
+		p #[code class] creates a JavaScript class.
+		p The class body consists of a constructor followed by method definitions.
 		p Methods being defined should be #[+ms('Method')]s or strings.
-		p (We'll get to #[code Method] creation later.)
 
 	mason-editor
 		pre.
 			|| If superclass is missing, it will be Object, so this is just for show.
 			Point = class
 				construct x y
-					.x ::= x
-					.y ::= y
+					.x = x
+					.y = y
 
+				|| This is just like `impl! to-string Point .|`
+				|| The `|` doesn't need a `.` in front; that's implied.
 				to-string |
 					"({.x} {.y})"
 
-				|| The `|` doesn't need a `.` in front; that's implied.
-				|| It does need `!` and `~` where appropriate.
 				'transpose! !|
 					y = .y
 					.y := .x
@@ -31,12 +82,14 @@ block content
 			p.transpose!()
 			. to-string p
 
-	+hdr('static')
+	+hdr2('static')
 
 	section
-		p The class itself can have its own functionality.
-		p A #[code do] block sets the focus to the class.
-		p #[code static] defines static methods on the class.
+		p.
+			A #[code do] block sets the focus to the class and lets you do anything with it.
+			#[span.aside= "These usually aren't needed."]
+		p #[code static] defines static methods.
+		p Constructor arguments prefixed with #[code .] become properties.
 
 	mason-editor
 		pre.
@@ -49,21 +102,20 @@ block content
 						.origin
 
 					'from-array |arr
-						assert! =? 2 arr.length
+						assert =? 2 arr.length
 						new Point arr[0] arr[1]
 
-				construct! x y
-					.x = x
-					.y = y
+				construct .x .y
+					pass
 
 			. empty Point
 			. Point.from-array [1 2]
 
 	p.
-		The parts of a class *must* come in this order:
+		The parts of a class #[strong must] come in this order:
 		#[code do], #[code static], #[code construct], then methods.
 
-	+hdr('get/set')
+	+hdr2('get / set')
 
 	section
 		p Getters and setters are also supported.
@@ -88,3 +140,128 @@ block content
 			. p.len
 			p.len := 25
 			. p
+
+	+hdr2('my')
+
+	section
+		p When you don't intend a method to be used by others, just put #[code my] in front.
+		p This works on all kinds, including get/set.
+		p #[code my] doesn't actually do anything, but #[+ms-project('mason-doc')] is planned to use that information.
+
+	mason-editor
+		pre.
+			Bouncer = class
+				'allow-entry? |guess
+					=? guess .password
+
+				my get 'password
+					'swordfish
+
+			_ = new Bouncer
+			. _.allow-entry? 'abc123
+			|| not actually secret
+			. _.allow-entry? _.password
+
+	+hdr2('super')
+
+	section
+		p Class inheritance works the same as in JavaScript.
+		p Declare the superclass by writing it after the #[code class].
+		p.
+			The constructor of an inherited class must call #[code super]
+			before attempting to access #[code this].
+		p.
+			You can use #[code super] in methods to call the same method on a super class,
+			or #[code super.foo] to call a different method.
+		p Like in JavaScript, static methods are inherited.
+
+	mason-editor
+		pre.
+			A = class
+				static
+					get 'super-static
+						4
+
+				construct foo
+					.foo = 0
+
+				'super-method |
+					1
+
+				'overridden-method |x
+					x
+
+
+			B = class A
+				construct
+					|| Illegal to write to `.bar` here
+					super()
+					|| It's OK after you've called `super`
+					.bar = 1
+
+				'overridden-method |x
+					+ (super x) .bar
+
+				'other-method |x
+					super.overridden-method x
+
+			b = new B
+			. b.foo
+			. b.super-method()
+			. b.overridden-method 1
+			. b.other-method 3
+			. B.super-static
+
+
+	+hdr('kind')
+
+	section
+		p.
+			#[code kind] implements multiple inheritance.
+			A #[+ms('Kind')] is basically a collection of methods,
+			so the body of a Kind looks just like a class body.
+			#[span.aside But static methods in Kinds are currently not supported.]
+		p Kinds also work great as interfaces.
+		p.
+			Declare a class to implement a kind with #[code class kind Foo].
+			This copies the methods from the kind to the class.
+		p Kinds can have super-kinds.
+
+	mason-editor
+		pre.
+			A = kind
+				get 'foo
+					1
+			B = kind A
+				get 'bar
+					2
+			C = class
+				get 'baz
+					3
+			Bar = class C kind B
+			bar = new Bar
+			. bar.foo
+			. bar.bar
+			. bar.baz
+
+	section
+		p.
+			Like methods, it's safe to declare a builtin type to implement a Kind.
+			#[span.aside Just be sure to only define method functions on the Kind and not named methods.]
+
+	mason-editor
+		pre.
+			meth = method |
+				false
+
+			Num/Str = kind
+				meth |
+					true
+
+			kind! Number Num/Str
+			kind! String Num/Str
+
+			. and 0:Num/Str "0":Num/Str
+			. not []:Num/Str
+			. and (meth 0) (meth "0")
+			. not meth []

@@ -1,11 +1,35 @@
 extends _layout
 
 block content
+	+hdr('&')
+
+	section
+		p #[code &] lets you write simple functions one one line.
+		p Use #[code &()] to write a function of one argument, the focus, on one line.
+		p There are more short forms for named methods:
+		ul
+			li #[code obj&foo] is short for #[code obj.foo.bind obj].
+			li #[code .&foo] is short for #[code this&foo].
+			li
+				p #[code &foo] is short for:
+				mason-editor(no-eval)
+					pre.
+						|_ ...args
+							_.foo ...args
+		p #[code &.foo] is short for #[code &(_.foo)].
+
+	mason-editor
+		pre.
+			. @keep [1 2 3 4] &(divisible? _ 2)
+			. @map [1 2 3] 'foo&repeat
+			. @map [1 2] &toString
+			. @map ['a 'bb 'ccc] &.length
+
 	+hdr('with')
 
 	section
 		p #[code with] lets you create an empty object and build it up by modifying it.
-		p It assigns to the focus, or to a new local.
+		p It assigns to the focus, or to a new local specified with #[code as].
 
 	mason-editor
 		pre.
@@ -16,11 +40,51 @@ block content
 				o.x = 1
 				o.y = 2
 
+	+hdr('pipe')
+
+	section
+		p A common pattern is to repeatedly apply transforms to a value.
+		p With #[code pipe], #[code _] on each line of the indented block represents the value of the previous line.
+		p The start value goes before the indented block. #[span.aside #[code [1 2 3 4 5]] in this example.]
+
+	mason-editor
+		pre.
+			pipe [1 2 3 4 5]
+				@keep _ &(divisible? _ 2)
+				sum_
+			|| Same as: sum (@keep [1 2 3 4 5] &(divisible? _ 2))
+
+	section
+		p If you ever get stuck having to use a #[a(href='https://en.wikipedia.org/wiki/Fluent_interface') fluent API], #[code pipe] could help reduce the pain.
+
+	+hdr('destructuring')
+
+	section
+		p.
+			If a value is an object and you need several of its fields,
+			extract them all by writing multiple names before the #[code =].
+
+	mason-editor
+		pre.
+			obj =
+				a. 1
+				b. 2
+			a b = obj
+			. a
+			. b
+
+	section
+		p Array destructuring is planned...
+
 	+hdr('sub')
 
 	section
 		p #[+ms('sub')] is a #[+ms('Method')] with special syntax.
-		p It does #[+ms('Map')] lookups, #[+ms('Seq')] lookups by index, and partially applies functions.
+		p It does #[+ms('Map')] lookups, #[+ms('Seq')] lookups by index.
+		p It also #[a(href='//rosettacode.org/wiki/Partial_function_application') partially applies] functions.
+		p.
+			Remember that spaces are significant:
+			#[code a[b]] calls #[code sub] on #[code a] while #[code a [b]] calls #[code a] on an Array.
 
 	mason-editor
 		pre.
@@ -38,22 +102,66 @@ block content
 			+2 = +[(+ 1 1)]
 			. +2 1
 
-	+hdr('region')
-
 	section
-		p #[code region] visually groups your code.
-		p The code of the region goes in an indented block, but does #[i not] introduce a new program block.
+		p Sub syntax can also be used to add values with #[code =] and #[code :=], which behave identically.
+		p You can remove values with #[code del], which returns a #[+ms('?')] of the value that was there.
 
 	mason-editor
 		pre.
-			obj =
-				region Nums
-					one. 1
-					two. 2
+			map = empty Map
+			map[1] = 2
+			. map[1]
+			. del map[1]
+			. del map[1]
 
-				region Funs
-					double. *[two]
+	section
+		p.
+			Many types also support #[code sub], as in #[code Array[Number]].
+			Usually this is just the identity, so it's just for documentation.
 
-				region Calculated Nums
-					four. double two
-			obj.double obj.four
+	+hdr('range')
+
+	section
+		p This syntax simply calls the #[+ms('Range')] constructor.
+		p #[code a..b] is inclusive and #[code a...b] is exclusive of #[code b].
+		p.
+			#[code ..] splits tokens earlier than #[code .],
+			so you can write #[code 0...array.length] but have to write #[code (0...6).by 2].
+		p #[code a...] is an infinite range.
+
+	mason-editor
+		pre.
+			. 0..1
+			. 2...4
+			. (4...8).by 2
+			. @take 8... 3
+
+	+hdr('ignore')
+
+	section
+		p Mason will complain if you don't use a local, so just #[code ignore] it.
+
+	mason-editor
+		pre.
+			second = |a b
+				ignore a
+				b
+			ignore second
+
+	+hdr('pass')
+
+	section
+		p Mason doesn't expect certain expressions to be used as values and will complain.
+		p If you want to use them as values anyway, use #[code pass].
+
+	mason-editor
+		pre.
+			Foo = class
+				get 'x
+					|| Changing state in a getter, very naughty!
+					.y = 1
+					null
+			f = new Foo
+			|| Mason doesn't expect a getter to do anything, so it complains if you take out `pass`.
+			pass f.x
+			f.y

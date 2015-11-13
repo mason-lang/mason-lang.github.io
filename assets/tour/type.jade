@@ -2,130 +2,58 @@ extends _layout
 
 block content
 	section
-		p A #[+ms('Type')] is something that #[+ms('contains?')] a certain set of values.
-		p When declaring a local, use #[code :] to assert its type.
-		p For return types, write the type right after the #[code |].
+		p There are more types than just #[a(href='./class') classes and kinds].
+		p The kind #[+ms('Type')] can be implemented by anything defining the method #[+ms('has-instance?')].
+		p The colon #[code :] is special syntax for using #[code instanceof].
+		.aside Currently it uses a shim because #[code Symbol.hasInstance] isn't yet implemented in any JS engine.
+		p.
+			When declaring a local, use #[code :] to assert its type.
+			For function return types, write the type right after the #[code |].
+		p The #[+ms('Str')] and #[+ms('Num')] builtins act like #[code String] and #[code Number] but recognize primitives instead of the rarely-used object versions. There's also #[+ms('Bool')] and #[+ms('Sym')].
 
 	mason-editor
 		pre.
-			number-to-string = |:String _:Number
+			number->string = |:Str _:Num
 				"{_}"
 
-			number-to-string []
+			|| This should fail
+			number->string []
 
 	section
 		p You can also use #[code value:Type] (with no spaces) to call #[code contains?].
-		p If the value is missing, the test is on the focus.
+		p For just #[code :Type], the test is on the focus. (This works great in #[code case] expressions!)
 
 	mason-editor
 		pre.
-			. 1:Number
-			. 1:String
+			. 1:Num
+			. not 1:Str
 			_ = "one"
-			. :Number
-			. :String
+			. not :Num
+			. :Str
 
+	+hdr('Pred-Type')
 
-	+hdr('types', 'types of types')
-
-	+hdr2('Pred-Type')
 	section
 		p Any predicate can become a Type.
+		.aside.
+			#[code name.] adds an object property equal to
+			the current name being assigned to, in this case #[code "Three"].
+
 	mason-editor
 		pre.
-			import
-				msl.Type.Pred-Type
-
 			Three = new Pred-Type
 				name.
 				predicate. =?[3]
 
 			. 3:Three
-			. 4:Three
-
-
-	+hdr2('Impl-Type')
-	section
-		p A #[+ms('Kind')] of Type with an associated prototype.
-		p Most types are #[+ms('Impl-Type')]s.
-		p All functions are considered Impl-Types because they might be constructors.
-		p In Mason you should use #[code class] and #[code Kind] to create Impl-Types.
-
-
-	+hdr2('Kind')
-	section
-		p #[+ms('Kind')]s group multiple #[+ms('Impl-Type')]s.
-		p #[code Kind]s can even implement other #[code Kind]s.
-		p.
-			#[code name.] is shorthand for #[code name. "Num-or-Str"].
-			It looks for the assignment that it's part of and uses that for the name.
-
-	mason-editor
-		pre.
-			Num-or-Str = new Kind
-				name.
-				implementors. [Number String]
-
-			. 0:Num-or-Str
-			. "0":Num-or-Str
-			. [0]:Num-or-Str
-
-			|| You can also leave the implementors open-ended.
-			Open-Kind = new Kind
-				name.
-			kind! String Open-Kind
-			kind! Number Open-Kind
-
-
-	+hdr('method')
-
-	section
-		p #[+ms('Method')]s are functions that act differently on different #[code Impl-Type]s.
-		p The implementation function chosen depends on the first parameter.
-		p.
-			Methods use a #[code Symbol], #[code method.impl-symbol],
-			to store the implementation,
-			so they don't risk conflicts with other methods.
-		p.aside You can also manually supply a string for it, as was done for #[code to-string].
-		p #[+ms('impl!')] creates a method implementation in a type's prototype.
-		p #[+ms('self-impl!')] implements the method directly on some object.
-
-	mason-editor
-		pre.
-			magnitude = new Method
-				name.
-				|| This is called when there is no implementation for the first argument.
-				default. .|
-					"{this}".length
-				allow-null?. true
-
-			|| This modifies Number.prototype (safely, using a Symbol)
-			impl! magnitude Number .|
-				this
-			impl! magnitude String .|
-				.length
-
-			|| This modifies String, not String.prototype.
-			self-impl! magnitude String .|
-				3
-
-			. magnitude 1
-			. magnitude "#2"
-			. magnitude String
-			|| This uses the default implementation.
-			. magnitude null
-
-	section
-		p.
-			You can implement a Method on a Kind,
-			which will pass the implementation down to its implementors
-			(recursively, if its implementors are also Kinds).
-
+			. not 4:Three
 
 	+hdr('prefix')
 	section
-		p Mason uses prefixes and suffixes to indicate type.
-		p This is just a convention; the compiler doesn't do anything special.
+		p Mason code often uses prefixes and suffixes to indicate type.
+		p.
+			The compiler doesn't treat these specially.
+			#[+ms-project('msl')] follows this convention, but you don't have to.
 
 	table
 		thead
@@ -140,13 +68,13 @@ block content
 			td #[+ms('$')] #[span.aside promise]
 		tr
 			td #[code @a]
-			td #[+ms('@')] #[span.aside bag]
+			td #[+ms('@')] #[span.aside collection]
 		tr
 			td #[code a->b]
 			td #[+ms('Map')] #[span.aside from a to b]
 		tr
 			td #[code a?]
-			td #[code Boolean]
+			td #[+ms('Bool')]
 
 	p An optional promise is #[code ?$a]; a promise for an option is #[code $?a].
 	p #[code a!] indicates a function that performs some action rather than just returning a value.

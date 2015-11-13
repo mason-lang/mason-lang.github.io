@@ -1,0 +1,61 @@
+extends _layout
+
+block content
+	section
+		p.
+			Async functions run asynchronously, consuming
+			#[a(href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise') Promises] and returning one too.
+		p Just use #[code $|] instead of #[code *|]. #[span.aside Generators are never async.]
+		p Await a promise using #[code $]. This allows you to write asynchronous code without higher-order functions.
+		.aside.
+			These are based on a future JS
+			#[a(href='https://tc39.github.io/ecmascript-asyncawait/') feature].
+
+	mason-editor
+		pre.
+			import
+				global fetch
+
+			$fetch-text = $|url
+				response = $ fetch url
+				$ response.text()
+
+			$fetch-text "./fetch-me.txt"
+
+	section
+		p These are actually compiled to generators with a simple wrapper around them.
+		p That's the awesome power of generators!
+
+	+hdr('$for')
+
+	section
+		p #[code $for] is just like a #[a(href='./for') for] that runs all iterations together concurrently, rather than one-by-one.
+		.aside It's concurrent, but not parallel unless you use #[a(href='//developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API') web workers].
+		p The value of the #[code $for] is a Promise for an Array of the results of each iteration.
+		p.
+			It essentially compiles to #[code Promise.all (@map @coll for-body)].
+			So, you must always provide a collection to iterate over, and #[code break] is forbidden.
+
+	mason-editor
+		pre.
+			import
+				global fetch
+
+			$for ["./fetch-me.txt" "./fetch-me-too.txt"]
+				$ ($ fetch_).text()
+
+	section
+		p #[code $for] can appear as a statement inside #[code $|].
+		p In statement context, is automatically awaited #[span.aside equivalent to #[code $ $for ...]].
+
+	mason-editor
+		pre.
+			import
+				global fetch
+
+			$fetch-map = $|urls
+				with empty Map as map
+					$for url of urls
+						map[url] = $ ($ fetch url).text()
+
+			$fetch-map ["./fetch-me.txt" "./fetch-me-too.txt"]

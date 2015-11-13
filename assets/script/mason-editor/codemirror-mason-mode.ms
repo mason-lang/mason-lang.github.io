@@ -1,5 +1,6 @@
 import
 	codemirror.lib.codemirror
+	mason-compile.info keywords
 
 codemirror.defineMode 'mason |
 	| Declares styles for various Mason tokens.
@@ -7,7 +8,7 @@ codemirror.defineMode 'mason |
 	startState. |
 		state. PlainState
 	token. |stream state
-		stream.eatWhile (new RegExp "\\s")
+		stream.eatWhile `\s`
 		new-state style = next-token state.state stream
 		state.state := new-state
 		style
@@ -20,6 +21,7 @@ next-token = new Method
 || styles available:
 || atom bracket comment def error keyword link number property string tag variable variable-2
 styles =
+	amp. 'variable-3
 	assign-local. 'atom
 	brace. 'keyword
 	comment. 'comment
@@ -27,13 +29,14 @@ styles =
 	function. 'def
 	invalid. 'error
 	keyword. 'keyword
-	local. 'variable-3
+	local. null || 'variable-3
 	member. 'comment
 	number. 'number
-	plain. 'variable-3
+	plain. null ||'variable-3
 	ms-region. 'comment
+	regexp. 'string
 	string. 'string
-	"type". 'atom
+	type. 'atom
 
 Indented-String-State = class
 	construct current-indent
@@ -48,46 +51,53 @@ Indented-String-State = class
 			else
 				next-token PlainState stream
 
-todo singleton
+todo SYNTAX singleton
 PlainState = new Object
 self-impl! next-token PlainState .|stream
 	case
-		stream.match new RegExp "\"$"
+		stream.match `"$`
 			new-state. new Indented-String-State stream.indentation()
 			style. styles.string
 		else
 			new-state. this
 			style. case stream
-				_.match new RegExp "\\|?\\| "
+				_.match `\|?\| `
 					_.skipToEnd()
 					styles.comment
-				_.match new RegExp 'region
+				_.match `region`
 					_.skipToEnd()
 					styles.ms-region
-				_.match new RegExp "\".*\""
+				_.match `".*"`
 					styles.string
-				_.match new RegExp "\\S+\\.\\s"
+				_.match `\`.*\`g?i?m?y?`
+					styles.regexp
+				_.match `'\S+`
+					styles.string
+				_.match `\S+\.\s`
 					styles.assign-local
-				_.eat new RegExp "[\\(\\)\\[\\]\\\{\\}]"
+				_.eat `[\(\)\[\]\{\}]`
 					styles.brace
-				_.match new RegExp "-?\\d+(\\.\\d+)?"
+				_.match `-?\d+(\.\d+)?`
 					styles.number
-				_.match new RegExp ":\\S+"
+				_.match `:\S+`
 					styles.type
-				_.match "~?\\|.*"
+				_.match `\.?(\*|\$)?\!?\|.*`
 					styles.function
 				_.eat "~"
 					styles.lazy
-				_.match new RegExp "\\S+_"
+				_.match `\S+_`
 					styles.focus-call
-				_.match new RegExp "[^\\s\\.\\(\\)\\[\\]\\\{\\}]+"
-					cond stream.current().trim():keywords styles.keyword styles.local
+				_.match rgx-id
+					cond stream.current().trim():keywords-set styles.keyword styles.local
 				_.eat "."
 					styles.member
+				_.eat "&"
+					styles.amp
 				else
 					stream.next()
 					styles.plain
 
-todo Use mason-compile.Lang
-keywords-string = "_|->|and|as|assert!|break|break!|built|case|case!|catch|catch!|class|construct!|continue!|debug|debugger|do!|else|except|except!|false|finally!|forbid!|@for|@for|for|for!|get|if|if!|in|is|new|not|null|or|out|pass|returning|set!|super|static|switch|switch!|this|this-module-directory|throw!|true|try|try!|undefined|unless|unless!|use|use!|use-debug|use~|<~|<~~"
-keywords = => Set (keywords-string.split "|")
+todo get from mason-compile info
+non-id-characters = `\s.:()\[\]"&`
+rgx-id = `[^#non-id-characters]+`
+keywords-set = new Id-Set keywords

@@ -4,16 +4,28 @@ block content
 	+hdr('for')
 	section
 		p #[code for] allows for simple loops.
+		p #[code break] alone will end the loop.
 
 	mason-editor
 		pre.
-			n ::= 0
-			. n
+			n = 0
 			for
 				n := + 1 n
-				. n
-				if =? n 10
+				if =? n 5
 					break
+			n
+
+	section
+		p Loops can be values instead of statements.
+		p Just provide a value to #[code break].
+
+	mason-editor
+		pre.
+			n = 0
+			for
+				n := + 1 n
+				if =? n 10
+					break n
 
 	section
 		p You can also loop over a collection.
@@ -22,31 +34,35 @@ block content
 	mason-editor
 		pre.
 			. 0
-			for n of 1..4
+			for n of 1..3
 				. n
-			for 5..99
+			for 4..99
 				. _
-				if =? _ 10
+				if =? _ 5
 					break
-
-	section
-		p To return a value from the loop, provide it to #[code break].
-
-	mason-editor
-		pre.
-			n ::= 0
-			. for
-				n := + 1 n
-				if =? n 10
-					break n
 
 	+hdr('@for')
 	section
-		p Use #[code @for] to create a bag as you loop.
-		p This makes it a map, flat-map, and filter all in one.
+		p Often you want to create a collection from a loop.
+		p Just use #[code @for] and the whole loop will be a builder.
 
 	mason-editor
 		pre.
 			@for [1 2 3 4]
 				if divisible? _ 2
 					. _
+
+	section
+		p.
+			If you're #[em not] writing a complicated block,
+			consider using functions like #[+ms('each!')] and #[+ms('@map')],
+			combined with #[a(href='./misc#&') &],
+			to fit it all on one line.
+
+	mason-editor
+		pre.
+			. @map ['foo 'bar 'baz] &toUpperCase
+			. @keep [1 2 3 4] &(divisible? _ 2)
+
+	section
+		.aside There's also a third kind of loop, #[a(href='./async#$for') $for]!
