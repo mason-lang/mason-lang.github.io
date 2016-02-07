@@ -1,9 +1,9 @@
 {
 	"name": "mason-online",
 	"dependencies": {
-		"msl": "andy-hanson/msl",
-		"mason-compile": "andy-hanson/mason-compile",
-		"codemirror": "5.7.0",
-		"requirejs": "2.1.20"
+		"msl": "mason-lang/msl",
+		"mason-compile": "mason-lang/mason-compile",
+		"codemirror": "5.11.0",
+		"requirejs": "2.1.22"
 	}
 }

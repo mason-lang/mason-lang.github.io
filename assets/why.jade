@@ -11,34 +11,30 @@ block content
 			li
 				p Everything JS can do, Mason can do better.
 				p.
-					This means the core language is just JavaScript #[span.aside minus syntax].
-					Mason functions are JS functions, Mason classes are JS classes, Mason modules are JS modules.
-				p You can convert a JS project to Mason without changing the design at all.
+					The core language is just JavaScript with new syntax.
+					You can convert a JS project to Mason without changing the design at all.
 			li.
 				Mason uses a mandatory standard library #[span.aside a small one] called #[+ms-project('msl')] to provide basic functionality missing from JS.
-				Many of msl's functions are builtins that are implicitly imported.
-				#[span.aside For example, JS's #[code ==] can't be overloaded, so Mason programs use the #[+ms('=?')] method from msl instead.]
+				Many of msl's functions are builtins, values that are accessed like globals but are implicitly imported.
 			li.
 				Don't impose any style.
 				Mason isn't X-oriented for #[em any] X.
-				This leads to it being bigger and less "pure", but more useful as a JS substitute.
-				It adds new features but doesn't force you to use them.
+				It adds new features but doesn't force you to use any of them.
 
 		p So what features does it add? You'll read them all in the #[a(href='./tour') tour], but here's a preview:
 		ul
 			li.
-				#[a(href='tour/basic#build') Build] syntax for constructing objects, lists, and maps. It's also a nice syntax for declarative data.
+				#[a(href='tour/basic#build') Builder] syntax for constructing objects, lists, and maps. It's also a nice syntax for declarative data.
 			li.
-				Most statements are also values.
-				For example, #[a(href='tour/if#if') if] returns an optional value.
-			li #[a(href='tour/try#assert') Assertions]
+				Most statements (such as #[code if], #[code switch], etc.) are also values.
+			li #[a(href='tour/try#assert') Assertions].
 			li.
-				#[a(href='tour/class#method functions') Method functions]: functions that can be polymorphically implemented by many types, including builtin types.
+				#[a(href='tour/poly') Polymorphs]: functions that can be polymorphically implemented by many types, including builtin types.
 			li.
-				#[a(href='tour/class#kind') Kinds]: abstract types that support multiple inheritance and can be safely implemented by builtin types.
+				#[a(href='tour/trait') Traits]: abstract types that support multiple inheritance and can be safely implemented by builtin types.
 			li.
-				#[a(href='tour/type') Type] declaration syntax, with dynamic type checks.
-			li #[a(href='tour/async') Async] functions
+				#[a(href='tour/type') Type] declaration syntax.
+			li #[a(href='tour/async') Async] functions.
 
 		p Planned features:
 		ul
@@ -46,14 +42,7 @@ block content
 			li Discriminated union syntax (actually just a class heirarchy)
 			li #[a(href='//github.com/jeffmo/es-class-static-properties-and-fields') Class properties]
 			li #[a(href='//github.com/wycats/javascript-decorators') Decorators]
-			li Lazy builders (useful for lazy #[a(href='tour/for#@for') @for] loops)
 
 		p It's under active development #[a(href='//github.com/mason-lang') here].
-		p In addition to language/msl features, it needs:
-		ul
-			li #[a(href='gruntjs.com') grunt]-mason
-			li emacs/vim support
-			li Finish #[+ms-project('mason-doc')]
-			li Users!
 
 		+request-for-comments()

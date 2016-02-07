@@ -1,49 +1,22 @@
 extends _layout
 
 block content
-	+hdr('boolean operations')
-	section
-		p These work just like JavaScript's #[code && || !].
-		p In Mason, keywords automatically group with the rest of the line. (Or up until the next closing parenthesis, but due to this rule you'll rarely need parentheses.)
-		p Since #[code not] has only one argument, the entire expression after it is its argument.
-		p #[code and] and #[code or] expect many arguments, so their arguments are the multiple expressions after them.
-		p So, #[code not a b] is #[code not (a b)], but #[code and a b] is #[code (and a b)].
-		p Remember, keywords eat up the rest of the line after them.
-
-	mason-editor
-		pre.
-			. not false
-			. and true true
-			|| `and`/`or` can take any number of arguments
-			. or false false true
-			|| nand and nor are simply:
-			. not and true false
-			. not or false false
-			|| The `or` here takes up the rest of the line, so it's parsed as `and true (or false true)`.
-			. and true or false true
-
-	section
-		p Please don't use these as control structures; they are forbidden to be used as statements. #[code if] handles that instead.
-
 	+hdr('if')
 
 	section
 		p #[code if] and #[code unless] return a value only when their condition is true.
 		p When used as expressions, these are #[+ms('?')] values.
-		p These parse the block specially by taking it for theirselves before anything else can.
+		p These parse specially; if a block is present, it always goes with the #[code if], even if there's another keyword in between.
 
 	mason-editor
 		pre.
 			. if true 0
 			. if (or true false) 1
+			|| Thanks to special parsing, this is `unless (not true) 2`, not `unless (not true 2)`.
 			. unless not true
 				2
-			|| `unless` eats the block before `and` can, so this works:
 			. unless and true false
 				3
-			|| `un-?` has *1* argument; `if` eats the rest of the line.
-			|| (un-? gets an option's value or throws.)
-			. un-? if true 4
 
 	section
 		p There is no #[code else] expression to go with #[code if]; use #[code cond] or #[code case] (both below) instead.
@@ -68,8 +41,8 @@ block content
 
 	mason-editor
 		pre.
-			f = |number
-				switch number
+			f = \n
+				switch n
 					0
 						"zero"
 					1 2
@@ -97,14 +70,15 @@ block content
 
 	+hdr('case')
 	section
-		p #[code case] allows any expression as a test.
+		p #[code case] is Mason's replacement JS's #[code if ... else if ... else].
 		p Tests are tried from top to bottom until one matches.
-		p Just like #[code switch], a missing #[code else] compiles to throwing an error.
-		p An expression written after #[code case] on the same line will become the focus.
+		p Tests are each written on their own line, with the result for that test in a block next to it.
+		p Just like #[code switch], a missing #[code else] will throw an error.
+		p An expression written on the same line as #[code case] on the same line will become the focus. This is optional but recommended.
 
 	mason-editor
 		pre.
-			rate-guess = |guess
+			rate-guess = \guess
 				case guess
 					|| implicitly, `_ = guess`
 					&lt? _ 7
@@ -119,19 +93,19 @@ block content
 			. rate-guess 7
 
 	section
-		p  Use #[code |case] or #[code |switch] and it will implicitly make the focus the argument.
+		p  #[code \case] and #[code \switch] create functions with a single implicit argument: #[code _].
 
 	mason-editor
 		pre.
-			rate-guess = |case
+			rate-guess = \case
 				=? _ 7
 					"You got it!"
 				else
-					"Off by {- _ 7}"
+					"Off by #(- _ 7)"
 
 			. rate-guess 1337
 
-			rate-guess-2 = |switch
+			rate-guess-2 = \switch
 				7
 					"You got it!"
 

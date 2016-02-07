@@ -1,7 +1,7 @@
 extends ../_lib/layout
 
 block subheader
-	- var pages = [ 'basic', '=', 'if', 'try', 'class', 'type', 'misc', 'for', 'yield', 'async', 'doc' ]
+	- var pages = ['basic', '=', 'if', 'try', 'poly', 'class', 'trait', 'type', 'misc', 'for', 'pattern', 'yield', 'async', 'doc']
 	- var page = path.match(/tour\/(.+)/)[1]
 	- var my_idx = pages.indexOf(page)
 

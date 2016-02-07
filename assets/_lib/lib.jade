@@ -3,9 +3,13 @@
 - rootUrl = '//mason-lang.org'
 - gitRoot = '//github.com/mason-lang'
 
+- quote = '"'
+- singleQuote = "'"
+
 mixin request-for-comments()
 	p.
 		Have a comment about the language?
+		#[a(href='//github.com/mason-lang/mason-compile/issues/new') Create an issue] or
 		#[a(href='//gitter.im/mason-lang/mason-compile') Chat on gitter] or
 		#[a(href='mailto:andy.pj.hanson@gmail.com') contact me directly].
 
@@ -20,23 +24,20 @@ mixin hdr2(name, fullName)
 		h2(id='#{name}')= fullName
 
 -
-	// TODO: use builtins map for this
-	//todo: delete some junk
+	//TODO: use builtins map for this
 	var ms_s = {
 		'!': '!',
 		'@': '@.@',
 		'$': '$',
 		'$ing': '$',
 		'--!': '@.@!',
-		'+': 'math.methods',
 		'++': '@.@',
 		'++!': '@.@!',
 		'=>': 'Type.Type',
-		'=?': 'compare',
-		'<?': 'compare',
 		'?': '@.?',
 		'Alias-Type': 'Type.Alias-Type',
 		Bool: 'Type.primitive',
+		'binary=?': 'compare',
 		curry: 'Function',
 		Deque: '@.Deque',
 		'each!': '@.@',
@@ -48,25 +49,26 @@ mixin hdr2(name, fullName)
 		'Hash-Map!': '@.Map.Hash-Map',
 		'Hash-Set': '@.Hash-Set',
 		'Heap-Priority-Queue!': '@.Heap-Priority-Queue',
+		identity: 'Function',
 		'Id-Map!': '@.Map.Id-Map!',
 		'id-memoize': 'Function',
 		'Id-Set!': '@.Id-Set!',
-		'id=?': 'js',
 		'impl!': 'Type.Method',
 		'Impl-Type': 'Type.Impl-Type',
 		iterator: '@.@',
-		Kind: 'Type.Kind',
+		'js<<': 'js',
 		'Lazy-Stream': '@.Lazy-Stream',
 		LList: '@.LList',
 		'@map': '@.@',
 		Map: '@.Map.Map',
-		Method: 'Type.Method',
 		Num: 'Type.primitive',
 		'p': 'Object',
 		'?p': 'Object',
 		'?pop!': '@.Priority-Queue!',
+		Poly: 'Type.Poly',
 		'Pred-Type': 'Type.Pred-Type',
 		Range: '@.Range',
+		Record: 'Type.Record',
 		send: 'Object',
 		'self-impl!': 'Type.Method',
 		Seq: '@.Seq',
@@ -74,6 +76,7 @@ mixin hdr2(name, fullName)
 		Sym: 'Type.primitive',
 		sub: 'methods',
 		Stream: '@.Stream',
+		Trait: 'Type.Trait',
 		'Type': 'Type.Type',
 		'Weak-Id-Map!': '@.Map.Weak-Id-Map!',
 		'Wrap-Type': 'Type.Wrap-Type'

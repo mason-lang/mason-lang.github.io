@@ -1,0 +1,64 @@
+extends _layout
+
+block content
+	+hdr('patterns')
+
+	section
+		p Mason supports single-level pattern-matching inside of #[code case] expressions.
+
+	mason-editor
+		pre.
+			Point = class x y
+
+			magnitude = \case
+				|| This is a simple expression.
+				:Num
+					_
+				|| Write extracted variables from the type.
+				:Point x y
+					Math.sqrt + (** x 2) ** y 2
+
+			. magnitude 0
+			. magnitude new Point 3 4
+
+	section
+		p You can write custom pattern matching by implementing the builtin #[+ms('extract')] method.
+		p This should return #[code null] or an array of extracted values.
+
+	mason-editor
+		pre.
+			multiple-of = \n
+				with {}
+					self-impl! extract _ \case
+						divisible? _ n
+							[/ _ n]
+						else
+							null
+
+			foo = \case
+				:(multiple-of 2) n
+					"#n pairs"
+				:(multiple-of 3) n
+					"#n triples"
+				else
+					'other
+
+			. foo 8
+			. foo 9
+			. foo 11
+
+	+hdr('destructuring')
+
+	section
+		p Mason supports simple object destructuring.
+		p It currently does not support renaming or default values, but that's planned.
+
+	mason-editor
+		pre.
+			{a b} = {a. 1 b. 2}
+			+ a b
+
+	section
+		p Array destructuring is planned.
+		p In the future, Mason will unify destructuring with patterns and support both within cases, assignments, and parameters.
+		p Nested patterns #[span.aside #[code {p1. :Point x1 y1 p2. :Point x2 y2}]] are also planned.

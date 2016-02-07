@@ -14,29 +14,25 @@ block content
 		pre.
 			| This here's my module. Is it not nifty?
 
-			double. |n:Number
+			double. \:Num n:Num
 				| Twice a number.
 				* 2 n
 
-			Point. class
-				| Stores x and y.
+			Point. class x:Num y:Num
+				| 2D coordinate.
 
-				construct! .x .y
-					pass
-
-				'transpose |
+				transpose \:Point
 					| Point with flipped x and y.
 					new Point .y .x
 
 	section
-		p This part of mason is in its early stages, so as of now these are basically ignored.
-		p Someday there will be something useful in #[+ms-project('mason-doc')].
+		p Currently doc comments are completely ignored.
 
 	+hdr('todo')
 
 	section
 		p.
-			Normal (#[code ||]) comments tell you useful information about the code.
+			Normal (#[code || ]) comments tell you useful information about the code.
 			#[code todo] comments indicate things you need to change before committing to source control.
 
 	mason-editor(no-eval)
@@ -62,7 +58,7 @@ block content
 				region Functions
 					|| `region` doesn't create new program blocks.
 					|| Locals from other regions are accessible.
-					double. *[two]
+					double. &*[two]
 
 			obj.double obj.two
 

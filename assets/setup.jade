@@ -19,10 +19,9 @@ block content
 	section
 		p Mason does not come with a build tool. But it works with many:
 		ul
-			li #[+ms-project('gulp-mason')] (most stable)
+			li #[+ms-project('gulp-mason')] #[span.aside recommended]
 			li #[+ms-project('broccoli-mason')]
-			li #[+ms-project('fly-mason')]
-			li #[+ms-project('jstransformer-mason')] (for #[a(href='//dum-build.org') dum], a build tool written in Mason)
+			li #[+ms-project('jstransformer-mason')] #[span.aside for #[a(href='//dum-build.org') dum], a build tool written in Mason]
 
 	+hdr('options')
 	section
@@ -30,17 +29,12 @@ block content
 
 	+hdr2('mslPath')
 	section
-		p Path to #[code msl]. You'll want to set this to #[code msl/dist], but it defaults to #[code msl].
+		p Path to #[code msl]. You'll want to set this to #[code msl/lib], but it defaults to #[code msl].
 		p So annoying... This option will go away soon.
 
 	+hdr2('indent')
 	section
-		p This defaults to #[code \t]. You can set it to #[code 2] or #[code 4] (or any other number) if to use that many spaces for indentation.
-
-	+hdr2('checks')
-	section
-		p Set to #[code false] to disable type checks.
-		p That's not recommended, but the option's there...
+		p This defaults to #[code \t]. You can set it to #[code 2] or #[code 4] (or any other number) to use that many spaces for indentation.
 
 	+hdr2('language')
 	section
@@ -51,5 +45,4 @@ block content
 		p Mason syntaxes exist for these text editors:
 		ul
 			li #[+ms-project('mason-atom')] for #[a(href='//atom.io') atom]
-			li #[+ms-project('mason-tmLanguage')] for #[a(href='//sublimetext.com') sublime] and #[a(href='//macromates.com') textmate]
-			li (TODO: emacs, vim)
+			li #[+ms-project('mason-tmLanguage')] for #[a(href='//sublimetext.com') sublime], #[a(href='//code.visualstudio.com') vscode], and #[a(href='//macromates.com') textmate]

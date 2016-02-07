@@ -1,0 +1,51 @@
+extends _layout
+
+block content
+	section
+		p #[code poly]s are polymorphic functions; they have different implementations for different types.
+		p.
+			Normally for polymorphism you'll want to use regular class-based methods,
+			but #[code poly]s can be safely implemented for builtins
+			because implementations are attached to a type's prototype using #[+mdn('Symbol')]s,
+			so there is no chance of a name conflict.
+		p Implement them using the builtin function #[code impl!].
+
+	mason-editor
+		pre.
+			|| The default implementation of a method is implicitly a `.\`, meaning that `this` is freshly bound inside.
+			magnitude = poly \
+				|| This is the default implementation.
+				"#this".length
+
+			|| This modifies Number.prototype.
+			impl! magnitude Number .\
+				this
+			impl! magnitude String .\
+				.length
+
+			|| To implement statically, use self-impl!
+			self-impl! magnitude Number .\
+				3
+
+			. magnitude 1
+			. magnitude "2!"
+			. magnitude Number
+			|| This uses the default implementation.
+			. magnitude true
+
+	section
+		p If you don't want a default implementation, use `abstract`.
+		p In that case, arguments listed are purely for documentation.
+
+	mason-editor(no-eval)
+		pre.
+			foo. poly \bar
+				abstract
+
+	section
+		p Certain polys such as #[+ms('binary=?')] also work on null and undefined values.
+		aside These have to be manually constructed using the #[+ms('Poly')] constructor.
+		p.
+			#[code poly] makes polymorphic methods look like regular functions,
+			so it is used extensively in #[+ms-project('msl')].
+		p But you usually won't have to define new #[code poly]s yourself.

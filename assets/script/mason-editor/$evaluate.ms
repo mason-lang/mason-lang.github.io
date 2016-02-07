@@ -1,18 +1,18 @@
-|-require- js
+\-require- js
 	fun = Function 'define js
-	new Promise |resolve reject
-		define = |required do-define!
+	new Promise \resolve reject
+		define = \required do-define!
 			exports = required.shift()
 			assert =? exports 'exports
-			successful-require = !|...modules
+			successful-require = !\...modules
 				except
 					try
-						exports = new Object
+						exports = {}
 						modules.unshift exports
 						do-define! ...modules
 						keys = Object.keys exports
 						resolve case
-							and (=? 1 keys.length) (=? 'default keys[0])
+							and (=? 1 keys.length) =? 'default keys[0]
 								exports.default
 							else
 								exports

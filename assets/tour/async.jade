@@ -5,7 +5,7 @@ block content
 		p.
 			Async functions run asynchronously, consuming
 			#[a(href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise') Promises] and returning one too.
-		p Just use #[code $|] instead of #[code *|]. #[span.aside Generators are never async.]
+		p Just use #[code $\] instead of #[code *\]. #[span.aside Generators are never async.]
 		p Await a promise using #[code $]. This allows you to write asynchronous code without higher-order functions.
 		.aside.
 			These are based on a future JS
@@ -16,7 +16,7 @@ block content
 			import
 				global fetch
 
-			$fetch-text = $|url
+			$fetch-text = $\url
 				response = $ fetch url
 				$ response.text()
 
@@ -45,17 +45,17 @@ block content
 				$ ($ fetch_).text()
 
 	section
-		p #[code $for] can appear as a statement inside #[code $|].
-		p In statement context, is automatically awaited #[span.aside equivalent to #[code $ $for ...]].
+		p #[code $for] can appear as a statement inside #[code $\].
+		p In statement context, it is automatically awaited #[span.aside equivalent to #[code $ $for ...]].
 
 	mason-editor
 		pre.
 			import
 				global fetch
 
-			$fetch-map = $|urls
+			$fetch-map = $\urls
 				with empty Map as map
 					$for url of urls
-						map[url] = $ ($ fetch url).text()
+						map[url] := $ ($ fetch url).text()
 
 			$fetch-map ["./fetch-me.txt" "./fetch-me-too.txt"]

@@ -32,7 +32,7 @@ block content
 
 	section
 		p You can save yourself from an exception with #[code except].
-		p The error given to to #[code catch] is by default the focus, but you could also provide a name.
+		p The error given to to #[code catch] is by default #[code], but you could also provide a name.
 
 	mason-editor
 		pre.
@@ -43,7 +43,7 @@ block content
 				|| catch foo
 				||	foo
 				catch
-					_
+					_.message
 				|| `finally` is optional
 				finally
 					pass
@@ -51,7 +51,7 @@ block content
 	section
 		p Usually you only need to catch a certain type of exception.
 		p A type on the caught exception means that the exception will not be caught unless it is of that type.
-		p Omitting a variable name before the type makes it the focus.
+		p Omitting a variable name before the type makes it #[code _].
 		p.
 			You can only provide one untyped #[code catch] and it has to come at the end, much like the #[code else] of a #[code switch].
 

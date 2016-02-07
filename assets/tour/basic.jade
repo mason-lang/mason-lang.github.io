@@ -1,9 +1,6 @@
 extends _layout
 
 block content
-	- var quote = '"'
-	- var singleQuote = "'"
-
 	section
 		p All Mason programs must use the #[+ms-project('msl')] (Mason Standard Library) package.
 		p The examples can be run on the site, but you may want to #[a(href='/setup') install mason] too.
@@ -94,8 +91,12 @@ block content
 
 	mason-editor
 		pre.
-			object. (a. 1 b. 2)
-			array. [1 2]
+			obj = {a. 1 b. 2}
+			arr = [1 2]
+			|| When a value is just accessing the variable with the key name, you don't have to type it.
+			. {foo. 1 arr.}
+			|| When all values are just local accesses, you don't need `.`.
+			. {obj arr}
 
 	+hdr2('value blocks')
 	section
@@ -107,19 +108,15 @@ block content
 			two = 2
 			two
 
-	+hdr2('blocks are values')
 	section
-		p You can use a block anywhere a value is expected.
-		p.
-			It is highly encouraged to use this as an additional level of code organization where possible,
-			instead of writing long flat functions or lots of tiny functions.
+		p Yes, you can use a block anywhere a value is expected!
 
 	mason-editor
 		pre.
 			a.
+				|| `x` is scoped to this block.
 				x = 1
 				x
-			|| `x` not accessible outside of the block
 			b.
 				. 1
 				.
@@ -127,12 +124,9 @@ block content
 					. 2
 					. 3
 
-
-
 	+hdr('literals')
 	section
 		p Constants and numbers work as in JavaScript.
-		.aside #[code undefined] is a constant in Mason compiling to #[code void 0].
 
 	mason-editor
 		pre.
@@ -193,32 +187,94 @@ block content
 			|| We used the `i` flag, so capital letters are OK.
 			. hex-number.test "0xDEADBEEF"
 
-	+hdr('functions')
+	+hdr('operators')
 	section
-		p Functions are written with #[code |] followed by arguments.
-		p The body of a function is a block #[span.aside meaning it can be a builder].
-		p Calling a function doesn't require parentheses.
-		p For arguments that are theirselves function calls, use #[code ()].
+		p.
+			Operators are written in prefix notation.
+		p.
+			They can take any number of arguments.
+			Unlike function calls, they don't require parentheses.
+
+		p The operators are:
+		ul
+			li #[code and or]
+			li #[code + - * &#47; ** %]
+			li #[code =? ==? &lt;? &lt;=? &gt;? &gt;=?]
+
+		p #[code **] is equivalent to #[code Math.pow].
+		p #[code ==?] tests identity while #[code =?] is overridable via #[+ms('binary=?')].
 
 	mason-editor
 		pre.
-			identity = |a
+			|| Operators ending in `?` test their arguments in pairs.
+			|| This is equivalent to `and &lt;? 1 2 &lt;? 2 3`.
+			. &lt;? 1 2 3
+
+			|| Other operators run left to right.
+			|| This is equivalent to `- (- 3 2) 1`.
+			. - 3 2 1
+
+			|| Operators don't require parentheses.
+			|| This is equivalent to `=? 9 (* 3 (+ 2 1))`.
+			. =? 9 * 3 + 2 1
+
+	section
+		p.
+			Since operators take any number of arguments,
+			you will still occasionally need parentheses to distinguish these:
+
+	mason-editor
+		pre.
+			|| + 1 (* 2 3 (- 4 5))
+			. + 1 * 2 3 - 4 5
+
+			|| + 1 (* 2 3) (- 4 5)
+			. + 1 (* 2 3) - 4 5
+
+	section
+		p There are also two unary operators, #[code neg] and #[code not].
+		p.
+			These take only one argument no matter what, so
+			#[code neg a b] is parsed as #[code neg (a b)].
+
+	mason-editor
+		pre.
+			. neg 1
+			. not true
+			|| Equivalent to `neg (identity 1)`
+			. neg identity 1
+
+	section
+		p Mason does not implement these javascript operators:
+		p #[code &lt;&lt; &gt;&gt; &gt;&gt;&gt; &amp; ^ | ~ ++ -- in]
+		p or the unary #[code +] operator.
+		p If you need these, they are available as functions such as #[+ms('js<<')].
+
+	+hdr('functions')
+	section
+		p Functions are written with #[code \] followed by arguments.
+		p The body of a function is a block #[span.aside meaning it can be a builder].
+		p Calling a function doesn't usually require parentheses, except for arguments that are theirselves function calls.
+
+	mason-editor
+		pre.
+			id = \a
 				a
-			two-of = |a
+			two-of = \a
 				. a
 				. a
 
-			. identity 1
+			. id 1
 			. two-of 1
 			|| Parentheses are only needed when a subexpression is itself a function call.
-			. identity (identity 1)
+			. id (id 1)
 
 	section
 		p If you want to put a block inside parentheses, just don't include the closing parenthesis.
 
 	mason-editor
 		pre.
-			two-of = |a
+			two-of = \a
 				. a
 				. a
 
@@ -228,28 +284,28 @@ block content
 				|| No closing parenthesis!
 
 	section
-		p For functions with no value, use #[code !|].
+		p For functions with no return value, use #[code !\].
 		p If you don't need to do anything in a block, use #[code pass].
 		p A function with no arguments is called like #[code fun()].
 
 	mason-editor
 		pre.
-			do-nothing! = !|
+			do-nothing! = !\
 				pass
 			do-nothing!()
 
 	+hdr2('this-functions')
 	section
 		p Normal functions compile to JavaScript's arrow functions.
-		p For #[code function() { }], which has a new #[code this] variable, use #[code .|] and #[code .!|].
+		p For #[code function() { }], which has a freshly bound #[code this] variable, use #[code .\] and #[code .!\].
 		p In inner functions, it's safe to use #[code this].
 		p You usually won't need these, because Mason has #[a(href='./class') class syntax].
 
 	mason-editor
 		pre.
-			f = .|
+			f = .\
 				|| In here `this` has a different value than outside.
-				|
+				\
 					|| In here `this` has the same value as in `f`.
 					this
 			(f.call 3)()
@@ -257,6 +313,7 @@ block content
 	+hdr2('new')
 	section
 		p Calling a constructor looks like a function call with #[code new] in front.
+		.aside #[code new] is parsed like an operator, as are all other expression keywords. So #[code foo new Bar] is #[code foo (new Bar)].
 
 	mason-editor
 		pre.
@@ -264,7 +321,9 @@ block content
 
 	+hdr('modules')
 	section
-		p Plans are for Mason to compile to [JavaScript ES6 modules](//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
+		p.
+			Mason is planned to compile to
+			#[a(href='//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export') JavaScript native modules].
 		aside Currently it compiles to AMD modules.
 		p A module is written as an object block.
 		p The default export is an entry with the same name as the file name.
@@ -283,6 +342,7 @@ block content
 		p.
 			If your module does not have any named exports,
 			it is treated as a block and its value is assigned to the default export.
+		.aside To export nothing, just end the file with #[code pass].
 		p So, the code for a module whose default export is zero is:
 
 	mason-editor(no-eval)
@@ -319,10 +379,6 @@ block content
 				|| Both combined. The default export is still called `a`, not `_`.
 				a _ b c
 
-			|| Variables only used for tests should go here.
-			import-debug
-				msl.assert assert-call!
-
 	section
 		p Mason doesn't normally allow global variables (except for builtin globals), but you can declare them using the fake #[code global] module.
 
@@ -335,10 +391,9 @@ block content
 
 	section
 		p.
-			Some values from #[+ms-project('msl')] such as #[+ms('+')] are builtins — you don't have to explitly import them.
+			Some values from #[+ms-project('msl')] such as #[+ms('identity')] are builtins — you don't have to explitly import them.
 			The necessary imports will be added for you.
 		p The list of builtins is currently only available #[a(href='//github.com/mason-lang/mason-compile/blob/master/src/private/defaultBuiltins.js') here].
 		p Putting these together, global variables such as #[code Object] are really builtins from the global module. Common JS globals (not including web-specific ones) are builtins.
 		.aside.
-			If you need it #[span.aside hopefully not!],
-			the global variable 'global' #[span.aside an object containing all globals] is shimmed to work on either client or server.
+			If you need it, the global variable 'global' #[span.aside an object containing all globals] is shimmed to work on either client or server.

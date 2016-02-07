@@ -1,0 +1,71 @@
+extends _layout
+
+block content
+	section
+		p.
+			#[code trait] allows multiple inheritance.
+			A #[+ms('Trait')] is basically a collection of methods,
+			so the body of a Trait looks just like a class body.
+		p Traits also work great as interfaces.
+		p.
+			Declare a class to implement a trait with #[code class trait Foo].
+			This copies the methods from the trait to the class.
+		p Traits can have super-traits.
+		p Just like for classes, static methods of traits are inherited.
+
+	mason-editor
+		pre.
+			A = trait
+				static
+					get static
+						0
+				get foo
+					1
+			B = trait A
+				get bar
+					2
+			C = class
+				get baz
+					3
+			Bar = class extends C trait B
+			bar = new Bar
+			. Bar.static
+			. bar.foo
+			. bar.bar
+			. bar.baz
+
+	+hdr2('trait!')
+
+	section
+		p.
+			#[code trait!] lets an existing type implement a Trait.
+			#[span.aside Trait uses a #[+mdn('Symbol')] to mark implementors, so this is safe.]
+		p.
+			You can also define methods (including statics) in a block.
+			This is intended for traits with associated methods —
+			for example, a #[+ms('@')] must implement #[+ms('iterator')].
+
+	mason-editor
+		pre.
+			pol = poly \
+				0
+
+			Num/Str = trait
+				pol \
+					1
+
+			trait! Number Num/Str
+			trait! String Num/Str
+				static
+					|| Sometimes implementing a trait means implementing static methods.
+					|| For example, any `@` type should implement `empty`.
+					get foo
+						0
+				pol \
+					2
+
+			. and 0:Num/Str "":Num/Str
+			. not []:Num/Str
+			. pol [] || the poly's default
+			. pol 12 || Num/Str implementation
+			. pol "" || String implementation (overrides Num/Str implementation)

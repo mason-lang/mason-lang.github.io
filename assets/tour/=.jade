@@ -4,11 +4,11 @@ block content
 	+hdr('locals')
 	section
 		p.
-			#[code =] declares a local.
+			#[code =] declares new locals.
 			#[span.aside So does in #[code a. b] in object builders.]
 		p.
-			#[code :=] changes the value of a previously declared local.
-			#[span.aside For object builders, this does #[em not] change #[code built].]
+			#[code :=] changes an existing local's value.
+		.aside Unlike in JS, #[code =] can never be used to change a value, and #[code :=] can't be used as an expression.
 
 	mason-editor
 		pre.
@@ -29,31 +29,33 @@ block content
 
 	mason-editor
 		pre.
-			obj = (x. 0)
+			obj = {x. 0}
 			. obj.x
-			f = .|
+			f = .\
+				|| Equivalent to `this.x`
 				.x
 			. f.call obj
 
 	section
-		p Object properties assignment has a similar syntax to local assignment.
-		p #[code =] creates a new property #[span.aside throwing if it already exists].
-		p #[code :=] compiles to JavaScript's normal property assignment, meaning it mutates or creates properties on the fly.
+		p #[code :=] can also set property values.
 
 	mason-editor
 		pre.
-			obj = (x. 1)
-			obj.y = 1
+			obj = {x. 1}
 			obj.y := 2
-			|| := creates the property if necessary.
-			obj.z := 3
 			obj
 
 	section
-		p To access a property whose name must be computed, use #[code obj."foo"]
+		p To access any string as a property, use #[code obj."foo"] #[span.aside equivalent to #[code obj.("foo")]].
+		p To access any value as a property, use #[code obj.(foo)].
+		p #[code :=] can use this syntax too.
 
 	mason-editor
 		pre.
-			obj =
-				"wierd name". 1
-			obj."wierd name"
+			obj = {"wierd name". 1}
+			. obj."wierd name"
+
+			obj."wierd name" := 2
+
+			key = "wierd name"
+			. obj.(key)

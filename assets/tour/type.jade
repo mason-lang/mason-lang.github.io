@@ -8,20 +8,20 @@ block content
 		.aside Currently it uses a shim because #[code Symbol.hasInstance] isn't yet implemented in any JS engine.
 		p.
 			When declaring a local, use #[code :] to assert its type.
-			For function return types, write the type right after the #[code |].
+			For function return types, write the type right after the #[code \].
 		p The #[+ms('Str')] and #[+ms('Num')] builtins act like #[code String] and #[code Number] but recognize primitives instead of the rarely-used object versions. There's also #[+ms('Bool')] and #[+ms('Sym')].
 
 	mason-editor
 		pre.
-			number->string = |:Str _:Num
-				"{_}"
+			number->string = \:Str _:Num
+				"#_"
 
 			|| This should fail
 			number->string []
 
 	section
 		p You can also use #[code value:Type] (with no spaces) to call #[code contains?].
-		p For just #[code :Type], the test is on the focus. (This works great in #[code case] expressions!)
+		p For just #[code :Type], the test is on #[code _]. (This works great in #[code case] expressions!)
 
 	mason-editor
 		pre.
@@ -43,10 +43,11 @@ block content
 		pre.
 			Three = new Pred-Type
 				name.
-				predicate. =?[3]
+				predicate. \_
+					=? _ 3
 
 			. 3:Three
-			. not 4:Three
+			. 4:Three
 
 	+hdr('prefix')
 	section

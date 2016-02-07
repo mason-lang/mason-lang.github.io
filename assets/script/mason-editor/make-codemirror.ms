@@ -13,9 +13,9 @@ common-opts =
 	|| Entire CodeMirror is rendered.
 	viewportMargin. Number.POSITIVE_INFINITY
 
-special = |special-opts
+special = \special-opts
 	base-opts = object-merge common-opts special-opts
-	|dom-element opts
+	\dom-element opts
 		all-opts = object-merge base-opts opts
 		codemirror dom-element all-opts
 
