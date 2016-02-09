@@ -1,0 +1,7 @@
+{
+	"name": "msl",
+	"moduleType": "amd",
+	"main": "dist/**/*",
+	"license": "WTFPL",
+	"private": true
+}

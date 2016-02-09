@@ -1,12 +1,12 @@
 {
   "name": "source-map",
   "homepage": "https://github.com/mozilla/source-map",
-  "version": "0.5.1",
-  "_release": "0.5.1",
+  "version": "0.5.2",
+  "_release": "0.5.2",
   "_resolution": {
     "type": "version",
-    "tag": "0.5.1",
-    "commit": "92fbfc86a9d5de98c1e66b0fc8aa8bc19cac2648"
+    "tag": "0.5.2",
+    "commit": "05211de6d4eb137ecbc0c67b2ade910b534fd2f3"
   },
   "_source": "git://github.com/mozilla/source-map.git",
   "_target": "*",

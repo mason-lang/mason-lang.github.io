@@ -1,0 +1,25 @@
+{
+  "name": "esast-render-fast",
+  "dependencies": {
+    "esast": "esast/esast",
+    "op": "esast/op",
+    "source-map": "mozilla/source-map"
+  },
+  "ignore": [
+    "test",
+    "package.json",
+    "README.md"
+  ],
+  "moduleType": "amd",
+  "license": "Unlicense",
+  "homepage": "https://github.com/esast/esast-render-fast",
+  "_release": "d1ee4a97d6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d1ee4a97d65cb35d841e271f3225c19cd5e01093"
+  },
+  "_source": "git://github.com/esast/esast-render-fast.git",
+  "_target": "*",
+  "_originalSource": "esast/esast-render-fast"
+}

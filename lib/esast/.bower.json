@@ -1,30 +1,22 @@
 {
   "name": "esast",
   "dependencies": {
-    "acorn": "1.0.3",
-    "source-map": "mozilla/source-map"
+    "op": "esast/op"
   },
-  "main": "dist/**/*",
   "ignore": [
-    "compiled-test",
-    "node_modules",
-    "test",
-    "gulp",
-    "gulpfile.js",
     "package.json",
-    "README.md"
+    "readme.md"
   ],
   "moduleType": "amd",
-  "private": true,
-  "license": "WTFPL",
-  "homepage": "https://github.com/andy-hanson/esast",
-  "_release": "bb60fb6346",
+  "license": "Unlicense",
+  "homepage": "https://github.com/esast/esast",
+  "_release": "7532b1c878",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "bb60fb63460ebb81447f7090ce486144dd335dc2"
+    "commit": "7532b1c87880d59165eafce0a4599d226739e3b7"
   },
-  "_source": "git://github.com/andy-hanson/esast.git",
+  "_source": "git://github.com/esast/esast.git",
   "_target": "*",
-  "_originalSource": "andy-hanson/esast"
+  "_originalSource": "esast/esast"
 }

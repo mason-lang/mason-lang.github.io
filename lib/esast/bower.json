@@ -1,0 +1,9 @@
+{
+	"name": "esast",
+	"dependencies": {
+		"op": "esast/op"
+	},
+	"ignore": ["package.json", "readme.md"],
+	"moduleType": "amd",
+	"license": "Unlicense"
+}

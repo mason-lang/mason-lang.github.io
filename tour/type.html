@@ -8,33 +8,33 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>There are more types than just <a href="./class">classes and kinds</a>.</p><p>The kind <a href="//github.com/mason-lang/msl/tree/master/src/Type/Type.ms">Type</a> can be implemented by anything defining the method <a href="//github.com/mason-lang/msl/tree/master/src/Type/Type.ms">contains?</a>.</p><p>The colon <code>:</code> is special syntax for using <code>contains?</code>.</p><p>When declaring a local, use <code>:</code> to assert its type.
-For function return types, write the type right after the <code>|</code>.
-</p></section><mason-editor><pre>number->string = |:String _:Number
-	"{_}"
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>There are more types than just <a href="./class">classes and kinds</a>.</p><p>The kind <a href="//github.com/mason-lang/msl/tree/master/src/Type/Type.ms">Type</a> can be implemented by anything defining the method <a href="//github.com/mason-lang/msl/tree/master/src/Type/Type.ms">has-instance?</a>.</p><p>The colon <code>:</code> is special syntax for using <code>instanceof</code>.</p><div class="aside">Currently it uses a shim because <code>Symbol.hasInstance</code> isn't yet implemented in any JS engine.</div><p>When declaring a local, use <code>:</code> to assert its type.
+For function return types, write the type right after the <code>\</code>.</p><p>The <a href="//github.com/mason-lang/msl/tree/master/src/Type/primitive.ms">Str</a> and <a href="//github.com/mason-lang/msl/tree/master/src/Type/primitive.ms">Num</a> builtins act like <code>String</code> and <code>Number</code> but recognize primitives instead of the rarely-used object versions. There's also <a href="//github.com/mason-lang/msl/tree/master/src/Type/primitive.ms">Bool</a> and <a href="//github.com/mason-lang/msl/tree/master/src/Type/primitive.ms">Sym</a>.</p></section><mason-editor><pre>number->string = \:Str _:Num
+	"#_"
 
 || This should fail
 number->string []
-</pre></mason-editor><section><p>You can also use <code>value:Type</code> (with no spaces) to call <code>contains?</code>.</p><p>For just <code>:Type</code>, the test is on the focus. (This works great in <code>case</code> expressions!)</p></section><mason-editor><pre>. 1:Number
-. not 1:String
+</pre></mason-editor><section><p>You can also use <code>value:Type</code> (with no spaces) to call <code>contains?</code>.</p><p>For just <code>:Type</code>, the test is on <code>_</code>. (This works great in <code>case</code> expressions!)</p></section><mason-editor><pre>. 1:Num
+. not 1:Str
 _ = "one"
-. not :Number
-. :String
+. not :Num
+. :Str
 </pre></mason-editor><a href="/tour/type#Pred-Type"><h1 id="Pred-Type">Pred-Type</h1></a><section><p>Any predicate can become a Type.</p><div class="aside"><code>name.</code> adds an object property equal to
 the current name being assigned to, in this case <code>"Three"</code>.
 </div></section><mason-editor><pre>Three = new Pred-Type
 	name.
-	predicate. =?[3]
+	predicate. \_
+		=? _ 3
 
 . 3:Three
-. not 4:Three
+. 4:Three
 </pre></mason-editor><a href="/tour/type#prefix"><h1 id="prefix">prefix</h1></a><section><p>Mason code often uses prefixes and suffixes to indicate type.</p><p>The compiler doesn't treat these specially.
 <a href="//github.com/mason-lang/msl">msl</a> follows this convention, but you don't have to.
-</p></section><table><thead><tr><td>Looks like</td><td>Means</td></tr></thead><tr><td><code>?a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> <span class="aside">option</span></td></tr><tr><td><code>$a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/$.ms">$</a> <span class="aside">promise</span></td></tr><tr><td><code>@a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/@.ms">@</a> <span class="aside">collection</span></td></tr><tr><td><code>a->b</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> <span class="aside">from a to b</span></td></tr><tr><td><code>a?</code></td><td><code>Boolean</code></td></tr></table><p>An optional promise is <code>?$a</code>; a promise for an option is <code>$?a</code>.</p><p><code>a!</code> indicates a function that performs some action rather than just returning a value.</p></main><footer><div id="prev" class="prev-next"><a href="class">class</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="misc">misc</a></div></footer></body></html>
+</p></section><table><thead><tr><td>Looks like</td><td>Means</td></tr></thead><tr><td><code>?a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> <span class="aside">option</span></td></tr><tr><td><code>$a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/$.ms">$</a> <span class="aside">promise</span></td></tr><tr><td><code>@a</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/@.ms">@</a> <span class="aside">collection</span></td></tr><tr><td><code>a->b</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> <span class="aside">from a to b</span></td></tr><tr><td><code>a?</code></td><td><a href="//github.com/mason-lang/msl/tree/master/src/Type/primitive.ms">Bool</a></td></tr></table><p>An optional promise is <code>?$a</code>; a promise for an option is <code>$?a</code>.</p><p><code>a!</code> indicates a function that performs some action rather than just returning a value.</p></main><footer><div id="prev" class="prev-next"><a href="trait">trait</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="misc">misc</a></div></footer></body></html>

@@ -1,0 +1,18 @@
+{
+  "name": "typescript-char",
+  "ignore": [
+    "package.json",
+    "readme.md"
+  ],
+  "license": "Unlicense",
+  "homepage": "https://github.com/mason-lang/typescript-char",
+  "_release": "b53287ed5f",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "b53287ed5fcc4e7d23c93c9589dc34241e439403"
+  },
+  "_source": "git://github.com/mason-lang/typescript-char.git",
+  "_target": "*",
+  "_originalSource": "mason-lang/typescript-char"
+}

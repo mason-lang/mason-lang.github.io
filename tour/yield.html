@@ -8,45 +8,45 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>Mason supports JavaScript's generator functions.</p><p>A generator function returns a generator object.
-This has a <code>next</code> method that runs code up until the next <code>yield</code> and returns.</p><p>So, functions can look like normal code but actually be full of continuations.</p><p>For a JS-style overview, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator">here</a>.</p></section><section><p>Generator functions should be marked with <code>*|</code>.</p><p>We've also seen <code>.</code> and <code>!</code> prepended to <code>|</code>.</p><p>The order of function markers is:</p><ul><li><code>.</code> <span class="aside">has newly bound <code>this</code></span></li><li><code>*</code> <span class="aside">is a generator function</span></li><li><code>!</code> <span class="aside">does not return any value</span></li></ul><p>, all of them optional.</p></section><section><p><code>yield</code> can get values from the context:</p></section><mason-editor><pre>|| If these generator context functions are confusing, relax.
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>Mason supports JavaScript's generator functions.</p><p>A generator function returns a generator object.
+This has a <code>next</code> method that runs code up until the next <code>yield</code> and returns.</p><p>So, functions can look like normal code but actually be full of continuations.</p><p>For a JS-style overview, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator">here</a>.</p></section><section><p>Generator functions should be marked with <code>*\</code>.</p><p>We've also seen <code>.</code> and <code>!</code> prepended to <code>\</code>.</p><p>The order of function markers is:</p><ul><li><code>.</code> <span class="aside">has newly bound <code>this</code></span></li><li><code>*</code> <span class="aside">is a generator function</span></li><li><code>!</code> <span class="aside">does not return any value</span></li></ul><p>, all of them optional.</p></section><section><p><code>yield</code> can get values from the context:</p></section><mason-editor><pre>|| If these generator context functions are confusing, relax.
 || You'll probably never have to write one yourself.
-taking = |@vals generator-func
+taking = \@vals generator-func
 	generator = generator-func()
-	value done = generator.next()
+	{value done} = generator.next()
 	cond done value for @vals
-		value done = generator.next _
+		{value done} = generator.next _
 		if done
 			break value
 
-taking 0..2 *|
+taking 0..2 *\
 	. yield
 	. yield
 	. yield
 </pre></mason-editor><section><p>It can also send values back to the context.</p></section><mason-editor><pre>|| Injects itself into assignments and increments the number.
-incrementing = |yields-numbers
+incrementing = \yields-numbers
 	generator = yields-numbers()
 	last-value = undefined
 	for
-		value done = generator.next last-value
+		{value done} = generator.next last-value
 		if done
 			break value
 		last-value := + 1 value
 
-incrementing *|
+incrementing *\
 	two = yield 1
 	three = yield two
 	yield three
-</pre></mason-editor><section><p><code>yield*</code> delegates to another generator.</p></section><mason-editor><pre>yield-both = *!|a b
+</pre></mason-editor><section><p><code>yield*</code> delegates to another generator.</p></section><mason-editor><pre>yield-both = *!\a b
 	yield a
 	yield b
-new Stream *!|
+new Stream *!\
 	yield* yield-both 1 2
-	yield* yield-both 3 4</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="for">for</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="async">async</a></div></footer></body></html>
+	yield* yield-both 3 4</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="pattern">pattern</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="async">async</a></div></footer></body></html>

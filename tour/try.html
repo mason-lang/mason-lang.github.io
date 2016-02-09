@@ -8,32 +8,32 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/try#throw"><h1 id="throw">throw</h1></a><section><p>You can throw errors as in JavaScript.</p><p>If you throw a string, it will be converted to an <code>Error</code> for you.
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/try#throw"><h1 id="throw">throw</h1></a><section><p>You can throw errors as in JavaScript.</p><p>If you throw a string, it will be converted to an <code>Error</code> for you.
 It has to be a string literal though — <code>throw a</code> won't work if <code>a</code> happens to be a String.
 </p></section><mason-editor><pre>throw "This code throws a fit!"
 </pre></mason-editor><a href="/tour/try#assert"><h1 id="assert">assert</h1></a><section><p>Usually, you'll only need to throw an exception under certain conditions.</p></section><mason-editor><pre>assert true
 forbid =? 0 1
 || `throw` splits the line in two between the condition and the error.
 assert false throw "Custom error"
-</pre></mason-editor><section><p>If an explicit <code>throw</code> isn't given, the compiler tries to create a descriptive error message.</p><p>For example, when asserting the result of a function call, the error message will include the function called and its arguments.</p></section><a href="/tour/try#except"><h1 id="except">except</h1></a><section><p>You can save yourself from an exception with <code>except</code>.</p><p>The error given to to <code>catch</code> is by default the focus, but you could also provide a name.</p></section><mason-editor><pre>except
+</pre></mason-editor><section><p>If an explicit <code>throw</code> isn't given, the compiler tries to create a descriptive error message.</p><p>For example, when asserting the result of a function call, the error message will include the function called and its arguments.</p></section><a href="/tour/try#except"><h1 id="except">except</h1></a><section><p>You can save yourself from an exception with <code>except</code>.</p><p>The error given to to <code>catch</code> is by default <code></code>, but you could also provide a name.</p></section><mason-editor><pre>except
 	try
 		throw 'oh-no!
 	|| same as:
 	|| catch foo
 	||	foo
 	catch
-		_
+		_.message
 	|| `finally` is optional
 	finally
 		pass
-</pre></mason-editor><section><p>Usually you only need to catch a certain type of exception.</p><p>A type on the caught exception means that the exception will not be caught unless it is of that type.</p><p>Omitting a variable name before the type makes it the focus.</p><p>You can only provide one untyped <code>catch</code> and it has to come at the end, much like the <code>else</code> of a <code>switch</code>.
+</pre></mason-editor><section><p>Usually you only need to catch a certain type of exception.</p><p>A type on the caught exception means that the exception will not be caught unless it is of that type.</p><p>Omitting a variable name before the type makes it <code>_</code>.</p><p>You can only provide one untyped <code>catch</code> and it has to come at the end, much like the <code>else</code> of a <code>switch</code>.
 </p></section><mason-editor><pre>except
 	try
 		throw new TypeError 'type-no-good
@@ -53,4 +53,4 @@ assert false throw "Custom error"
 		|| `else` is for using values defined in `try`.
 		|| If there are errors here, they won't be caught.
 		foo
-</pre></mason-editor><section><p>If there are any errors in <code>try</code>, <code>else</code> never runs.</p><p>You can read code as: <em>try (something dangerous)... catch (these errors)... else (if nothing was caught)...</em></p><div class="aside"><code>else</code> can use values defined in <code>try</code>, but <code>catch</code> can't. Why? Because <code>catch</code> only runs if something went wrong when defining those values.</div></section></main><footer><div id="prev" class="prev-next"><a href="if">if</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="class">class</a></div></footer></body></html>
+</pre></mason-editor><section><p>If there are any errors in <code>try</code>, <code>else</code> never runs.</p><p>You can read code as: <em>try (something dangerous)... catch (these errors)... else (if nothing was caught)...</em></p><div class="aside"><code>else</code> can use values defined in <code>try</code>, but <code>catch</code> can't. Why? Because <code>catch</code> only runs if something went wrong when defining those values.</div></section></main><footer><div id="prev" class="prev-next"><a href="if">if</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="poly">poly</a></div></footer></body></html>

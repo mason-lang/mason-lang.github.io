@@ -1,0 +1,10 @@
+import Declaration, { VariableDeclaration, VariableDeclarator } from 'esast/lib/Declaration';
+import Expression from 'esast/lib/Expression';
+import Identifier from 'esast/lib/Identifier';
+export default function renderDeclaration(_: Declaration): void;
+export declare function renderDeclarationNoLoc(_: Declaration): void;
+export declare function renderVariableDeclaration(_: VariableDeclaration): void;
+export declare function renderVariableDeclarationNoLoc(_: VariableDeclaration): void;
+export declare function renderVariableDeclarationOrIdentifier(_: VariableDeclaration | Identifier): void;
+export declare function renderVariableDeclarationOrExpression(_: VariableDeclaration | Expression): void;
+export declare function renderVariableDeclarator(_: VariableDeclarator): void;

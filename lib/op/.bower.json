@@ -1,0 +1,20 @@
+{
+  "name": "op",
+  "dependencies": {},
+  "ignore": [
+    "package.json",
+    "readme.md"
+  ],
+  "moduleType": "amd",
+  "license": "Unlicense",
+  "homepage": "https://github.com/esast/op",
+  "_release": "9573e566e5",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9573e566e56758e07b7090ff315678af5c51a1f8"
+  },
+  "_source": "git://github.com/esast/op.git",
+  "_target": "*",
+  "_originalSource": "esast/op"
+}

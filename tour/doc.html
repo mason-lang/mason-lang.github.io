@@ -8,32 +8,29 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/doc#doc"><h1 id="doc">doc</h1></a><section><p>The previous section should give you everything you need to know to write awesome modules. But how do you brag about them?</p><p><code>| </code> (with a space after it) starts a doc comment.
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/doc#doc"><h1 id="doc">doc</h1></a><section><p>The previous section should give you everything you need to know to write awesome modules. But how do you brag about them?</p><p><code>| </code> (with a space after it) starts a doc comment.
 These have to go at the start of an indented block.
 They go <em>inside</em> the thing they're documenting.
 </p></section><mason-editor no-eval><pre>| This here's my module. Is it not nifty?
 
-double. |n:Number
+double. \:Num n:Num
 	| Twice a number.
 	* 2 n
 
-Point. class
-	| Stores x and y.
+Point. class x:Num y:Num
+	| 2D coordinate.
 
-	construct! .x .y
-		pass
-
-	'transpose |
+	transpose \:Point
 		| Point with flipped x and y.
 		new Point .y .x
-</pre></mason-editor><section><p>This part of mason is in its early stages, so as of now these are basically ignored.</p><p>Someday there will be something useful in <a href="//github.com/mason-lang/mason-doc">mason-doc</a>.</p></section><a href="/tour/doc#todo"><h1 id="todo">todo</h1></a><section><p>Normal (<code>||</code>) comments tell you useful information about the code.
+</pre></mason-editor><section><p>Currently doc comments are completely ignored.</p></section><a href="/tour/doc#todo"><h1 id="todo">todo</h1></a><section><p>Normal (<code>|| </code>) comments tell you useful information about the code.
 <code>todo</code> comments indicate things you need to change before committing to source control.
 </p></section><mason-editor no-eval><pre>|| A single unit.
 one. 1
@@ -47,10 +44,11 @@ two. -2
 	region Functions
 		|| `region` doesn't create new program blocks.
 		|| Locals from other regions are accessible.
-		double. *[two]
+		double. &*[two]
 
 obj.double obj.two
 </pre></mason-editor><section><p>You made it to the end of the tour!</p><p>Have a comment about the language?
+<a href="//github.com/mason-lang/mason-compile/issues/new">Create an issue</a> or
 <a href="//gitter.im/mason-lang/mason-compile">Chat on gitter</a> or
 <a href="mailto:andy.pj.hanson@gmail.com">contact me directly</a>.
-</p></section></main><footer><div id="prev" class="prev-next"><a href="async">async</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"></div></footer></body></html>
+</p></section></main><footer><div id="prev" class="prev-next"><a href="async">async</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"></div></footer></body></html>

@@ -1,0 +1,23 @@
+{
+  "name": "esast-create-util",
+  "dependencies": {
+    "esast": "esast/esast",
+    "op": "esast/op"
+  },
+  "ignore": [
+    "package.json",
+    "readme.md"
+  ],
+  "moduleType": "amd",
+  "license": "Unlicense",
+  "homepage": "https://github.com/esast/esast-create-util",
+  "_release": "407b072bb8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "407b072bb8f541fab630e823edb7fc63d33c21fd"
+  },
+  "_source": "git://github.com/esast/esast-create-util.git",
+  "_target": "*",
+  "_originalSource": "esast/esast-create-util"
+}

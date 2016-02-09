@@ -38,8 +38,7 @@ header nav {
 header nav a {
   display: inline-block;
   text-align: center;
-  width: 2em;
-  padding: 0 1em;
+  padding: 0 0.5em;
   font-family: Overlock;
   font-weight: bold;
   font-size: 120%;

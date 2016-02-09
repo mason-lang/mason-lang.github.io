@@ -8,14 +8,14 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>All Mason programs must use the <a href="//github.com/mason-lang/msl">msl</a> (Mason Standard Library) package.</p><p>The examples can be run on the site, but you may want to <a href="/setup">install mason</a> too.</p></section><a href="/tour/basic#syntax"><h1 id="syntax">syntax</h1></a><section><p>Character sequences are valid names if they have no special characters
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>All Mason programs must use the <a href="//github.com/mason-lang/msl">msl</a> (Mason Standard Library) package.</p><p>The examples can be run on the site, but you may want to <a href="/setup">install mason</a> too.</p></section><a href="/tour/basic#syntax"><h1 id="syntax">syntax</h1></a><section><p>Character sequences are valid names if they have no special characters
 (<code>() [] {} # % ^ & _ | \ : ; ' &quot; , .</code> or whitespace),
 do not start with a digit or <code>~</code>, and are not keywords.</p><p>Blocks of code are written as indented blocks of text.
 <span class="aside">Tabs by default, but there is a compiler option for spaces.</span></p><p>Spaces within a line are significant too, so don't go adding spaces anywhere the examples don't.
@@ -38,25 +38,25 @@ if false
 	. 2
 if true
 	. 3
-</pre></mason-editor><a href="/tour/basic#short forms"><h2 id="short forms">short forms</h2></a><section><p>You can also do it all on one line.</p></section><mason-editor><pre>object. (a. 1 b. 2)
-array. [1 2]
+</pre></mason-editor><a href="/tour/basic#short forms"><h2 id="short forms">short forms</h2></a><section><p>You can also do it all on one line.</p></section><mason-editor><pre>obj = {a. 1 b. 2}
+arr = [1 2]
+|| When a value is just accessing the variable with the key name, you don't have to type it.
+. {foo. 1 arr.}
+|| When all values are just local accesses, you don't need `.`.
+. {obj arr}
 </pre></mason-editor><a href="/tour/basic#value blocks"><h2 id="value blocks">value blocks</h2></a><section><p>If a block appears in a value position, either it is a builder it returns its last line.</p><div class="aside">Mason doesn't have a <code>return</code> keyword.</div></section><mason-editor><pre>two = 2
 two
-</pre></mason-editor><a href="/tour/basic#blocks are values"><h2 id="blocks are values">blocks are values</h2></a><section><p>You can use a block anywhere a value is expected.</p><p>It is highly encouraged to use this as an additional level of code organization where possible,
-instead of writing long flat functions or lots of tiny functions.
-</p></section><mason-editor><pre>a.
+</pre></mason-editor><section><p>Yes, you can use a block anywhere a value is expected!</p></section><mason-editor><pre>a.
+	|| `x` is scoped to this block.
 	x = 1
 	x
-|| `x` not accessible outside of the block
 b.
 	. 1
 	.
 		|| `. ` expects a value, which can of course be a block!
 		. 2
 		. 3
-
-
-</pre></mason-editor><a href="/tour/basic#literals"><h1 id="literals">literals</h1></a><section><p>Constants and numbers work as in JavaScript.</p><div class="aside"><code>undefined</code> is a constant in Mason compiling to <code>void 0</code>.</div></section><mason-editor><pre>. true
+</pre></mason-editor><a href="/tour/basic#literals"><h1 id="literals">literals</h1></a><section><p>Constants and numbers work as in JavaScript.</p></section><mason-editor><pre>. true
 . false
 . null
 . undefined
@@ -83,17 +83,43 @@ hex-number = `0x#(hex-digit)+`i
 . hex-number
 || We used the `i` flag, so capital letters are OK.
 . hex-number.test "0xDEADBEEF"
-</pre></mason-editor><a href="/tour/basic#functions"><h1 id="functions">functions</h1></a><section><p>Functions are written with <code>|</code> followed by arguments.</p><p>The body of a function is a block <span class="aside">meaning it can be a builder</span>.</p><p>Calling a function doesn't require parentheses.</p><p>For arguments that are theirselves function calls, use <code>()</code>.</p></section><mason-editor><pre>identity = |a
+</pre></mason-editor><a href="/tour/basic#operators"><h1 id="operators">operators</h1></a><section><p>Operators are written in prefix notation.</p><p>They can take any number of arguments.
+Unlike function calls, they don't require parentheses.
+</p><p>The operators are:</p><ul><li><code>and or</code></li><li><code>+ - * &#47; ** %</code></li><li><code>=? ==? &lt;? &lt;=? &gt;? &gt;=?</code></li></ul><p><code>**</code> is equivalent to <code>Math.pow</code>.</p><p><code>==?</code> tests identity while <code>=?</code> is overridable via <a href="//github.com/mason-lang/msl/tree/master/src/compare.ms">binary=?</a>.</p></section><mason-editor><pre>|| Operators ending in `?` test their arguments in pairs.
+|| This is equivalent to `and &lt;? 1 2 &lt;? 2 3`.
+. &lt;? 1 2 3
+
+|| Other operators run left to right.
+|| This is equivalent to `- (- 3 2) 1`.
+. - 3 2 1
+
+|| Operators don't require parentheses.
+|| This is equivalent to `=? 9 (* 3 (+ 2 1))`.
+. =? 9 * 3 + 2 1
+</pre></mason-editor><section><p>Since operators take any number of arguments,
+you will still occasionally need parentheses to distinguish these:
+</p></section><mason-editor><pre>|| + 1 (* 2 3 (- 4 5))
+. + 1 * 2 3 - 4 5
+
+|| + 1 (* 2 3) (- 4 5)
+. + 1 (* 2 3) - 4 5
+</pre></mason-editor><section><p>There are also two unary operators, <code>neg</code> and <code>not</code>.</p><p>These take only one argument no matter what, so
+<code>neg a b</code> is parsed as <code>neg (a b)</code>.
+</p></section><mason-editor><pre>. neg 1
+. not true
+|| Equivalent to `neg (identity 1)`
+. neg identity 1
+</pre></mason-editor><section><p>Mason does not implement these javascript operators:</p><p><code>&lt;&lt; &gt;&gt; &gt;&gt;&gt; &amp; ^ | ~ ++ -- in</code></p><p>or the unary <code>+</code> operator.</p><p>If you need these, they are available as functions such as <a href="//github.com/mason-lang/msl/tree/master/src/js.ms">js&lt;&lt;</a>.</p></section><a href="/tour/basic#functions"><h1 id="functions">functions</h1></a><section><p>Functions are written with <code>\</code> followed by arguments.</p><p>The body of a function is a block <span class="aside">meaning it can be a builder</span>.</p><p>Calling a function doesn't usually require parentheses, except for arguments that are theirselves function calls.</p></section><mason-editor><pre>id = \a
 	a
-two-of = |a
+two-of = \a
 	. a
 	. a
 
-. identity 1
+. id 1
 . two-of 1
 || Parentheses are only needed when a subexpression is itself a function call.
-. identity (identity 1)
-</pre></mason-editor><section><p>If you want to put a block inside parentheses, just don't include the closing parenthesis.</p></section><mason-editor><pre>two-of = |a
+. id (id 1)
+</pre></mason-editor><section><p>If you want to put a block inside parentheses, just don't include the closing parenthesis.</p></section><mason-editor><pre>two-of = \a
 	. a
 	. a
 
@@ -101,17 +127,18 @@ two-of (two-of
 	. 1
 	. 2
 	|| No closing parenthesis!
-</pre></mason-editor><section><p>For functions with no value, use <code>!|</code>.</p><p>If you don't need to do anything in a block, use <code>pass</code>.</p><p>A function with no arguments is called like <code>fun()</code>.</p></section><mason-editor><pre>do-nothing! = !|
+</pre></mason-editor><section><p>For functions with no return value, use <code>!\</code>.</p><p>If you don't need to do anything in a block, use <code>pass</code>.</p><p>A function with no arguments is called like <code>fun()</code>.</p></section><mason-editor><pre>do-nothing! = !\
 	pass
 do-nothing!()
-</pre></mason-editor><a href="/tour/basic#this-functions"><h2 id="this-functions">this-functions</h2></a><section><p>Normal functions compile to JavaScript's arrow functions.</p><p>For <code>function() { }</code>, which has a new <code>this</code> variable, use <code>.|</code> and <code>.!|</code>.</p><p>In inner functions, it's safe to use <code>this</code>.</p><p>You usually won't need these, because Mason has <a href="./class">class syntax</a>.</p></section><mason-editor><pre>f = .|
+</pre></mason-editor><a href="/tour/basic#this-functions"><h2 id="this-functions">this-functions</h2></a><section><p>Normal functions compile to JavaScript's arrow functions.</p><p>For <code>function() { }</code>, which has a freshly bound <code>this</code> variable, use <code>.\</code> and <code>.!\</code>.</p><p>In inner functions, it's safe to use <code>this</code>.</p><p>You usually won't need these, because Mason has <a href="./class">class syntax</a>.</p></section><mason-editor><pre>f = .\
 	|| In here `this` has a different value than outside.
-	|
+	\
 		|| In here `this` has the same value as in `f`.
 		this
 (f.call 3)()
-</pre></mason-editor><a href="/tour/basic#new"><h2 id="new">new</h2></a><section><p>Calling a constructor looks like a function call with <code>new</code> in front.</p></section><mason-editor><pre>new Array 4
-</pre></mason-editor><a href="/tour/basic#modules"><h1 id="modules">modules</h1></a><section><p>Plans are for Mason to compile to [JavaScript ES6 modules](//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).</p><aside>Currently it compiles to AMD modules.</aside><p>A module is written as an object block.</p><p>The default export is an entry with the same name as the file name.</p></section><mason-editor no-eval><pre>|| my-module.ms
+</pre></mason-editor><a href="/tour/basic#new"><h2 id="new">new</h2></a><section><p>Calling a constructor looks like a function call with <code>new</code> in front.</p><div class="aside"><code>new</code> is parsed like an operator, as are all other expression keywords. So <code>foo new Bar</code> is <code>foo (new Bar)</code>.</div></section><mason-editor><pre>new Array 4
+</pre></mason-editor><a href="/tour/basic#modules"><h1 id="modules">modules</h1></a><section><p>Mason is planned to compile to
+<a href="//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export">JavaScript native modules</a>.</p><aside>Currently it compiles to AMD modules.</aside><p>A module is written as an object block.</p><p>The default export is an entry with the same name as the file name.</p></section><mason-editor no-eval><pre>|| my-module.ms
 
 || default export
 my-module. 1
@@ -119,7 +146,7 @@ my-module. 1
 || named export
 a. 2
 </pre></mason-editor><section><p>If your module does not have any named exports,
-it is treated as a block and its value is assigned to the default export.</p><p>So, the code for a module whose default export is zero is:</p></section><mason-editor no-eval><pre>0
+it is treated as a block and its value is assigned to the default export.</p><div class="aside">To export nothing, just end the file with <code>pass</code>.</div><p>So, the code for a module whose default export is zero is:</p></section><mason-editor no-eval><pre>0
 </pre></mason-editor><section><p>Module imports go at the top of a script and use a special syntax.</p></section><mason-editor no-eval><pre>import
 	|| Uses the globally available module `fs`.
 	fs
@@ -144,14 +171,9 @@ it is treated as a block and its value is assigned to the default export.</p><p>
 
 	|| Both combined. The default export is still called `a`, not `_`.
 	a _ b c
-
-|| Variables only used for tests should go here.
-import-debug
-	msl.assert assert-call!
 </pre></mason-editor><section><p>Mason doesn't normally allow global variables (except for builtin globals), but you can declare them using the fake <code>global</code> module.</p></section><mason-editor><pre>import
 	global alert
 
 alert 'hi
-</pre></mason-editor><section><p>Some values from <a href="//github.com/mason-lang/msl">msl</a> such as <a href="//github.com/mason-lang/msl/tree/master/src/math/methods.ms">+</a> are builtins — you don't have to explitly import them.
-The necessary imports will be added for you.</p><p>The list of builtins is currently only available <a href="//github.com/mason-lang/mason-compile/blob/master/src/private/defaultBuiltins.js">here</a>.</p><p>Putting these together, global variables such as <code>Object</code> are really builtins from the global module. Common JS globals (not including web-specific ones) are builtins.</p><div class="aside">If you need it <span class="aside">hopefully not!</span>,
-the global variable 'global' <span class="aside">an object containing all globals</span> is shimmed to work on either client or server.</div></section></main><footer><div id="prev" class="prev-next"></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="=">=</a></div></footer></body></html>
+</pre></mason-editor><section><p>Some values from <a href="//github.com/mason-lang/msl">msl</a> such as <a href="//github.com/mason-lang/msl/tree/master/src/Function.ms">identity</a> are builtins — you don't have to explitly import them.
+The necessary imports will be added for you.</p><p>The list of builtins is currently only available <a href="//github.com/mason-lang/mason-compile/blob/master/src/private/defaultBuiltins.js">here</a>.</p><p>Putting these together, global variables such as <code>Object</code> are really builtins from the global module. Common JS globals (not including web-specific ones) are builtins.</p><div class="aside">If you need it, the global variable 'global' <span class="aside">an object containing all globals</span> is shimmed to work on either client or server.</div></section></main><footer><div id="prev" class="prev-next"></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="=">=</a></div></footer></body></html>

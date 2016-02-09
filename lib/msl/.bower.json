@@ -4,14 +4,14 @@
   "main": "dist/**/*",
   "license": "WTFPL",
   "private": true,
-  "homepage": "https://github.com/andy-hanson/msl",
-  "_release": "548d2d8aba",
+  "homepage": "https://github.com/mason-lang/msl",
+  "_release": "61032828a4",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "548d2d8aba7056244348284ccae82c904270bc77"
+    "commit": "61032828a48456d396db8e43907ba607f816bb8e"
   },
-  "_source": "git://github.com/andy-hanson/msl.git",
+  "_source": "git://github.com/mason-lang/msl.git",
   "_target": "*",
-  "_originalSource": "andy-hanson/msl"
+  "_originalSource": "mason-lang/msl"
 }

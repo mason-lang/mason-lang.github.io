@@ -8,70 +8,48 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/class#method functions"><h1 id="method functions">method functions</h1></a><section><p>In addition to javascript's named methods <span class="aside"><code>object.method()</code></span>,
-mason supports a kind of method that are called like functions <span class="aside"><code>method object</code></span>.
-These are <a href="//github.com/mason-lang/msl/tree/master/src/Type/Method.ms">Method</a> objects.
-Unlike named methods, these use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>s, so they are safe to implement on builtins.
-</p></section><mason-editor><pre>|| The default implementation of a method is implicitly a `.|`, so `this` is freshly bound inside.
-magnitude = method |
-	- "{this}".length 1
-
-|| impl! is a builtin function defined in msl/Type/Method.ms
-
-|| This modifies Number.prototype.
-impl! magnitude Number .|
-	this
-impl! magnitude String .|
-	.length
-
-. magnitude 1
-. magnitude "#2"
-|| This uses the default implementation.
-. magnitude true
-</pre></mason-editor><section><p>If you don't want a default implementation, use `abstract`.</p></section><mason-editor no-eval><pre>foo. method |
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p><code>class</code> creates a JavaScript class.</p><p>The class body consists of a constructor followed by method definitions.</p><p>You can use computed method names with <code>()</code>. This allows you to implement <code>poly</code>s.</p></section><mason-editor><pre>dimension = poly \
 	abstract
 
-</pre></mason-editor><section><p>Certain methods such as <a href="//github.com/mason-lang/msl/tree/master/src/compare.ms">=?</a> also work on null and undefined values.</p><aside>These have to be manually constructed using the <a href="//github.com/mason-lang/msl/tree/master/src/Type/Method.ms">Method</a> constructor.</aside><p>The advantages of method functions are that they:</p><ul><li>Are regular functions</li><li>Can be implemented on builtin types without a risk of conflict</li><li>Work on <code>null</code> and <undefined></undefined> with a default implementation</li><li>Make it explicit when a class is implementing part of a polymorphic function</li></ul><p>Much of <a href="//github.com/mason-lang/msl">msl</a> is implemented as methods
-<span class="aside">such as <a href="//github.com/mason-lang/msl/tree/master/src/compare.ms">=?</a> and <a href="//github.com/mason-lang/msl/tree/master/src/math/methods.ms">+</a></span>,
-but you don't have to use them in your own code — both method functions and classic-style methods are fully supported.
-</p></section><a href="/tour/class#class"><h1 id="class">class</h1></a><section><p><code>class</code> creates a JavaScript class.</p><p>The class body consists of a constructor followed by method definitions.</p><p>Methods being defined should be <a href="//github.com/mason-lang/msl/tree/master/src/Type/Method.ms">Method</a>s or strings.</p></section><mason-editor><pre>|| If superclass is missing, it will be Object, so this is just for show.
+|| If superclass is missing, it will be Object, so this is just for show.
 Point = class
 	construct x y
-		.x = x
-		.y = y
+		.x := x
+		.y := y
 
-	|| This is just like `impl! to-string Point .|`
-	|| The `|` doesn't need a `.` in front; that's implied.
-	to-string |
-		"({.x} {.y})"
+	|| This implements the builtin `to-string` method.
+	|| Any expression can go within the parentheses;
+	|| if it's a method, its `symbol` property will be fetched.
+	(dimension) \
+		2
 
-	'transpose! !|
-		y = .y
-		.y := .x
+	transpose! !\
+		{x y} = this
+		.y := x
 		.x := y
 
 p = new Point 1 2
-. to-string p
+. dimension p
 p.transpose!()
-. to-string p
-</pre></mason-editor><a href="/tour/class#static"><h2 id="static">static</h2></a><section><p>A <code>do</code> block sets the focus to the class and lets you do anything with it.
+. p
+</pre></mason-editor><a href="/tour/class#static"><h2 id="static">static</h2></a><section><p>A <code>do</code> block sets <code>_</code> to the class and lets you do anything with it.
 <span class="aside">These usually aren't needed.</span></p><p><code>static</code> defines static methods.</p><p>Constructor arguments prefixed with <code>.</code> become properties.</p></section><mason-editor><pre>Point = class
 	do
-		_.origin = new _ 0 0
+		_.origin := new _ 0 0
 
 	static
-		empty |
+		|| `empty` is a builtin poly
+		(empty) \
 			.origin
 
-		'from-array |arr
-			assert =? 2 arr.length
+		from-array \arr
 			new Point arr[0] arr[1]
 
 	construct .x .y
@@ -83,14 +61,14 @@ p.transpose!()
 <code>do</code>, <code>static</code>, <code>construct</code>, then methods.
 </p><a href="/tour/class#get / set"><h2 id="get / set">get / set</h2></a><section><p>Getters and setters are also supported.</p></section><mason-editor><pre>Point = class
 	construct x y
-		.x ::= x
-		.y ::= y
+		.x := x
+		.y := y
 
-	get 'len
-		Math.sqrt (+ (* .x .x) (* .y .y))
+	get len
+		Math.sqrt + (** .x 2) ** .y 2
 
 	|| Setter has `_` as its implicit parameter.
-	set 'len
+	set len
 		scale = / _ .len
 		.x := * .x scale
 		.y := * .y scale
@@ -100,10 +78,10 @@ p = new Point 3 4
 p.len := 25
 . p
 </pre></mason-editor><a href="/tour/class#my"><h2 id="my">my</h2></a><section><p>When you don't intend a method to be used by others, just put <code>my</code> in front.</p><p>This works on all kinds, including get/set.</p><p><code>my</code> doesn't actually do anything, but <a href="//github.com/mason-lang/mason-doc">mason-doc</a> is planned to use that information.</p></section><mason-editor><pre>Bouncer = class
-	'allow-entry? |guess
+	allow-entry? \guess
 		=? guess .password
 
-	my get 'password
+	my get password
 		'swordfish
 
 _ = new Bouncer
@@ -114,30 +92,29 @@ _ = new Bouncer
 before attempting to access <code>this</code>.</p><p>You can use <code>super</code> in methods to call the same method on a super class,
 or <code>super.foo</code> to call a different method.</p><p>Like in JavaScript, static methods are inherited.</p></section><mason-editor><pre>A = class
 	static
-		get 'super-static
+		get super-static
 			4
 
 	construct foo
-		.foo = 0
+		.foo := 0
 
-	'super-method |
+	super-method \
 		1
 
-	'overridden-method |x
+	overridden-method \x
 		x
 
-
-B = class A
+B = class extends A
 	construct
 		|| Illegal to write to `.bar` here
 		super()
 		|| It's OK after you've called `super`
-		.bar = 1
+		.bar := 1
 
-	'overridden-method |x
+	overridden-method \x
 		+ (super x) .bar
 
-	'other-method |x
+	other-method \x
 		super.overridden-method x
 
 b = new B
@@ -146,38 +123,10 @@ b = new B
 . b.overridden-method 1
 . b.other-method 3
 . B.super-static
+</pre></mason-editor><a href="/tour/class#record"><h2 id="record">record</h2></a><section><p>If a class is just a container for various fields, there's an easy record syntax.</p></section><mason-editor><pre>Point = class x y
+	|| Can still put method definitions here.
+	get transpose
+		new Point .y .x
 
-</pre></mason-editor><a href="/tour/class#kind"><h1 id="kind">kind</h1></a><section><p><code>kind</code> implements multiple inheritance.
-A <a href="//github.com/mason-lang/msl/tree/master/src/Type/Kind.ms">Kind</a> is basically a collection of methods,
-so the body of a Kind looks just like a class body.
-<span class="aside">But static methods in Kinds are currently not supported.</span></p><p>Kinds also work great as interfaces.</p><p>Declare a class to implement a kind with <code>class kind Foo</code>.
-This copies the methods from the kind to the class.</p><p>Kinds can have super-kinds.</p></section><mason-editor><pre>A = kind
-	get 'foo
-		1
-B = kind A
-	get 'bar
-		2
-C = class
-	get 'baz
-		3
-Bar = class C kind B
-bar = new Bar
-. bar.foo
-. bar.bar
-. bar.baz
-</pre></mason-editor><section><p>Like methods, it's safe to declare a builtin type to implement a Kind.
-<span class="aside">Just be sure to only define method functions on the Kind and not named methods.</span>
-</p></section><mason-editor><pre>meth = method |
-	false
-
-Num/Str = kind
-	meth |
-		true
-
-kind! Number Num/Str
-kind! String Num/Str
-
-. and 0:Num/Str "0":Num/Str
-. not []:Num/Str
-. and (meth 0) (meth "0")
-. not meth []</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="try">try</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="type">type</a></div></footer></body></html>
+(new Point 1 2).transpose
+</pre></mason-editor><section><p>The class will inherit from the <a href="//github.com/mason-lang/msl/tree/master/src/Type/Record.ms">Record</a> trait (traits are up next!).</p><p>Records can be <a href="./pattern">pattern matched</a>. They also have a default <code>'toString</code>.</p></section></main><footer><div id="prev" class="prev-next"><a href="poly">poly</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="trait">trait</a></div></footer></body></html>

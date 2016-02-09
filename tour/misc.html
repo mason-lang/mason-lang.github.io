@@ -8,60 +8,67 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/misc#&amp;"><h1 id="&amp;">&amp;</h1></a><section><p><code>&</code> lets you write simple functions one one line.</p><p>Use <code>&()</code> to write a function of one argument, the focus, on one line.</p><p>There are more short forms for named methods:</p><ul><li><code>obj&foo</code> is short for <code>obj.foo.bind obj</code>.</li><li><code>.&foo</code> is short for <code>this&foo</code>.</li><li><p><code>&foo</code> is short for:</p><mason-editor no-eval><pre>|_ ...args
-	_.foo ...args</pre></mason-editor></li></ul><p><code>&.foo</code> is short for <code>&(_.foo)</code>.</p></section><mason-editor><pre>. @keep [1 2 3 4] &(divisible? _ 2)
-. @map [1 2 3] 'foo&repeat
-. @map [1 2] &toString
-. @map ['a 'bb 'ccc] &.length
-</pre></mason-editor><a href="/tour/misc#with"><h1 id="with">with</h1></a><section><p><code>with</code> lets you create an empty object and build it up by modifying it.</p><p>It assigns to the focus, or to a new local specified with <code>as</code>.</p></section><mason-editor><pre>. with []
-	_.push 1
-	_.push 2
-. with new Object as o
-	o.x = 1
-	o.y = 2
-</pre></mason-editor><a href="/tour/misc#pipe"><h1 id="pipe">pipe</h1></a><section><p>A common pattern is to repeatedly apply transforms to a value.</p><p>With <code>pipe</code>, <code>_</code> on each line of the indented block represents the value of the previous line.</p><p>The start value goes before the indented block. <span class="aside"><code>[1 2 3 4 5]</code> in this example.</span></p></section><mason-editor><pre>pipe [1 2 3 4 5]
-	@keep _ &(divisible? _ 2)
-	sum_
-|| Same as: sum (@keep [1 2 3 4 5] &(divisible? _ 2))
-</pre></mason-editor><section><p>If you ever get stuck having to use a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent API</a>, <code>pipe</code> could help reduce the pain.</p></section><a href="/tour/misc#destructuring"><h1 id="destructuring">destructuring</h1></a><section><p>If a value is an object and you need several of its fields,
-extract them all by writing multiple names before the <code>=</code>.
-</p></section><mason-editor><pre>obj =
-	a. 1
-	b. 2
-a b = obj
-. a
-. b
-</pre></mason-editor><section><p>Array destructuring is planned...</p></section><a href="/tour/misc#sub"><h1 id="sub">sub</h1></a><section><p><a href="//github.com/mason-lang/msl/tree/master/src/methods.ms">sub</a> is a <a href="//github.com/mason-lang/msl/tree/master/src/Type/Method.ms">Method</a> with special syntax.</p><p>It does <a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> lookups, <a href="//github.com/mason-lang/msl/tree/master/src/%40/Seq.ms">Seq</a> lookups by index.</p><p>It also <a href="//rosettacode.org/wiki/Partial_function_application">partially applies</a> functions.</p><p>Remember that spaces are significant:
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><a href="/tour/misc#range"><h1 id="range">range</h1></a><section><p>This syntax simply calls the <a href="//github.com/mason-lang/msl/tree/master/src/%40/Range.ms">Range</a> constructor.</p><p><code>a..b</code> is inclusive and <code>a...b</code> is exclusive of <code>b</code>.</p><p><code>..</code> splits tokens earlier than <code>.</code>,
+so you can write <code>0...array.length</code> but have to write <code>(0...6).by 2</code>.</p><p><code>a...</code> is an infinite range.</p></section><mason-editor><pre>. 0..1
+. 2...4
+. (4...8).by 2
+. @take 8... 3
+</pre></mason-editor><a href="/tour/misc#sub"><h1 id="sub">sub</h1></a><section><p><a href="//github.com/mason-lang/msl/tree/master/src/methods.ms">sub</a> is a <code>poly</code> with special syntax.</p><p>It does <a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> lookups, <a href="//github.com/mason-lang/msl/tree/master/src/%40/Seq.ms">Seq</a> lookups by index.</p><p>It also <a href="//rosettacode.org/wiki/Partial_function_application">partially applies</a> functions.</p><p>Remember that spaces are significant:
 <code>a[b]</code> calls <code>sub</code> on <code>a</code> while <code>a [b]</code> calls <code>a</code> on an Array.
 </p></section><mason-editor><pre>map =
 	1 -> 1
 . map[1]
 
-foo = |a b c
+foo = \a b c
 	[a b c]
 || Call `sub` with 2 arguments.
 bar = foo[1 2]
 . bar 3
 
-|| Call `sub` with 1 argument.
-+2 = +[(+ 1 1)]
-. +2 1
-</pre></mason-editor><section><p>Sub syntax can also be used to add values with <code>=</code> and <code>:=</code>, which behave identically.</p><p>You can remove values with <code>del</code>, which returns a <a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> of the value that was there.</p></section><mason-editor><pre>map = empty Map
-map[1] = 2
+|| Calling `sub` with 1 argument may require parentheses.
+. [0 1 2][(Math.min 2 3)]
+</pre></mason-editor><section><p><code>:=</code> can be used with subs too.</p><p>You can remove values with <code>del</code>, which returns a <a href="//github.com/mason-lang/msl/tree/master/src/%40/%3F.ms">?</a> of the value that was there.</p></section><mason-editor><pre>map = empty Map
+map[1] := 2
 . map[1]
 . del map[1]
 . del map[1]
 </pre></mason-editor><section><p>Many types also support <code>sub</code>, as in <code>Array[Number]</code>.
 Usually this is just the identity, so it's just for documentation.
-</p></section><a href="/tour/misc#range"><h1 id="range">range</h1></a><section><p>This syntax simply calls the <a href="//github.com/mason-lang/msl/tree/master/src/%40/Range.ms">Range</a> constructor.</p><p><code>a..b</code> is inclusive and <code>a...b</code> is exclusive of <code>b</code>.</p><p><code>..</code> splits tokens earlier than <code>.</code>,
-so you can write <code>0...array.length</code> but have to write <code>(0...6).by 2</code>.</p><p><code>a...</code> is an infinite range.</p></section><mason-editor><pre>. 0..1
-. 2...4
-. (4...8).by 2
-. @take 8... 3</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="type">type</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="for">for</a></div></footer></body></html>
+</p></section><a href="/tour/misc#&amp;"><h1 id="&amp;">&amp;</h1></a><section><p><code>&</code> lets you write simple functions one one line.</p><p>Use <code>&()</code> to write a function of one argument, <code>_</code>, on one line.</p><p>There are more short forms for named methods:</p><ul><li><code>obj&foo</code> is short for <code>obj.foo.bind obj</code>.</li><li><code>.&foo</code> is short for <code>this&foo</code>.</li><li><p><code>&foo</code> is short for:</p><mason-editor no-eval><pre>\_ ...args
+	_.foo ...args</pre></mason-editor></li></ul><p><code>&.foo</code> is short for <code>&(_.foo)</code>.</p></section><mason-editor><pre>. @keep [1 2 3 4] &(divisible? _ 2)
+. @map [1 2 3] 'foo&repeat
+. @map [1 2] &toString
+. @map ['a 'bb 'ccc] &.length
+</pre></mason-editor><section><p><code>&</code> is compatible with <code>[]</code> for partial application.</p></section><mason-editor><pre>. @map 0..3 'abc&slice[0]
+</pre></mason-editor><section><p>For operators, <code>&+</code> and friends represent a function version.</p><p>For non-unary operators this is a variadic function.</p></section><mason-editor><pre>. @map [true false true] &amp;not
+. @map [1 2 3] &+[1]
+</pre></mason-editor><a href="/tour/misc#with"><h1 id="with">with</h1></a><section><p><code>with</code> lets you create an empty object and build it up by modifying it.</p><p>It assigns to <code>_</code>, or to a new local specified with <code>as</code>.</p></section><mason-editor><pre>. with []
+	_.push 1
+	_.push 2
+. with {} as o
+	o.x := 1
+	o.y := 2
+</pre></mason-editor><a href="/tour/misc#pipe"><h1 id="pipe">pipe</h1></a><section><p>A common pattern is to repeatedly apply transforms to a value.</p><p>With <code>pipe</code>, <code>_</code> on each line of the indented block represents the value of the previous line.</p><p>The start value goes before the indented block. <span class="aside"><code>[1 2 3 4 5]</code> in this example.</span></p></section><mason-editor><pre>pipe [1 2 3 4 5]
+	@keep _ &(divisible? _ 2)
+	sum_
+|| Same as: sum (@keep [1 2 3 4 5] &(divisible? _ 2))
+</pre></mason-editor><section><p>There is also <code>\pipe</code>, which works like <code>\case</code> and <code>\switch</code>: it makes a function with a single implicit argument passed into <code>pipe</code>.</p><p>If you ever get stuck having to use a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent API</a>, <code>pipe</code> could help reduce the pain.</p></section><a href="/tour/misc#ignore"><h1 id="ignore">ignore</h1></a><section><p>Mason will complain if you don't use a local, so just <code>ignore</code> it.</p></section><mason-editor><pre>second = \a b
+	ignore a
+	b
+ignore second
+</pre></mason-editor><a href="/tour/misc#pass"><h1 id="pass">pass</h1></a><section><p>Mason doesn't expect certain expressions to be used as values and will complain.</p><p>If you want to use them as values anyway, use <code>pass</code>.</p></section><mason-editor><pre>Foo = class
+	get x
+		|| Changing state in a getter, very naughty!
+		.y := 1
+		null
+f = new Foo
+|| Mason doesn't expect a getter to do anything, so it complains if you take out `pass`.
+pass f.x
+f.y</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="type">type</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="for">for</a></div></footer></body></html>

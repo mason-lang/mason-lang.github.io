@@ -1,23 +1,27 @@
 {
   "name": "mason-compile",
-  "main": "dist/**/*",
-  "ignore": [
-    "dist/node-only"
-  ],
   "dependencies": {
-    "esast": "andy-hanson/esast"
+    "esast": "esast/esast",
+    "esast-create-util": "esast/esast-create-util",
+    "esast-render-fast": "esast/esast-render-fast",
+    "op": "esast/op",
+    "typescript-char": "mason-lang/typescript-char"
   },
+  "ignore": [
+    "package.json",
+    "readme.md",
+    "test"
+  ],
   "moduleType": "amd",
-  "license": "WTFPL",
-  "private": true,
-  "homepage": "https://github.com/andy-hanson/mason-compile",
-  "_release": "803e87ccb2",
+  "license": "Unlicense",
+  "homepage": "https://github.com/mason-lang/mason-compile",
+  "_release": "2edc26677f",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "803e87ccb2214008a0d1409f0c86c6a15023a2eb"
+    "commit": "2edc26677f7d2fcdaae058abc38123fe87f9b263"
   },
-  "_source": "git://github.com/andy-hanson/mason-compile.git",
+  "_source": "git://github.com/mason-lang/mason-compile.git",
   "_target": "*",
-  "_originalSource": "andy-hanson/mason-compile"
+  "_originalSource": "mason-lang/mason-compile"
 }

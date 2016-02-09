@@ -8,20 +8,20 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>Async functions run asynchronously, consuming
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> and returning one too.</p><p>Just use <code>$|</code> instead of <code>*|</code>. <span class="aside">Generators are never async.</span></p><p>Await a promise using <code>$</code>. This allows you to write asynchronous code without higher-order functions.</p><div class="aside">These are based on a future JS
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>Async functions run asynchronously, consuming
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> and returning one too.</p><p>Just use <code>$\</code> instead of <code>*\</code>. <span class="aside">Generators are never async.</span></p><p>Await a promise using <code>$</code>. This allows you to write asynchronous code without higher-order functions.</p><div class="aside">These are based on a future JS
 <a href="https://tc39.github.io/ecmascript-asyncawait/">feature</a>.
 </div></section><mason-editor><pre>import
 	global fetch
 
-$fetch-text = $|url
+$fetch-text = $\url
 	response = $ fetch url
 	$ response.text()
 
@@ -33,12 +33,12 @@ So, you must always provide a collection to iterate over, and <code>break</code>
 
 $for ["./fetch-me.txt" "./fetch-me-too.txt"]
 	$ ($ fetch_).text()
-</pre></mason-editor><section><p><code>$for</code> can appear as a statement inside <code>$|</code>.</p><p>In statement context, is automatically awaited <span class="aside">equivalent to <code>$ $for ...</code></span>.</p></section><mason-editor><pre>import
+</pre></mason-editor><section><p><code>$for</code> can appear as a statement inside <code>$\</code>.</p><p>In statement context, it is automatically awaited <span class="aside">equivalent to <code>$ $for ...</code></span>.</p></section><mason-editor><pre>import
 	global fetch
 
-$fetch-map = $|urls
+$fetch-map = $\urls
 	with empty Map as map
 		$for url of urls
-			map[url] = $ ($ fetch url).text()
+			map[url] := $ ($ fetch url).text()
 
-$fetch-map ["./fetch-me.txt" "./fetch-me-too.txt"]</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="yield">yield</a></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="doc">doc</a></div></footer></body></html>
+$fetch-map ["./fetch-me.txt" "./fetch-me-too.txt"]</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="yield">yield</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="doc">doc</a></div></footer></body></html>

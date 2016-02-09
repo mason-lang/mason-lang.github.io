@@ -8,12 +8,12 @@ ga('send', 'pageview')
 	baseUrl: '/lib',
 	paths: {
 		marked: 'marked/marked.min',
-		msl: 'msl/dist',
-		'mason-compile': 'mason-compile/dist'
+		msl: 'msl/lib',
+		'mason-compile': 'mason-compile/lib'
 	}
 })
 // kludge: need to require bootstrap because mason modules lazily load using _ms
 require(['msl/private/bootstrap'], () =>
 	require(['../script/mason-editor/mason-editor']), err => { throw err })
-</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="class">class</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>The tour pages come with example code sections.</p><p>Can you see the one below? If not, try using <a href="//opera.com">Opera</a> or <a href="//google.com/chrome">Chrome</a>.</p><p>Mason uses real JavaScript classes, which Firefox doesn't support yet.</p></section><mason-editor><pre>1
-</pre></mason-editor><section><p>Click on the <i class="fa fa-refresh"></i> to compile and evaluate the module and see its value (or an error message).</p><p>Hover over the bottom section to see the compiled JavaScript code.</p><p>Got it? Now go to <a href="./basic">basic</a> to start.</p></section></main><footer><div id="prev" class="prev-next"></div><div id="middle"><ul><li>public domain</li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"></div></footer></body></html>
+</script></head><body><header><h1><a href="/">mason</a></h1><nav><a href="basic">basic</a><a href="=">=</a><a href="if">if</a><a href="try">try</a><a href="poly">poly</a><a href="class">class</a><a href="trait">trait</a><a href="type">type</a><a href="misc">misc</a><a href="for">for</a><a href="pattern">pattern</a><a href="yield">yield</a><a href="async">async</a><a href="doc">doc</a></nav></header><main><section><p>The tour pages come with example code sections.</p><p>Can you see the one below? If not, try using <a href="//opera.com">Opera</a> or <a href="//google.com/chrome">Chrome</a>.</p><p>Mason uses real JavaScript classes, which Firefox doesn't support yet.</p></section><mason-editor><pre>1
+</pre></mason-editor><section><p>Click on the <i class="fa fa-refresh"></i> to compile and evaluate the module and see its value (or an error message).</p><p>Hover over the bottom section to see the compiled JavaScript code.</p><p>Got it? Now go to <a href="./basic">basic</a> to start.</p></section></main><footer><div id="prev" class="prev-next"></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"></div></footer></body></html>

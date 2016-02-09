@@ -1,0 +1,10 @@
+{
+	"name": "esast-create-util",
+	"dependencies": {
+		"esast": "esast/esast",
+		"op": "esast/op"
+	},
+	"ignore": ["package.json", "readme.md"],
+	"moduleType": "amd",
+	"license": "Unlicense"
+}
