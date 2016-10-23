@@ -1,6 +1,6 @@
-- path = filename.match(/assets\/(.+).jade/)[1]
+- path = filename.match(/assets\/(.+).pug/)[1]
 - fullTitle = path === 'index' ? 'mason' : `${path} - mason programming language`
-- rootUrl = '//mason-lang.org'
+- rootUrl = '//mason-lang.github.io'
 - gitRoot = '//github.com/mason-lang'
 
 - quote = '"'
@@ -15,13 +15,13 @@ mixin request-for-comments()
 
 mixin hdr(name, fullName)
 	- fullName = fullName || name
-	a(href='/#{path}##{name}')
-		h1(id='#{name}')= fullName
+	a(href=`/${path}#${name}`)
+		h1(id=name)= fullName
 
 mixin hdr2(name, fullName)
 	- fullName = fullName || name
-	a(href='/#{path}##{name}')
-		h2(id='#{name}')= fullName
+	a(href=`/${path}#${name}`)
+		h2(id=name)= fullName
 
 -
 	//TODO: use builtins map for this
@@ -94,7 +94,7 @@ mixin ms(name)
 	-
 		var url = export_paths[name]
 		if (url === undefined) throw new Error(`No doc link for ${name}.`)
-	a(href='#{url}')= name
+	a(href=url)= name
 
 -
 	var mdn_s = {
@@ -104,7 +104,7 @@ mixin mdn(name)
 	-
 		var url = mdn_s[name]
 		if (url === undefined) throw new Error(`No MDN link for ${name}.`)
-	a(href='#{url}')= name
+	a(href=url)= name
 
 mixin ms-project(name)
-	a(href='#{gitRoot}/#{name}')= name
+	a(href=`${gitRoot}/${name}`)= name

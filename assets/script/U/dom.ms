@@ -9,8 +9,6 @@ trait! NodeList Seq
 self-impl! from-stream NodeList \stream
 	=> Array stream
 
-impl! iterator NodeList (impl-for iterator Array)
-
 impl! empty! Node .!\
 	todo SYNTAX while
 	for

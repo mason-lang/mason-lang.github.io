@@ -9,7 +9,7 @@ block subheader
 		if name === 'index'
 			a(href='/') tour
 		else
-			a(href="#{name}")= name
+			a(href=name)= name
 
 	nav
 		for page in pages

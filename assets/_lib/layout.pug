@@ -13,7 +13,7 @@ html
 		// ID needed because mason-editor.js is not run inside of this.
 		link#link-mason-editor(rel='import' href='/mason-editor')
 
-		// I'd like to include this in mason-editor.jade, but RequireJS won't let me.
+		// I'd like to include this in mason-editor.pug, but RequireJS won't let me.
 		link(rel='stylesheet' href='/style/layout.css')
 
 		script.
@@ -63,7 +63,7 @@ html
 			div#middle
 				ul
 					li #[a(href='//unlicense.org/UNLICENSE') unlicensed]
-					li #[a(href='#{gitRoot}') #[i.fa.fa-github]]
+					li #[a(href=gitRoot) #[i.fa.fa-github]]
 					li #[a(href='//andy-hanson.me') author]
 
 			div#next.prev-next

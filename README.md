@@ -1,8 +1,8 @@
-Website showing off [mason](http://mason-lang.org).
+Website showing off [mason](http://mason.github.io).
 
 ## Run
 
-`npm run-script serve`, then see <http://localhost:8000>.
+`npm start`, then see <http://localhost:8000>.
 
 ## Credits
 
