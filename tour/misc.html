@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>tour/misc - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.jade, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+<!DOCTYPE html><html><head><title>tour/misc - mason programming language</title><meta charset="utf-8"><meta name="description" content="Mason is a new programming language compiling to JavaScript. It runs on the web and in node.js."><link rel="icon" href="/icon.svg"><!-- ID needed because mason-editor.js is not run inside of this.--><link id="link-mason-editor" rel="import" href="/mason-editor"><!-- I'd like to include this in mason-editor.pug, but RequireJS won't let me.--><link rel="stylesheet" href="/style/layout.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga')
@@ -21,7 +21,7 @@ so you can write <code>0...array.length</code> but have to write <code>(0...6).b
 . (4...8).by 2
 . @take 8... 3
 </pre></mason-editor><a href="/tour/misc#sub"><h1 id="sub">sub</h1></a><section><p><a href="//github.com/mason-lang/msl/tree/master/src/methods.ms">sub</a> is a <code>poly</code> with special syntax.</p><p>It does <a href="//github.com/mason-lang/msl/tree/master/src/%40/Map.Map.ms">Map</a> lookups, <a href="//github.com/mason-lang/msl/tree/master/src/%40/Seq.ms">Seq</a> lookups by index.</p><p>It also <a href="//rosettacode.org/wiki/Partial_function_application">partially applies</a> functions.</p><p>Remember that spaces are significant:
-<code>a[b]</code> calls <code>sub</code> on <code>a</code> while <code>a [b]</code> calls <code>a</code> on an Array.
+<code>a[b</code>] calls <code>sub</code> on <code>a</code> while <code>a [b</code>] calls <code>a</code> on an Array.
 </p></section><mason-editor><pre>map =
 	1 -> 1
 . map[1]
@@ -39,14 +39,14 @@ map[1] := 2
 . map[1]
 . del map[1]
 . del map[1]
-</pre></mason-editor><section><p>Many types also support <code>sub</code>, as in <code>Array[Number]</code>.
+</pre></mason-editor><section><p>Many types also support <code>sub</code>, as in <code>Array[Number</code>].
 Usually this is just the identity, so it's just for documentation.
 </p></section><a href="/tour/misc#&amp;"><h1 id="&amp;">&amp;</h1></a><section><p><code>&</code> lets you write simple functions one one line.</p><p>Use <code>&()</code> to write a function of one argument, <code>_</code>, on one line.</p><p>There are more short forms for named methods:</p><ul><li><code>obj&foo</code> is short for <code>obj.foo.bind obj</code>.</li><li><code>.&foo</code> is short for <code>this&foo</code>.</li><li><p><code>&foo</code> is short for:</p><mason-editor no-eval><pre>\_ ...args
 	_.foo ...args</pre></mason-editor></li></ul><p><code>&.foo</code> is short for <code>&(_.foo)</code>.</p></section><mason-editor><pre>. @keep [1 2 3 4] &(divisible? _ 2)
 . @map [1 2 3] 'foo&repeat
 . @map [1 2] &toString
 . @map ['a 'bb 'ccc] &.length
-</pre></mason-editor><section><p><code>&</code> is compatible with <code>[]</code> for partial application.</p></section><mason-editor><pre>. @map 0..3 'abc&slice[0]
+</pre></mason-editor><section><p><code>&</code> is compatible with <code>[</code>] for partial application.</p></section><mason-editor><pre>. @map 0..3 'abc&slice[0]
 </pre></mason-editor><section><p>For operators, <code>&+</code> and friends represent a function version.</p><p>For non-unary operators this is a variadic function.</p></section><mason-editor><pre>. @map [true false true] &amp;not
 . @map [1 2 3] &+[1]
 </pre></mason-editor><a href="/tour/misc#with"><h1 id="with">with</h1></a><section><p><code>with</code> lets you create an empty object and build it up by modifying it.</p><p>It assigns to <code>_</code>, or to a new local specified with <code>as</code>.</p></section><mason-editor><pre>. with []
@@ -55,7 +55,7 @@ Usually this is just the identity, so it's just for documentation.
 . with {} as o
 	o.x := 1
 	o.y := 2
-</pre></mason-editor><a href="/tour/misc#pipe"><h1 id="pipe">pipe</h1></a><section><p>A common pattern is to repeatedly apply transforms to a value.</p><p>With <code>pipe</code>, <code>_</code> on each line of the indented block represents the value of the previous line.</p><p>The start value goes before the indented block. <span class="aside"><code>[1 2 3 4 5]</code> in this example.</span></p></section><mason-editor><pre>pipe [1 2 3 4 5]
+</pre></mason-editor><a href="/tour/misc#pipe"><h1 id="pipe">pipe</h1></a><section><p>A common pattern is to repeatedly apply transforms to a value.</p><p>With <code>pipe</code>, <code>_</code> on each line of the indented block represents the value of the previous line.</p><p>The start value goes before the indented block. <span class="aside"><code>[1 2 3 4 5</code></span> in this example.]</p></section><mason-editor><pre>pipe [1 2 3 4 5]
 	@keep _ &(divisible? _ 2)
 	sum_
 || Same as: sum (@keep [1 2 3 4 5] &(divisible? _ 2))
@@ -71,4 +71,4 @@ ignore second
 f = new Foo
 || Mason doesn't expect a getter to do anything, so it complains if you take out `pass`.
 pass f.x
-f.y</pre></mason-editor></main><footer><div id="prev" class="prev-next"><a href="type">type</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div id="next" class="prev-next"><a href="for">for</a></div></footer></body></html>
+f.y</pre></mason-editor></main><footer><div class="prev-next" id="prev"><a href="type">type</a></div><div id="middle"><ul><li><a href="//unlicense.org/UNLICENSE">unlicensed</a></li><li><a href="//github.com/mason-lang"><i class="fa fa-github"></i></a></li><li><a href="//andy-hanson.me">author</a></li></ul></div><div class="prev-next" id="next"><a href="for">for</a></div></footer></body></html>
